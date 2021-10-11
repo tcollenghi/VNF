@@ -1,0 +1,161 @@
+﻿@using VNF.Portal.Models
+@using MetsoFramework.Utils
+@model MotivoCorrecao
+@{
+    ViewBag.Title = "Motivo de Correção";
+}
+
+
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-angle-double-right fa-fw "></i>
+            Motivos de Correção
+        </h1>
+    </div>
+</div>
+
+<section id="widget-grid" class="">
+
+    <div class="row">
+        <article class="col-sm-12 col-md-12 col-lg-12">
+            <div class="jarviswidget jarviswidget-color-blueDark" data-widget-sortable="false" data-widget-fullscreenbutton="false" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-deletebutton="false" data-widget-collapsed="false" data-widget-togglebutton="false">
+                <header>
+                    <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                    <h2>Editar informações</h2>
+                </header>
+                <div>
+                    <div class="jarviswidget-editbox">
+                    </div>
+                    <div class="widget-body no-padding">
+                        @using (Html.BeginForm("Edit", "MotivoCorrecao", FormMethod.Post, new { id = "frmMotivoCorrecao", @class = "smart-form", enctype = "multipart/form-data" }))
+                        {
+
+                            <fieldset>
+
+                                <div class="row">
+                                    <section class="col col-sm-12">
+                                        <label class="label">
+                                            Título
+                                        </label>
+                                        <label class="input">
+                                            @Html.HiddenFor(model => model.IdMotivoCorrecao)
+                                            @Html.MetsoTextBoxFor(model => model.Titulo, SessionsHelper.FieldType.Text, null, true)
+                                        </label>
+                                    </section>
+                                </div>
+
+
+                                <section>
+                                    <label class="label">
+                                        Descrição
+                                    </label>
+                                    <label class="textarea">
+                                        @Html.MetsoTextBoxFor(model => model.Descricao, SessionsHelper.FieldType.TextAreaMedium, new { @class = "custom-scroll" }, true)
+                                    </label>
+                                </section>
+
+                                <div class="row">
+
+                                    <section class="col col-3">
+                                        <label class="label">
+                                            Tipo Documento
+                                        </label>
+                                        <label class="input">
+                                            @Html.MetsoDropDownListFor(model => model.TipoDocumento, ViewBag.ddlTipoDocumento as SelectList, String.Empty, null, true, true)
+                                        </label>
+                                    </section>
+                                    <section class="col col-3">
+                                        <label class="label">
+                                            Classificação
+                                        </label>
+                                        <label class="input">
+                                            @Html.MetsoDropDownListFor(model => model.Classificacao, ViewBag.ddlClassificacao as SelectList, String.Empty, null, true, true)
+                                        </label>
+                                    </section>
+                                    <section class="col col-3">
+                                        <label class="label">
+                                            Responsável
+                                        </label>
+                                        <label class="input">
+                                            @Html.MetsoDropDownListFor(model => model.Responsavel, ViewBag.ddlResponsavel as SelectList, String.Empty, null, true, true)
+                                        </label>
+                                    </section>
+
+
+                                    <section class="col col-3">
+                                        <label class="label">
+                                            Grupo
+                                        </label>
+                                        <label class="input">
+                                            @Html.MetsoDropDownListFor(model => model.IdGroup, ViewBag.ddlIdGrupo as SelectList, String.Empty, null, true, true)
+                                        </label>
+                                    </section>
+
+                                    <section class="col col-3">
+                                        <label class="label">
+                                            Seleciona o Responsável
+                                        </label>
+                                        <label class="input">
+                                            
+                                                @Html.MetsoDropDownList("ddlSelecionaResponsavel", ViewBag.ddlSelecionaResponsavel as SelectList, String.Empty, null, true, true)
+                                                 
+                                        </label>
+                                    </section>
+                                </div>
+
+                            </fieldset>
+
+                            <footer>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-check"></i> Salvar
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="window.history.back();">
+                                    <i class="fa fa-arrow-circle-left"></i> Voltar
+                                </button>
+                            </footer>
+                        }
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+
+</section>
+
+
+@section pagespecific {
+    <script src="../../Scripts/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+    <script src="~/Scripts/MetsoAdmin.js"></script>
+
+    <script src="~/Scripts/views/PermissaoUsuario.js"></script>
+    <script>PermissaoUsuario('@(ViewBag.Acesso)')</script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            pageSetUp();
+
+            $("#frmGroups").bootstrapValidator({
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    GroupName: {
+                        validators: {
+                            notEmpty: {
+                                message: 'O grupo é obrigatório'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+}
+
+
+
+
+

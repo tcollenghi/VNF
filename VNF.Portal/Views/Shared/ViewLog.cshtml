@@ -1,0 +1,167 @@
+﻿<link type="text/css" rel="stylesheet" href="@Url.Content("~/Content/datatable/demo_table_jui.css")"/>
+<style type="text/css">
+    tr.odd:hover
+    {
+        cursor: pointer;
+        background-color: Silver;
+    }
+
+    tr.altDialog:hover
+    {
+        cursor: pointer;
+        background-color: Silver;
+    }
+                
+    .ui-dialog-titlebar-close
+    {
+        display: none;
+    }
+</style>
+<script type="text/javascript" src="@Url.Content("~/Scripts/jquery.datatables.min.js")"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#logDataTable').dataTable({
+            "bPaginate": false,
+            "bLengthChange": false,
+            "bFilter": false,
+            "bSort": false,
+            "bInfo": true,
+            "bAutoWidth": false,
+            "bJQueryUI": true,
+            "sPaginationType": "full_numbers",
+            "sScrollY": 300,
+            "iDisplayLength": 25,
+            "oLanguage": {
+                "sLengthMenu": "_MENU_",
+                "sInfo": "Show _START_ - _END_ of _TOTAL_ records",
+                "sInfoEmpty": "Show 0 - 0 of 0 records",
+                "sInfoFiltered": "(total:  _MAX_ records)"
+            }
+        });
+
+        $('.dataTables_scrollHeadInner,.dataTables_scrollHeadInner table').width("100%");
+    });
+
+    function ViewLog(logform, KeyValue) {
+        var lf = logform;
+        var key = KeyValue;
+        $.ajax({
+            url: '@Url.Action("LogView", "Log")',
+            data: { "logForm": lf, "KeyValue": key },
+            type: 'GET',
+            async: false,
+            cache: false,
+            dataType: "json",
+            success: function (data) {
+                if (data.date != null) {
+                    $("#logDataTable tbody").empty();
+
+                    var tr;
+                    var classRow = "odd";
+                    for (var i = 0; i < data.date.length; i++) {
+                        tr = "<tr class='" + classRow + "'>";
+                        tr = tr + "<td style='width: 120px;'>" + data.date[i] + "</td>";
+                        tr = tr + "<td style='width: 165px;'>" + data.user[i] + "</td>";
+                        tr = tr + "<td style='width: 165px;'>" + data.field[i] + "</td>";
+                        tr = tr + "<td style='width: 200px;'>" + data.oldvalue[i] + "</td>";
+                        tr = tr + "<td style='width: 200px;'>" + data.newvalue[i] + "</td>";
+                        tr = tr + "</tr>";
+                        $("#logDataTable tbody").append(tr);
+
+                        if (classRow == "odd") {
+                            classRow = "altDialog";
+                        } else {
+                            classRow = "odd";
+                        }
+                    }
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(errorThrown);
+            }
+        });
+        $("#popup").css("visibility", "visible");
+        $("#popup").css("heigth", "500px");
+        $("#popup").dialog({
+            title: "Log View",
+            width: 900,
+            dialogClass: "no-close",
+            buttons: {
+                Close: function () {
+                    $(this).dialog('close');
+                }
+            },
+            modal: true
+        });
+    }
+
+    function ViewLogMaster(logform, KeyValue, MasterKey) {
+        var lf = logform;
+        var key = KeyValue;
+        $.ajax({
+            url: '@Url.Action("LogView", "Log")',
+            data: { "logForm": lf, "KeyValue": key, "MasterKey": MasterKey },
+            type: 'GET',
+            async: false,
+            cache: false,
+            dataType: "json",
+            success: function (data) {
+                if (data.date != null) {
+                    $("#logDataTable tbody").empty();
+
+                    var tr;
+                    var classRow = "odd";
+                    for (var i = 0; i < data.date.length; i++) {
+                        tr = "<tr class='" + classRow + "'>";
+                        tr = tr + "<td style='width: 120px;'>" + data.date[i] + "</td>";
+                        tr = tr + "<td style='width: 165px;'>" + data.user[i] + "</td>";
+                        tr = tr + "<td style='width: 165px;'>" + data.field[i] + "</td>";
+                        tr = tr + "<td style='width: 200px;'>" + data.oldvalue[i] + "</td>";
+                        tr = tr + "<td style='width: 200px;'>" + data.newvalue[i] + "</td>";
+                        tr = tr + "</tr>";
+                        $("#logDataTable tbody").append(tr);
+
+                        if (classRow == "odd") {
+                            classRow = "altDialog";
+                        } else {
+                            classRow = "odd";
+                        }
+                    }
+                }
+            },
+            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                alert(errorThrown);
+            }
+        });
+        $("#popup").css("visibility", "visible");
+        $("#popup").css("heigth", "500px");
+        $("#popup").dialog({
+            title: "Log View",
+            width: 900,
+            dialogClass: "no-close",
+            buttons: {
+                Close: function () {
+                    $(this).dialog('close');
+                }
+            },
+            modal: true
+        });
+    }
+</script>
+<div id="popup" style="display: none; height: 0px">
+    <div style="font-size: 0.75em; width: 875px">
+        <table id="logDataTable" class="display">
+            <thead>
+                <tr>
+                    <td style="width: 120px !important; cursor: default;">Date</td>
+                    <td style="width: 165px !important; cursor: default;">User</td>
+                    <td style="width: 165px !important; cursor: default;">Field</td>
+                    <td style="width: 200px !important; cursor: default;">Old Value</td>
+                    <td style="width: 200px !important; cursor: default;">New Value</td>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+</div>

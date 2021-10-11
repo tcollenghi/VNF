@@ -1,0 +1,99 @@
+﻿@using MetsoFramework.Utils
+@using MetsoAdmin.Controllers
+@model System.Data.DataTable
+@{
+    ViewBag.Title = "Busca de talonário";
+}
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-angle-double-right fa-fw "></i>
+            Talonários
+        </h1>
+    </div>
+    <div class="demo">
+        <span id="demo-setting"><i class="fa fa-search txt-color-blueDark"></i></span>
+        @using (Html.BeginForm("CadastroManual", "Talonario", FormMethod.Post, new { @class = "smart-form" }))
+        {
+            <legend class="no-padding margin-bottom-10">Filtros</legend>
+            <div class="custom-scroll scroll-y">
+                <section>
+                    <h6 class="margin-top-10 semi-bold margin-bottom-5">Número</h6>
+                    <label class="input">
+                        <input type="text" onkeypress="KeyEnter(event);" class="input-sm" id="txtNumeroDocumento" name="txtNumeroDocumento">
+                    </label>
+                </section>
+                <section>
+                    <h6 class="margin-top-10 semi-bold margin-bottom-5">Série</h6>
+                    <label class="input">
+                        <input type="text" onkeypress="KeyEnter(event);" class="input-sm" id="txtSerie" name="txtSerie">
+                    </label>
+                </section>
+                <section>
+                    <h6 class="margin-top-10 semi-bold margin-bottom-5">CNPJ Emit.</h6>
+                    <label class="input">
+                        <input type="text" class="input-sm" id="txtCNPJEmit" name="txtCNPJEmit" onkeypress="KeyEnter(event);">
+                    </label>
+                </section>
+                @*<section>
+                    <h6 class="margin-top-10 semi-bold margin-bottom-5">Unidades Metso</h6>
+                    @Html.MetsoDropDownList("UnidadeMetso", ViewBag.UnidadeMetso as IEnumerable<SelectListItem>, "", new { @class = "input-sm", @onkeypress = "KeyEnter(event);" })
+                </section>
+                <section>
+                    <h6 class="margin-top-10 semi-bold margin-bottom-5">Finalizado</h6>
+                    @Html.MetsoDropDownList("Finalizado", ViewBag.Finalizado as IEnumerable<SelectListItem>, "(TODAS)", new { @class = "input-sm", @onkeypress = "KeyEnter(event);" })
+                </section>
+                <section>
+                    <h6 class="margin-top-10 semi-bold margin-bottom-5">Status Integração</h6>
+                    <label class="input">
+                        @Html.MetsoDropDownList("StatusIntegracao", ViewBag.StatusIntegracao as IEnumerable<SelectListItem>, "", new { @onkeypress = "KeyEnter(event);" })
+                    </label>
+                </section>
+                <section>
+                    <h6 class="margin-top-10 semi-bold margin-bottom-5">De</h6>
+                    <label class="input">
+                        <input type="text" class="form-control datepicker" data-dateformat="dd/mm/yy" placeholder="dd/mm/aaaa" name="txtDataDe" id="txtDataDe" onkeypress="KeyEnter(event);">
+                    </label>
+                </section>
+                <section>
+                    <h6 class="margin-top-10 semi-bold margin-bottom-5">Até</h6>
+                    <label class="input">
+                        <input type="text" class="form-control datepicker" data-dateformat="dd/mm/yy" placeholder="dd/mm/aaaa" name="txtDataAte" id="txtDataAte" onkeypress="KeyEnter(event);">
+                    </label>
+                </section>*@
+                <section>
+                    <div onclick="FilterData();" class="btn btn-xs btn-block btn-primary margin-top-10"><i class="fa fa-search margin-top-5 margin-bottom-5"></i> Buscar</div>
+                </section>
+            </div>
+        }
+    </div>
+</div>
+
+@Html.Hidden("hdfId")
+
+<div id="divGrid">
+    @{
+        Html.RenderPartial("GridTalonario");
+    }
+</div>
+
+@section pagespecific {
+
+    <!-- PAGE RELATED PLUGIN(S) -->
+    <script src="~/Scripts/views/Talonario/Talonario.js"></script>
+    <script src="~/Scripts/plugin/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.colVis.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.tableTools.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/plugin/datatable-responsive/datatables.responsive.min.js"></script>
+    <script src="~/Scripts/jquery.maskMoney.js"></script>
+    <script src="~/Scripts/Metso.js"></script>
+
+    <!-- Page Script -->
+    <script src="~/Scripts/views/_global.js"></script>
+
+    <script src="~/Scripts/views/PermissaoUsuario.js"></script>
+    <script>PermissaoUsuario('@(ViewBag.Acesso)')</script>
+
+}
+ 

@@ -1,0 +1,311 @@
+﻿@using MetsoFramework.Utils
+@model System.Data.DataTable
+<!-- NEW COL START -->
+@{ 
+    var Lista = (List<VNF.Portal.ViewsModel.OcorrenciasListagemViewModel>)ViewBag.Lista;
+}
+<div id="divData">
+    <!-- end widget edit box -->
+    <!-- widget content -->
+    <div class="widget-body no-padding">
+        <table id="dttTabela"  class="table table-striped table-bordered table-hover" width="100%">
+            <thead>
+                <tr> 
+                    <th style="display:none;"></th>
+                    <th width="8%">Data</th>
+                    <th width="8%">Nota Fiscal</th>
+                    @*<th width="8%">Origem</th>
+                    <th width="8%">Prioridade</th>*@
+                    <th width="7%">PO</th> 
+                    <th width="6%">Item</th> 
+                    <th width="7%">Id Forn.</th>
+                    <th width="15%">Fornecedor</th>
+                    <th width="5%">Comprador</th>
+                    <th width="19%">Motivo</th>
+                    <th width="13%">Valor DOC-e</th>
+                    <th width="13%">Valor PO</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Lista != null)
+                {
+                    string id = "";
+                    string nfId = "";
+                    string codLog = "";
+                    foreach (VNF.Portal.ViewsModel.OcorrenciasListagemViewModel i in Lista)
+                    {
+                        id = i.IdOcorrencia.ToString() + i.CodLog.ToString();
+                        nfId = i.NFEID.ToString();
+                        codLog = i.CodLog.ToString();
+
+                        <tr id='@id' onclick='SelectRowOcorrencia("Nfe", "@i.IdOcorrencia", "@codLog", "@i.CodigoFornecedor", "@i.Comprador" )' >
+                            <td style="display:none;">@i.NFEID</td>
+                            <td>@Convert.ToDateTime(i.Data).ToShortDateString()</td>
+                            <td><a href="@Url.Action("Edit", "Compras", new { id = i.NFEID})" target="_self">@i.NumeroDocumento</a></td>
+                            @*<td>@i.Origem.ToUpper()</td>
+                            <td>@i.Prioridade</td>*@
+                            <td>@i.PO</td>
+                            <td>@i.Item</td>
+                            <td>@i.CodigoFornecedor</td>
+                            <td></td>
+                            <td>@i.Comprador</td>
+                            <td>@i.Motivo</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    }
+                }
+
+                @if (Model != null)
+                {
+                    string id = "";
+                    string nfId = "";
+                    string codLog = "";
+                    string data = "";
+                    string strNumNf = "";
+
+                    foreach (System.Data.DataRow item in Model.Rows)
+                    {
+                        id = item["NFEID"].ToString() + item["CODLOG"].ToString();
+                        nfId = item["NFEID"].ToString();
+                        codLog = item["CODLOG"].ToString();
+                        strNumNf = item["VNF_TIPO_DOCUMENTO"].ToString() + " " + item["NF_IDE_NNF"].ToString();
+
+                        if (item["DATLOG"] != DBNull.Value)
+                        {
+                            data = Convert.ToDateTime(item["DATLOG"]).ToString("dd/MM/yyyy");
+                        }
+                        else
+                        {
+                            data = "-";
+                        }
+                        <tr id='@id' onclick='SelectRowCodLog("Nfe", "@nfId", "@codLog" )'>
+                            <td style="display:none;">@nfId</td>
+                            <td>@data</td>
+                            <td><a href="@Url.Action("Edit", "Compras", new { id = item["NFEID"]})" target="_self">@strNumNf</a></td>
+                            @*<td>MATCHING</td>
+                            <td>Normal</td>*@
+                            <td>@item["PEDCOM"]</td>
+                            <td>@item["ITEPED"]</td>
+                            <td> @item["CODFOR"]</td>
+                            <td> @(item["NF_EMIT_XNOME"].ToString().Length>16? item["NF_EMIT_XNOME"].ToString().Substring(0, 16): item["NF_EMIT_XNOME"].ToString())</td>
+                            <td title="@item["NOMCOM"]">@item["CODCOM"]</td>
+                            <td>@item["CAMPO"]</td>
+                            <td>@item["VALOR_NFE"]</td>
+                            <td>@item["VALOR_PED"]</td>
+
+                        </tr>
+                    }
+                }
+            </tbody> 
+        </table> 
+        <script type="text/javascript">
+        /* BASIC ;*/
+        var responsiveHelper_dt_basic1 = undefined;
+
+        var breakpointDefinition = {
+            tablet: 1024,
+            phone: 480
+        };
+
+      
+
+        $('#dttTabela').dataTable({
+            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
+                "t" +
+                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+            "autoWidth": false,
+            "preDrawCallback": function () {
+                // Initialize the responsive datatables helper once.
+                if (!responsiveHelper_dt_basic1) {
+                    responsiveHelper_dt_basic1 = new ResponsiveDatatablesHelper($('#dttTabela'), breakpointDefinition);
+                }
+            },
+            "rowCallback": function (nRow) {
+                responsiveHelper_dt_basic1.createExpandIcon(nRow);
+            },
+            "drawCallback": function (oSettings) {
+                responsiveHelper_dt_basic1.respond();
+            }
+        });
+
+        /* END COLUMN SHOW - HIDE */
+        </script>
+    </div> 
+</div>
+
+<div class="modal fade bs-example-modal-lg" id="divOcorrencia" style="margin-top:50px">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+             
+            <div class="modal-body">
+                <div>
+                    <div class="row">
+                        <article class="col-sm-12 col-md-12 col-lg-12">
+                            <div class="tabbable">
+                                <div class="jarviswidget jarviswidget-color-blueDark"  data-widget-sortable="false" data-widget-collapse="true" data-widget-colorbutton="true" data-widget-editbutton="true" data-widget-custombutton="true" data-widget-deletebutton="true">
+                                    <header>
+                                        <ul class="nav nav-tabs in" id="myTab1">
+                                            <li class="bg-color-blueDark active">
+                                                <a href="#tabOcorrencia" data-toggle="tab" onclick="MostrarOcorrencia();"><span class="hidden-mobile hidden-tablet"><i class="fa fa-list"></i> Detalhes da Ocorrência</span> </a>
+                                            </li>
+                                            <li class="bg-color-blueDark">
+                                                <a href="#tabHistorico" data-toggle="tab" onclick="MostrarHistorico();"><span class="hidden-mobile hidden-tablet"><i class="fa fa-list"></i> Histórico</span> </a>
+                                            </li> 
+                                        </ul>
+                                    </header>
+                                    <div class="tab-content">
+                                        <div class="tab-pane active" id="tabOcorrencia">
+                                            <div class="widget-body">
+                                                <div class="table-responsive smart-form">
+                                                    <div class="widget-body no-padding">
+                                                        <form class="smart-form">
+                                                            <fieldset>
+                                                                <section class="col col-md-12">
+                                                                    <label class="input">
+                                                                        Motivo da divergência*
+                                                                        <input type="text" class="form-control" id="txtMotivo" />
+                                                                    </label>
+                                                                </section>
+
+                                                                <section class="col col-md-6">
+                                                                    <label class="input">
+                                                                        Data Recebimento
+                                                                        <input type="text" class="form-control" id="DataRecebimento" />
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-md-6">
+                                                                    <label class="input">
+                                                                        Data Esperada
+                                                                        <input type="text" class="form-control" id="txtDataEsperada" />
+                                                                    </label>
+                                                                </section>
+                                                                <section class="col col-md-12">
+                                                                    <divinput input-file></divinput>
+                                                                    <label class="input">
+                                                                        Anexo
+                                                                    </label>
+                                                                    <div class="input input-file">
+                                                                        <span class="button"><input id="FileAttachment" type="file" name="file2" onchange="this.parentNode.nextSibling.value = this.value">Add</span><input type="text" placeholder="" readonly="">
+                                                                    </div>
+
+                                                                </section>
+                                                                <section class="col col-md-12">
+                                                                    <label class="input">
+                                                                        Comentários*
+                                                                        @Html.MetsoTextBox("txtCometario", SessionsHelper.FieldType.TextAreaLarge, null, false)
+                                                                    </label>
+                                                                </section> 
+                                                                 
+                                                            </fieldset>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="tab-pane hide" id="tabHistorico">
+                                             <table id="dtHistorico" datatables_fixedheader="top" datatables_fixedheader_offsettop="60" class="table table-striped table-bordered table-hover table-click" width="100%">
+                                                 <thead>
+                                                     <tr>
+                                                         <th width="13%">Data</th>
+                                                         <th width="20%">Usuario</th>
+                                                         <th>Comentario</th>
+                                                         <th width="4%"></th>
+                                                     </tr> 
+                                                 </thead>
+                                                 <tbody>
+                                                     <tr>
+                                                         <td>Data</td>
+                                                         <td>Data</td>
+                                                         <td>Data</td>
+                                                         <td><i title="Download" onclick="DownloadAnexo();" class="fa fa-download"></i></td>
+                                                     </tr>
+                                                 </tbody>
+                                             </table>
+                                        </div> 
+                                    </div>
+                                </div>
+                            </div>
+                        </article>
+                    </div>  
+                </div>
+            </div>
+            <div class="modal-footer"> 
+                <button type="button" id="btnFinalizarOc" onclick="FinalizaOcorrencia();" class="btn btn-primary"><i class="fa fa-book"></i><span class="text-btn"> Finalizar</span></button>
+                <button type="button" class="btn btn-primary" onclick="CarregaDadosEncaminhamento();" id="btnEncaminharOC" data-toggle="modal" data-target="#divEncaminharOcorrencia"><i class="fa fa-book"></i><span class="text-btn"> Encaminhar</span></button>
+                <button type="button" class="btn btn-primary" id="FecharOcorrencia" data-dismiss="modal"><i class="fa fa-times"></i><span class="text-btn"> Fechar</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bs-example-modal-lg" id="divEncaminharOcorrencia" style="margin-top:50px">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Encaminhar Ocorrência</h4>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <div class="table-responsive smart-form">
+                        <div class="widget-body no-padding">
+                            <form class="smart-form">
+                                <fieldset>
+                                    <section class="col col-md-12">
+                                        <label class="input">
+                                            Motivo da divergência*
+                                            <select id="cboMotivoDivergenciaEncaminhar" onchange="cboMotivoChange();" class="form-control">
+                                                <option></option>
+                                            </select>
+                                        </label>
+                                    </section> 
+                                    <section class="col col-md-12">
+                                        <label class="input">
+                                            Responsavel*
+                                            <select id="cboResponsavelEncaminhar" onchange="SelecionaMotivoCorrecaoEncaminhamento();" class="form-control">
+                                                <option></option>
+                                                <option value="Comprador">Comprador</option>
+                                                <option value="Grupo">Grupo</option>
+                                                <option value="Fornecedor">Fornecedor</option>
+                                                <option value="Manual">Manual</option>
+                                            </select>
+                                        </label>
+                                    </section> 
+                                    <section class="col col-md-12">
+                                        <label class="input">
+                                            Email
+                                            <input type="text" class="form-control" id="txtEmail" />
+                                        </label>
+                                    </section> 
+                                    <section class="col col-md-12">
+                                        <divinput input-file></divinput>
+                                        <label class="input">
+                                            Anexo
+                                        </label>
+                                        <div class="input input-file">
+                                            <span class="button"><input id="FileAttachmentEncaminhar" type="file" name="FileAttachmentEncaminhar" onchange="this.parentNode.nextSibling.value = this.value">Add</span><input type="text" placeholder="" readonly="">
+                                        </div>
+
+                                    </section> 
+                                    <section class="col col-md-12">
+                                        <label class="input">
+                                            Comentários*
+                                            @Html.MetsoTextBox("txtCometarioEncaminhar", SessionsHelper.FieldType.TextAreaLarge, null, false)
+                                        </label>
+                                    </section>
+
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                     
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="btnEncaminhaOC" onclick="EncaminhaOcorrencia();" class="btn btn-primary"><i class="fa fa-book"></i><span class="text-btn"> Finalizar</span></button>
+                <button type="button" class="btn btn-primary" id="FecharOcorrenciaEncaminhar" data-dismiss="modal"><i class="fa fa-times"></i><span class="text-btn"> Fechar</span></button>
+            </div>
+        </div>
+    </div>
+</div>

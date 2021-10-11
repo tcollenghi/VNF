@@ -1,0 +1,63 @@
+﻿@model System.Data.DataTable
+<!-- NEW COL START -->
+<!-- Widget ID (each widget will need unique ID)-->
+
+<div class="jarviswidget jarviswidget-color-blueDark" data-widget-editbutton="false">
+
+    <header class="navigation-wrap">
+        <div class="col-md-12 col-xs-12">
+            <div class="btn-group margin-top-5 right">
+                <a class="btn btn-primary" data-toggle="modal" data-target="#modalCFOP_MIRO" onclick="Novo()">
+                    <i class="fa fa-plus"></i>
+                    Novo
+                </a>
+                <a class="btn btn-primary" data-toggle="modal" data-target="#modalCFOP_MIRO" onclick="Editar('EDITAR')">
+                    <i class="fa fa-pencil"></i>
+                    Editar
+                </a>
+                <a class="btn btn-danger" onclick="Excluir()">
+                    <i class="fa fa-trash-o"></i>
+                    Excluir
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <input type="hidden" id="hdfCFOPXML" />
+    <input type="hidden" id="hdfCFOPSAP" />
+    <input type="hidden" id="hdfCFOPESCRITURAR" />
+
+    <div id="divData">
+        <!-- end widget edit box -->
+        <!-- widget content -->
+        <div class="widget-body no-padding">
+            <table id="dttTabela" datatables_fixedheader="top" datatables_fixedheader_offsettop="60" class="table table-striped table-bordered table-hover table-click" width="100%">
+                <thead>
+                    <tr>
+                        <th>CFOP XML</th>
+                        <th>CFOP SAP</th>
+                        <th>CFOP Escriturar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (Model != null)
+                        {
+                            for (int i = 0; i < Model.Rows.Count; i++)
+                            {
+
+                                string CFOPSAP = Model.Rows[i]["CFOP_SAP"].ToString().Replace("\\", "\\\\");
+                                string CFOPEscriturar = Model.Rows[i]["CFOP_ESCRITURAR"].ToString().Replace("\\", "\\\\");
+                                <tr id="i" onclick="selectRow('@Model.Rows[i]["CFOP_XML"].ToString()','@CFOPSAP', '@CFOPEscriturar')">
+                                    <td>@Model.Rows[i]["CFOP_XML"].ToString()</td>
+                                    <td>@Model.Rows[i]["CFOP_SAP"].ToString()</td>
+                                    <td>@Model.Rows[i]["CFOP_ESCRITURAR"].ToString()</td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

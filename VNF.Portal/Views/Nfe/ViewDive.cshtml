@@ -1,0 +1,58 @@
+﻿@model System.Data.DataTable
+<!-- NEW COL START -->
+<div id="divData">
+    <!-- end widget edit box -->
+    <!-- widget content -->
+    <div class="widget-body no-padding">
+        <table id="dttTabela" datatables_fixedheader="top" datatables_fixedheader_offsettop="60" class="table table-striped table-bordered table-hover table-click" width="100%">
+            <thead>
+                <tr>
+
+                    <th>Nº Doc</th>
+                    <th>Nº PO</th>
+                    <th>Item PO</th>
+                    <th>Campo</th>
+                    <th>Valor Nota Fiscal</th>
+                    <th>Valor PO</th>
+                    <th>Código</th>
+                    <th>Cod Comprador</th>
+                    <th>Data Divergência</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null)
+                {
+                    string id = "";
+                    string nfId = "";
+                    string codLog = "";
+
+                    foreach (System.Data.DataRow item in Model.Rows)
+                    {
+                        id = item["NFEID"].ToString() + item["CODLOG"].ToString();
+                        nfId = item["NFEID"].ToString();
+                        codLog = item["CODLOG"].ToString();
+
+                        <tr id='@id' onclick='SelectRowCodLog("Nfe", "@nfId", "@codLog" )'>
+                            <td style="width: 4%">@item["NUMERO"]</td>
+                            <td style="width: 6%">@item["PEDCOM"]</td>
+                            <td style="width: 4%">@item["ITEPED"]</td>
+                            <td style="width: 9%">@item["CAMPO"]</td>
+                            <td style="width: 8%">@item["VALOR_NFE"]</td>
+                            <td style="width: 8%">@item["VALOR_PED"]</td>
+                            <td title="@item["RAZFOR"]" style="width: 8%">@item["CODFOR"]</td>
+                            <td style="width: 6%">@item["CODCOM"]</td>
+                            <td style="width: 8%">@item["DATVER"]</td>
+                        </tr>
+                    }
+                }
+
+            </tbody>
+
+        </table>
+
+    </div>
+    <!-- end widget content -->
+
+</div>
+
+

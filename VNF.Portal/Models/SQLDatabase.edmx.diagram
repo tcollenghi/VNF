@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="2.0" xmlns:edmx="http://schemas.microsoft.com/ado/2008/10/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2008/10/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="767fdacb902945c4959b183c404acebf" Name="Diagram1" ZoomLevel="89" ShowGrid="true">
+     
+        
+        
+        
+        
+        
+        <EntityTypeShape EntityType="DTB_VNFModel.Groups" Width="1.5" PointX="7.75" PointY="2.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DTB_VNFModel.GroupUsers" Width="1.5" PointX="10" PointY="1.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.MotivoCorrecao" Width="1.5" PointX="10" PointY="2.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.Ocorrencias" Width="1.5" PointX="12.25" PointY="2.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.OcorrenciasComentarios" Width="1.5" PointX="14.5" PointY="2.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbCOM" Width="1.5" PointX="0.75" PointY="4.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbCON" Width="1.5" PointX="5.75" PointY="8.375" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbNFE" Width="1.5" PointX="7.75" PointY="8.375" IsExpanded="false" />
+        <AssociationConnector Association="DTB_VNFModel.FK_GroupUsers_Groups" />
+        <AssociationConnector Association="DTB_VNFModel.FK_MotivoCorrecao_Groups" />
+        <AssociationConnector Association="DTB_VNFModel.FK_Ocorrencias_MotivoCorrecao" />
+        <AssociationConnector Association="DTB_VNFModel.FK_OcorrenciasComentarios_Ocorrencias" />
+        <EntityTypeShape EntityType="DTB_VNFModel.Status_NotaFiscal" Width="1.5" PointX="5.75" PointY="6.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.Talonario" Width="1.5" PointX="8" PointY="6.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TalonarioItem" Width="1.5" PointX="10.25" PointY="6.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbDOC_CAB" Width="1.5" PointX="5.75" PointY="10.375" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbFOR" Width="1.5" PointX="9.75" PointY="8.375" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbStatusMateriaisBloqueados" Width="1.5" PointX="7.75" PointY="10.375" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbValidacoes" Width="1.5" PointX="7.75" PointY="4.5" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbVER" Width="1.5" PointX="9.75" PointY="10.375" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.ToleranciaValidacao" Width="1.5" PointX="0.75" PointY="11.375" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbLOGApplication" Width="1.5" PointX="2.75" PointY="11.375" IsExpanded="false" />
+        <AssociationConnector Association="DTB_VNFModel.FK_Talonario_Status_NotaFiscal" />
+        <AssociationConnector Association="DTB_VNFModel.FK_TalonarioItem_Talonario" />
+        <EntityTypeShape EntityType="DTB_VNFModel.Classificacao" Width="1.5" PointX="4.75" PointY="12.375" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.com_comparacao" Width="1.5" PointX="6.75" PointY="11" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbCFOP" Width="1.5" PointX="3" PointY="1.125" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbDOC_ITEM" Width="1.5" PointX="6.125" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbModoProcessoCategoriaContabil" Width="2.375" PointX="5.875" PointY="5.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbModoProcessoCfop" Width="2.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbDOC_CAB_NFE_REF" Width="1.5" PointX="8.75" PointY="12.375" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbPlantaCnpj" Width="1.5" PointX="11.75" PointY="10.375" IsExpanded="false" />
+        <AssociationConnector Association="DTB_VNFModel.FK_TbModoProcessoCfop_TbCFOP" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbJUN" Width="1.5" PointX="3" PointY="7" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbLOG" Width="1.5" PointX="11.5" PointY="12.125" IsExpanded="false" />
+        <AssociationConnector Association="DTB_VNFModel.FK_TbDOC_ITEM_TbJUN" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbUsuario" Width="1.5" PointX="0.75" PointY="13.375" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbDOC_CAB_ANEXOS" Width="2.5" PointX="11.75" PointY="4.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbDOC_CAB_CTE" Width="2.5" PointX="2.75" PointY="14.375" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbDOC_CAB_SAP" Width="2.5" PointX="7.875" PointY="14.375" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbDOC_ITEM_CTE" Width="2.5" PointX="0.5" PointY="8.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbDOC_ITEM_NFE" Width="2.5" PointX="5.875" PointY="13.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbAcesso" Width="1.5" PointX="10.375" PointY="13.75" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.tbImportacaoNotaFiscal" Width="1.5" PointX="14.375" PointY="6.75" />
+        <EntityTypeShape EntityType="DTB_VNFModel.vwTALONARIO" Width="1.5" PointX="13.5" PointY="12.125" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.vwIntegracaoPSGetPdf" Width="1.5" PointX="8.875" PointY="15.125" IsExpanded="false" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbModoProcessoDetalhe" Width="1.875" PointX="0.75" PointY="0.75" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TBJ1B1N_CFOP_PARCEIRO" Width="1.5" PointX="14.375" PointY="9.75" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TBJ1B1N_PLANTA_METSO_PARCEIRO" Width="1.5" PointX="14.375" PointY="13.75" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TBJ1B1N_DE_PARA_CFOP_ESCRITURAR" Width="1.5" PointX="0.75" PointY="15.75" />
+        <EntityTypeShape EntityType="DTB_VNFModel.VWJ1B1N_IMPOSTO_POR_CFOP_COFINS" Width="1.5" PointX="10.375" PointY="15.75" />
+        <EntityTypeShape EntityType="DTB_VNFModel.VWJ1B1N_IMPOSTO_POR_CFOP_IPI" Width="1.5" PointX="16.375" PointY="7.75" />
+        <EntityTypeShape EntityType="DTB_VNFModel.VWJ1B1N_IMPOSTO_POR_CFOP_PIS" Width="1.5" PointX="16.375" PointY="10.75" />
+        <EntityTypeShape EntityType="DTB_VNFModel.VWJ1B1N_DE_PARA_MATERIAL" Width="1.5" PointX="0.75" PointY="18.75" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TBJ1B1N_DIREITO_FISCAL" Width="1.5" PointX="9.375" PointY="18.75" />
+        <EntityTypeShape EntityType="DTB_VNFModel.VWJ1B1N_DIREITO_FISCAL_ICMS" Width="2.875" PointX="14.375" PointY="16.75" />
+        <EntityTypeShape EntityType="DTB_VNFModel.VWJ1B1N_DIREITO_FISCAL_IPI" Width="2.875" PointX="18.25" PointY="17.625" />
+        <EntityTypeShape EntityType="DTB_VNFModel.VWJ1B1N_DIREITO_FISCAL_PIS" Width="1.5" PointX="17.375" PointY="0.75" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TBDOC_CONSIGNACAO_REFNF" Width="1.5" PointX="9.125" PointY="23.625" />
+        <AssociationConnector Association="DTB_VNFModel.FK_TBDOC_ITEM_NFE" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbDOC_CAB_NFE" Width="1.5" PointX="11.375" PointY="18.75" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TBJ1B1N_TIPO_IMPOSTO_POR_CFOP" Width="1.5" PointX="19.375" PointY="0.75" />
+        <EntityTypeShape EntityType="DTB_VNFModel.VWJ1B1N_IMPOSTO_POR_CFOP_ICMS" Width="1.5" PointX="13.375" PointY="19.75" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TBJ1B1N_DADOS_METSO_PADRAO" Width="1.5" PointX="18.375" PointY="12.75" />
+        <EntityTypeShape EntityType="DTB_VNFModel.VWJ1B1N_DIREITO_FISCAL_COFINS" Width="1.5" PointX="15.375" PointY="19.75" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbValidacoesExcecoes" Width="1.5" PointX="10" PointY="47.625" />
+        <AssociationConnector Association="DTB_VNFModel.FK_TbValidacoesExcecoes_TbValidacoes" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TBJ1B1N_CAB_NFE" Width="1.5" PointX="18.375" PointY="6" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TBJ1B1N_ITEM_NFE" Width="1.5" PointX="20.625" PointY="4.125" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TBJ1B1N_ITEMTAX_NFE" Width="1.5" PointX="22.875" PointY="5.375" />
+        <AssociationConnector Association="DTB_VNFModel.FK_TOTBJ1B1N_CAB_NFE" />
+        <AssociationConnector Association="DTB_VNFModel.FK_TOTBJ1B1N_ITEM_NFE" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TBJ1B1N_COD_MATERIAL_DESCRICAO" Width="1.5" PointX="17.375" PointY="3.75" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TBDOC_SUBCONTRATACAO_REFNF" Width="1.5" PointX="9.125" PointY="26.625" />
+        <AssociationConnector Association="DTB_VNFModel.FK_TBDOC_ITEM_NFE_SUB" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TBDOC_NOTA_COMPLEMENTAR_REFNF" Width="1.5" PointX="9.125" PointY="29.75" />
+        <AssociationConnector Association="DTB_VNFModel.FK_TBDOC_NOTA_COMPLE_ITEM_NFE" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TbModoProcesso" Width="1.5" PointX="3.375" PointY="16" />
+        <AssociationConnector Association="DTB_VNFModel.FK_TbDOC_ITEM_TbModoProcesso" />
+        <AssociationConnector Association="DTB_VNFModel.FK_TbModoProcesso_TbModoProcessoDetalhe" />
+        <AssociationConnector Association="DTB_VNFModel.FK_TbModoProcessoCategoriaContabil_TbModoProcesso" />
+        <AssociationConnector Association="DTB_VNFModel.FK_TbModoProcessoCfop_TbModoProcesso" />
+        <EntityTypeShape EntityType="DTB_VNFModel.TBJ1B1N_CADASTRO_CFOP" Width="1.5" PointX="21.625" PointY="12.375" />
+        
+        
+         
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

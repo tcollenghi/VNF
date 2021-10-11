@@ -1,0 +1,28 @@
+﻿@{
+    ViewBag.Title = "MonitorDivergencias";
+    <style>
+        .graph_container {
+            display: block;
+            border-color: gray;
+            border-size: 1px;
+            border-style: solid;
+            width: 1400px;
+            max-width: 99%;
+            position: center;
+        }
+    </style>
+
+    <div >
+        <canvas id="Chart1"></canvas>
+    </div>
+
+
+
+
+}
+@section pagespecific {
+    <script src="~/scripts/views/relatorios/relatorios_index.js"></script>
+    <script src="~/scripts/plugin/chartjs/chart.js"></script>
+    <script src="~/Scripts/jquery.maskMoney.js"></script>
+    <script src="~/Scripts/Metso.js"></script>
+}

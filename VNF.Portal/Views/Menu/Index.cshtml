@@ -1,0 +1,93 @@
+﻿@using MetsoFramework.Utils
+@using VNF.Portal.DataLayer
+@model List<VNF.Menus>
+@{
+    DLMenu objDLMenu = new DLMenu();
+    ViewBag.Title = "Menu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row">
+    <div class="col-xs-2">
+        <h1>Menu</h1>
+    </div>
+  
+    <div class="col-xs-10 right">
+        <br class="hide-mobile" />
+        <div class="btn-group">
+            <button id="btnNovo" class="btn btn-primary" type="button" onclick="window.location='@Url.Action("Edit", "Menu")'">New</button>            
+            <button id="btnEdit" class="btn btn-primary disabled" type="button" onclick="Edit('Menu')">Edit</button>
+            <button id="btnDelete" class="btn btn-danger disabled" type="button" onclick="ConfirmDeletion()">Delete</button>
+        </div>
+        <div class="break-line20 hide-computer"></div>
+    </div>
+</div> 
+<hr />
+
+@Html.ConfirmDeletion("Do you really confirm this deletion ?", "This action cannot be undone. The page that is directed through the menu will not be deleted, but the sub-menus are also removed.", "Menu")
+
+<input type="hidden" id="hfIdMenu" /><br />
+
+<table id="dttMenu" class="display table table-responsive table-striped table-hover" width="100%">
+    <thead>
+      <tr>
+        <th>Menu</th>
+        <th>Parent Menu</th>
+        <th>Page</th>
+        <th>Released</th>
+      </tr>
+    </thead>
+    <tbody>
+        @foreach (var menu in (IEnumerable<VNF.Menus>)Model)
+        {
+            <tr id="@menu.IdMenu" class="@menu.IdMenu" onclick="SelectRow('Menu', @menu.IdMenu)">
+                <td><span class="@menu.Icon"></span>&nbsp; @menu.Description</td>
+                <td>-</td>
+                @if (menu.Pages == null)
+                {
+                    <td>-</td>
+                }
+                else
+                {
+                    <td>@menu.Pages.Title</td>
+                }
+                <td>@menu.Released</td>
+            </tr>
+            
+            foreach (var subMenu in (IEnumerable<VNF.Menus>)objDLMenu.GetSubMenus(0, @menu.IdMenu, false))
+                {
+                <tr id="@subMenu.IdMenu" class="@menu.IdMenu @subMenu.IdMenu" onclick="SelectRow('Menu', @subMenu.IdMenu)">
+                    <td>&nbsp;&nbsp;&nbsp;&nbsp; <span class="@subMenu.Icon"></span>&nbsp; @subMenu.Description</td>
+                    <td>@menu.Description</td>
+                    <td>@subMenu.Pages.Title</td>
+                    <td>@subMenu.Released</td>
+                </tr>
+                }
+        }
+    </tbody>
+</table>
+
+@section head
+{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $('#dttMenu').dataTable({
+                responsive: true,
+                "bLengthChange": false,
+                "bSort": false,
+                "pagingType": "simple_numbers",
+                "pageLength": 15,
+                "fnCreatedRow": function (nRow, aData, iDataIndex) {
+                    $(nRow).children("th").css("overflow", "hidden");
+                    $(nRow).children("th").css("white-space", "nowrap");
+                    $(nRow).children("th").css("text-overflow", "ellipsis");
+                }
+            });
+        });
+
+    </script>
+
+}

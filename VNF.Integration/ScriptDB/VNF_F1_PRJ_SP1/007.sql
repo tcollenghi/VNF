@@ -1,0 +1,1 @@
+ALTER SCHEMA dbo TRANSFER VNF.tbImportacaoItemNF;

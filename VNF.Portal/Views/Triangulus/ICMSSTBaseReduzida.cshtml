@@ -1,0 +1,299 @@
+﻿@using MetsoFramework.Utils
+@using MetsoAdmin.Controllers
+@model System.Data.DataTable
+@{
+    ViewBag.Title = "ICMS ST - Base Reduzida";
+}
+
+@*<style>
+        .margin-bottom0 {
+            margin-bottom: 0px !important;
+        }
+
+        .higth0 {
+            height: 0px !important;
+        }
+    </style>*@
+<style>
+    .exceedQtdMsg {
+        color: indianred;
+        font-style: italic;
+        font-weight: 700;
+        padding-top: 1px !important;
+        padding-bottom: 3px !important;
+        font-size: 10px !important;
+    }
+</style>
+
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-angle-double-right fa-fw "></i>
+            ICMS ST - Base Reduzida
+        </h1>
+    </div>
+
+    <article class="col-sm-12 col-md-12 col-lg-12">
+
+        <div class="jarviswidget jarviswidget-color-blueDark margin-bottom0" data-widget-editbutton="false">
+
+            <header class="navigation-wrap">
+                <span class="widget-icon"><i class="fa fa-file-text"></i></span>
+                <h2>Selecione a nota e o item do ICMS ST</h2>
+            </header>
+
+            <div id="divSelecionarArquivo">
+                <div class="modal-body">
+                    <form class="smart-form">
+                        <fieldset>
+                            <div class="row col-md-12">
+                                <section class="col col-md-2">
+                                    <label class="input">
+                                        @Html.Label("NF")
+                                        @Html.TextBox("pstrNF", "", new { @style = "text-align:left", @id = "txtNF" })
+                                        @*<input type="text" class="form-control datepicker" data-dateformat="dd/mm/yy" placeholder="dd/mm/aaaa" name="txtDataAte" id="txtDataAte" onkeypress="KeyEnter(event);">*@
+                                    </label>
+                                </section>
+                                <section class="col col-md-1">
+                                    <label class="input">
+                                        @Html.Label("Série")
+                                        @Html.TextBox("pstrSerie", "", new { @style = "text-align:left", @id = "txtSerie" })
+                                        @*<input type="text" class="form-control datepicker" data-dateformat="dd/mm/yy" placeholder="dd/mm/aaaa" name="txtDataAte" id="txtDataAte" onkeypress="KeyEnter(event);">*@
+                                    </label>
+                                </section>
+                                <section class="col col-md-1">
+                                    <label class="input">
+                                        @Html.Label("Nº Item")
+                                        @Html.TextBox("item", "", new { @style = "text-align:left", @id = "txtItem" })
+                                    </label>
+                                </section>
+                                <section class="col col-md-3">
+                                    <label class="input">
+                                        @Html.Label("Filial")
+                                        @Html.MetsoDropDownList("Filial", ViewBag.SelectFiliais as IEnumerable<SelectListItem>, "(SELECIONE)", new { @class = "input-sm", @style = "width:220px", @onkeypress = "KeyEnter(event);", @id = "txtFilial" })
+                                    </label>
+                                </section>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="widget-body">
+                    <div class="smart-form">
+                        <footer class="border">
+                            <a class="btn btn-primary" onclick="ICMSBaseReduzida(txtFilial.value, txtNF.value, txtSerie.value, txtItem.value);" id="btnVisualizarDanfe"><span class="text-btn"><i class="fa fa-file-text"></i> Atualizar </span></a>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+        </div>
+  
+    </article>
+
+</div>
+
+
+<script src="~/Scripts/plugin/datatables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/plugin/datatables/dataTables.colVis.min.js"></script>
+<script src="~/Scripts/plugin/datatables/dataTables.tableTools.min.js"></script>
+<script src="~/Scripts/plugin/datatables/dataTables.bootstrap.min.js"></script>
+<script src="~/Scripts/plugin/datatable-responsive/datatables.responsive.min.js"></script>
+<script src="~/scripts/plugin/jquery-form/jquery-form.min.js"></script>
+<script src="~/Scripts/jquery.maskedinput.min.js"></script>
+<script src="~/Scripts/plugin/jq"></script>
+<script src="~/Scripts/jquery.maskMoney.js"></script>
+<script src="~/Scripts/Metso.js"></script>
+<script src="~/Scripts/views/_global.js"></script>
+<script src="~/Scripts/views/gridpadrao_index.js"></script>
+<script src="~/Scripts/views/PermissaoUsuario.js"></script>
+<script>PermissaoUsuario('@(ViewBag.Acesso)')</script>
+
+<script language="javascript">
+
+    function ICMSBaseReduzida(pstrFilial, pstrNF, pstrSerie, pstrItem) {
+        $.ajax({
+            async: true,
+            type: 'POST',
+            url: '@Url.Action("validarICMSBaseReduzida", "Triangulus")',
+            dataType: 'json',
+            data: {
+                pstrFilial: pstrFilial,
+                pstrNF: pstrNF,
+                pstrSerie: pstrSerie,
+                pstrItem: pstrItem
+            },
+            error: function (erro) {
+                $.smallBox({
+                    title: "Erros",
+                    content: "Não foi possível completar sua solicitação!",
+                    color: "#C46A69",
+                    icon: "fa fa-exclamation-circle",
+                    buttons: '[Fechar]',
+                    timeout: 4000
+                });
+            },
+            success: function (oReturn) {
+                if (oReturn.result === "cancelar") {
+                    $.SmartMessageBox({
+                        title: "Alteração",
+                        content: oReturn.data,
+                        buttons: '[Não][Sim]'
+                    }, function (ButtonPressed) {
+                        if (ButtonPressed === "Sim") {
+                            $.ajax({
+                                async: true,
+                                type: 'POST',
+                                url: '@Url.Action("InserirICMSBaseReduzida", "Triangulus")',
+                                dataType: 'json',
+                                data: {
+                                    pstrFilial: pstrFilial,
+                                    pstrNF: pstrNF,
+                                    pstrSerie: pstrSerie,
+                                    pstrItem: pstrItem
+                                },
+                                error: function (erro) {
+                                    $.smallBox({
+                                        title: "Erros",
+                                        content: erro.data,
+                                        color: "#C46A69",
+                                        icon: "fa fa-exclamation-circle fadeInLeft animated",
+                                        buttons: '[Fechar]',
+                                        timeout: 4000
+                                    });
+                                },
+                                success: function (oReturn) {
+                                    //location.reload();
+                                    $.smallBox({
+                                        title: "Sucesso",
+                                        content: oReturn.data,
+                                        color: "#739E73",
+                                        icon: "fa fa-exclamation-circle fadeInLeft animated",
+                                        buttons: '[Fechar]',
+                                        timeout: 4000
+                                    });
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    if (oReturn.result === "ok") {
+                        $.smallBox({
+                            title: "VNF NELES",
+                            content: oReturn.data,
+                            color: "#739E73",
+                            icon: "fa fa-check-circle",
+                            timeout: 4000
+                        });
+                    }
+                    else {
+                        $.smallBox({
+                            title: "VNF NELES",
+                            content: oReturn.data,
+                            color: "#C46A69",
+                            icon: "fa fa-check-circle",
+                            timeout: 4000
+                        });
+                    }
+                }
+
+            }
+        });
+    }
+
+
+    function Inutilizar(pstrFilial, pnumeroNFe, pstrSerie, pstrData) {
+        //alert(pstrNF);
+        //alert(pstrSerie);
+        //alert(pstrData);
+        //alert(pstrFilial);
+        $.ajax({
+            async: true,
+         //   cache: false,
+            type: 'POST',
+            url: '@Url.Action("validarInutilizacao", "Triangulus")',
+            dataType: 'json',
+            data: {
+                pstrFilial: pstrFilial,
+                pnumeroNFe: pnumeroNFe,
+                pstrSerie: pstrSerie,
+                pstrData: pstrData
+            },
+            error: function (erro) {
+                $.smallBox({
+                    title: "Erros",
+                    content: "Não foi possível completar sua solicitação!",
+                    color: "#C46A69",
+                    icon: "fa fa-exclamation-circle",
+                    buttons: '[Fechar]',
+                    timeout: 4000
+                });
+            },
+            success: function (oReturn) {
+                if (oReturn.result === "cancelar") {
+                    $.SmartMessageBox({
+                        title: "Cancelamento",
+                        content: oReturn.data,
+                        buttons: '[Não][Sim]'
+                    }, function (ButtonPressed) {
+                        if (ButtonPressed === "Sim") {
+                            $.ajax({
+                                async: true,
+                                //cache: false,
+                                type: 'POST',
+                                url: '@Url.Action("Cancelar", "Triangulus")',
+                                dataType: 'json',
+                                data: {
+                                    pstrNF: pnumeroNFe,
+                                    pstrSerie: pstrSerie,
+                                    pstrData: pstrData,
+                                    pstrFilial: pstrFilial
+                                },
+                                error: function (erro) {
+                                    $.smallBox({
+                                        title: "Erros",
+                                        content: erro.data + " Não foi possível completar sua solicitação!",
+                                        color: "#C46A69",
+                                        icon: "fa fa-exclamation-circle fadeInLeft animated",
+                                        buttons: '[Fechar]',
+                                        timeout: 4000
+                                    });
+                                },
+                                success: function (oReturn) {
+                                    //location.reload();
+                                    $.smallBox({
+                                        title: "VNF NELES",
+                                        content: oReturn.data /*+ ", Não foi possível completar sua solicitação!"*/,
+                                        color: "#739E73",
+                                        icon: "fa fa-exclamation-circle fadeInLeft animated",
+                                        buttons: '[Fechar]',
+                                        timeout: 4000
+                                    });
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    if (oReturn.result === "ok") {
+                        $.smallBox({
+                            title: "VNF NELES",
+                            content: oReturn.data,
+                            color: "#739E73",
+                            icon: "fa fa-check-circle",
+                            timeout: 4000
+                        });
+                    }
+                    else {
+                        $.smallBox({
+                            title: "VNF NELES",
+                            content: oReturn.data,
+                            color: "#C46A69",
+                            icon: "fa fa-check-circle",
+                            timeout: 4000
+                        });
+                    }
+                }
+
+            }
+        });
+    }
+</script>
+

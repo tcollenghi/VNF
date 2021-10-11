@@ -1,0 +1,244 @@
+﻿@using VNF.Portal.Models
+@using MetsoFramework.Utils
+@model Groups
+@{
+    ViewBag.Title = "Grupos";
+}
+
+
+
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-angle-double-right fa-fw "></i>
+            Cadastro de Grupos
+        </h1>
+    </div>
+
+</div>
+<!-- widget grid -->
+<section id="widget-grid" class="">
+
+    <!-- START ROW -->
+    <div class="row">
+
+        <!-- NEW COL START -->
+        <article class="col-sm-12 col-md-12 col-lg-12">
+
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget jarviswidget-color-blueDark" data-widget-sortable="false" data-widget-fullscreenbutton="false" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-deletebutton="false" data-widget-collapsed="false" data-widget-togglebutton="false">
+
+                <header>
+                    <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                    <h2>Grupo</h2>
+
+                </header>
+
+                <div>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+
+                    </div>
+                    <!-- end widget edit box -->
+                    <div class="widget-body no-padding">
+                        @using (Html.BeginForm("Edit", "Groups", FormMethod.Post, new { id = "frmGroups", @class = "smart-form", enctype = "multipart/form-data" }))
+                        {
+
+                            <fieldset>
+                                <section>
+                                    <label class="label">
+                                        Nome do Grupo
+                                    </label>
+                                    @Html.HiddenFor(model => model.IdGroup)
+                                    <label class="input">
+                                        @Html.MetsoTextBoxFor(model => model.GroupName, SessionsHelper.FieldType.Text, null, true)
+                                    </label>
+                                </section>
+                            </fieldset>
+                            <br />
+                        }
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+</section>
+
+
+@if (Model.IdGroup > 0)
+{
+    <div class="row">
+
+        <article class="col-sm-12 col-md-12 col-lg-12">
+
+            <div class="jarviswidget jarviswidget-color-blueDark" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-deletebutton="false">
+                <header>
+                    <span class="widget-icon"> <i class="fa fa-reorder"></i> </span>
+                    <h2>Usuários do grupo</h2>
+                </header>
+
+                <div class="widget-body">
+                    <div id="myTabContent1" class="tab-content padding-10">
+                        <div class="tab-pane fade in active" id="s1">
+                            <table id="tbGrupos" class="table">
+                                <thead>
+                                    <tr>
+                                        <th>E-mail</th>
+                                        <th></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var i in Model.GroupUsers)
+                                    {
+                                        <tr>
+                                            <td>@i.LoginName</td>
+                                            <td width="3%">
+                                                <button type="button" title="Remover" class="btn btn-xs btn-danger" onclick="RemoveItem(@i.IdGroupUser)">
+                                                    <i class="fa fa-trash-o"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+}
+
+
+<section id="widget-grid" class="">
+    <div class="smart-form">
+        <footer class="border">
+            @if (Model.IdGroup > 0)
+            {
+                <button type="button" class="btn btn-primary" onclick="AdicionaItem();"><i class="fa fa-plus"></i>  Adicionar usuário</button>
+            }
+            <button type="submit" class="btn btn-primary">
+                <i class="fa fa-check"></i> Salvar
+            </button>
+            <button type="button" class="btn btn-primary" onclick="window.history.back();">
+                <i class="fa fa-arrow-circle-left"></i> Voltar
+            </button>
+        </footer>
+    </div>
+</section>
+
+@*Carrega os scripts necessarios*@
+@section pagespecific {
+    <script src="../../Scripts/plugin/bootstrapvalidator/bootstrapValidator.min.js"></script>
+
+    <script src="~/Scripts/views/PermissaoUsuario.js"></script>
+    <script>PermissaoUsuario('@(ViewBag.Acesso)')</script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            pageSetUp();
+            //GroupName: {
+            //        validators: {
+            //            notEmpty: {
+            //                    message: 'O grupo é obrigatório'
+            //            }
+            //        }
+            //}
+
+            $("#frmGroups").bootstrapValidator({
+                feedbackIcons: {
+                    valid: 'glyphicon glyphicon-ok',
+                    invalid: 'glyphicon glyphicon-remove',
+                    validating: 'glyphicon glyphicon-refresh'
+                },
+                fields: {
+                    GroupName: {
+                        validators: {
+                            notEmpty: {
+                                message: 'O grupo é obrigatório'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+
+        function CarregaUsuarios() {
+            $.ajax({
+                async: false,
+                type: 'GET',
+                cache: false,
+                dataType: 'text',
+                url: '@Url.Action("GetUsers")',
+                data: { Id: $("#IdGroup").val() },
+                success: function (result) {
+                    $("#tbGrupos tbody").html("");
+                    $("#tbGrupos tbody").append(result);
+                }
+            });
+        }
+
+        function AdicionaItem() {
+            $.SmartMessageBox({
+                title: "Adicionar usuário",
+                content: "Informe o e-mail do usuário que deseja adicionar.",
+                buttons: "[Confirmar][Cancelar]",
+                input: "text"
+            }, function (ButtonPress, Value) {
+                if (ButtonPress == "Confirmar") {
+                    if (Value != "") {
+                        $.ajax({
+                            async: false,
+                            type: 'POST',
+                            cache: false,
+                            dataType: 'text',
+                            url: '@Url.Action("AdicionaItem")',
+                            data: { IdGroup: $("#IdGroup").val(), LoginName: Value },
+                            success: function (result) {
+                                CarregaUsuarios();
+                                $("#txtLoginName").val("");
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                alert(xhr.status);
+                                alert(thrownError);
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+        function RemoveItem(id) {
+            $.SmartMessageBox({
+                title: "VNF NELES",
+                content: "Deseja remover o usuário do grupo?",
+                buttons: '[Sim][Não]'
+            }, function (ButtonPressed) {
+                if (ButtonPressed === "Sim") {
+                    $.ajax({
+                        async: false,
+                        type: 'POST',
+                        cache: false,
+                        dataType: 'text',
+                        url: '@Url.Action("RemoveItem")',
+                        data: { Id: id },
+                        success: function (result) {
+                            CarregaUsuarios();
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            alert(xhr.status);
+                            alert(thrownError);
+                        }
+                    });
+                }
+            });
+        }
+
+
+    </script>
+}
+
+
+

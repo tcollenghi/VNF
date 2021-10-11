@@ -1,0 +1,111 @@
+﻿@model System.Data.DataTable
+
+<div class="jarviswidget jarviswidget-color-blueDark" data-widget-sortable="false" data-widget-editbutton="false">
+    <header class="navigation-wrap">
+        <div class="col-md-9 col-xs-12">
+            <div class="btn-group margin-top-5 left">
+                @*<a class="btn btn-default" onclick="ExportarNfe();" data-toggle="modal"><i class="fa fa-file-excel-o"></i><span class="text-btn"> Exportar</span></a>*@
+            </div>
+        </div>
+        <div class="col-md-3 col-xs-12">
+            <div class="btn-group btn-group-justified margin-top-5 right">
+                <a class="btn btn-primary" onclick="Novo();"><i class="fa fa-plus"></i><span class="text-btn"> Novo</span></a>
+                <a class="btn btn-primary" onclick="Modificar();"><i class="fa fa-pencil"></i><span></span><span class="text-btn"> Modificar</span></a>
+            </div>
+        </div>
+    </header>
+
+    <div id="divData">
+        <div class="widget-body no-padding">
+            <table id="dttTalonario" datatables_fixedheader="top" datatables_fixedheader_offsettop="60" class="table table-striped table-bordered table-hover table-click" width="100%">
+                <thead>
+                    <tr>
+                        <th>Data Emissão</th>
+                        <th style="width: 35%;">Fornecedor</th>
+                        <th>Número</th>
+                        <th>Série</th>
+                        <th>Integração SAP</th>
+                        <th>Finalizado</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null)
+                    {
+
+                        string id = "";
+                        string Finalizado = "";
+                        string cor = "";
+                        string StatusIntegracao = "";
+                        foreach (System.Data.DataRow item in Model.Rows)
+                        {
+                            id = item["IdTalonario"].ToString();
+
+
+
+                            if (item["STATUS_INTEGRACAO"].ToString() == "CONCLUÍDO")
+                            {
+                                cor = "txt-color-gray";
+                            }
+                            else
+                            {
+                                cor = "txt-color-blue";
+                            }
+                            StatusIntegracao = item["STATUS_INTEGRACAO"].ToString();
+                            
+
+                            if (item["Finalizado"].ToString() == "True")
+                            {
+                                Finalizado = "Sim";
+                            }
+                            else
+                            {
+                                Finalizado = "Não";
+                            }
+
+
+
+                            <tr id='row_@id' onclick="selectRow('@id', '@StatusIntegracao');" class="@cor">
+                                <td>@(String.IsNullOrEmpty(item["DataEmissao"].ToString()) ? "---" : Convert.ToDateTime(item["DataEmissao"]).ToString("dd/MM/yyyy"))</td>
+                                <td>@item["RazaoSocialEmitente"].ToString()</td>
+                                <td>@item["NumeroDocumento"].ToString()</td>
+                                <td>@item["Serie"].ToString()</td>
+                                <td>@item["STATUS_INTEGRACAO"].ToString()</td>
+                                <td>@Finalizado</td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+@section pagespecific {
+
+    <!-- PAGE RELATED PLUGIN(S) -->
+    <script src="~/Scripts/views/Talonario/Talonario.js"></script>
+    <script src="~/Scripts/plugin/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.colVis.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.tableTools.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/plugin/datatable-responsive/datatables.responsive.min.js"></script>
+    <script src="~/Scripts/jquery.maskMoney.js"></script>
+    <script src="~/Scripts/Metso.js"></script>
+
+    <!-- Page Script -->
+    <script src="~/Scripts/views/_global.js"></script>
+    <script src="~/Scripts/views/PermissaoUsuario.js"></script>
+    <script>PermissaoUsuario('@(ViewBag.Acesso)')</script>
+}
+
+
+
+
+
+
+
+
+
+

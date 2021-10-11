@@ -1,0 +1,452 @@
+﻿@using MetsoFramework.Utils
+@using VNF.Portal.Models
+@model TbModoProcesso
+@{
+    ViewBag.Title = "Modo Processo";
+    int Id = Model.id_modo_processo;
+}
+
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-angle-double-right fa-fw "></i>
+            Modo Processo
+        </h1>
+    </div>
+
+</div>
+<!-- widget grid -->
+<section id="widget-grid" class="">
+    <div class="row">
+        <article class="col-sm-12 col-md-12 col-lg-12">
+
+            <div class="jarviswidget jarviswidget-color-blueDark" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-deletebutton="false">
+                <header>
+                    <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                    <h2>Processo</h2>
+                </header>
+
+                <div>
+                    <div class="jarviswidget-editbox">
+                    </div>
+                    <div class="widget-body no-padding">
+                        @using (Html.BeginForm("Edit", "ModoProcesso", FormMethod.Post, new { id = "frmEdit", @class = "smart-form", enctype = "multipart/form-data" }))
+                        {
+                            @Html.HiddenFor(model => model.id_modo_processo)
+                            @*<input type="hidden" id="id_modo_processo" value="@Id" />*@
+                            @*@Html.MetsoTextBoxFor(model => model.IdTalonario, SessionsHelper.FieldType.Text, null, true)*@
+
+                            <fieldset>
+
+                                <div class="row">
+                                    <section class="col col-12 col-3">
+                                        <label class="label">Tipo Documento*</label>
+                                        <label class="input">
+                                            @Html.MetsoDropDownListFor(model => model.mod_tipo_documento, ViewBag.TipoDocumento as IEnumerable<SelectListItem>, null, null, true, true)
+                                        </label>
+                                    </section>
+                                    <section class="col col-12 col-3">
+                                        <label class="label">Moeda*</label>
+                                        <label class="input">
+                                            @Html.MetsoDropDownListFor(model => model.mod_moeda, ViewBag.Moeda as IEnumerable<SelectListItem>, null, null, true, true)
+                                        </label>
+                                    </section>
+                                    <section class="col col-12 col-4">
+                                        <label class="label">Planta</label>
+                                        <label class="input">
+
+                                            @Html.MetsoDropDownListFor(model => model.mod_planta, ViewBag.Plantas as IEnumerable<SelectListItem>, null, null, true, true)
+                                        </label>
+                                    </section>
+                                    <section class="col col-12 col-2">
+                                        <label class="label">Prioridade</label>
+                                        <label class="input">
+                                            @Html.MetsoTextBoxFor(model => model.mod_prioridade, SessionsHelper.FieldType.Text, null, true)
+                                        </label>
+                                    </section>
+                                    <section class="col col-12 col-3">
+                                        <label class="label">Material</label>
+                                        <label class="input">
+                                            @Html.MetsoTextBoxFor(model => model.mod_tipo_material, SessionsHelper.FieldType.Text, null, true)
+                                        </label>
+                                    </section>
+                                    <section class="col col-12 col-3">
+                                        <label class="label">Qtd max de dígitos no número NF</label>
+                                        <label class="input">
+                                            @Html.MetsoTextBoxFor(model => model.mod_max_caracteres_num_nf, SessionsHelper.FieldType.Integer, null, true)
+                                        </label>
+                                    </section>
+                                    <section class="col col-12 col-4">
+                                        <label class="label">Processo*</label>
+                                        <label class="input">
+                                            @Html.MetsoDropDownListFor(model => model.mod_id_modo_processo_detalhe, ViewBag.ModoProcesso as IEnumerable<SelectListItem>, null, null, true, true)
+
+                                        </label>
+                                    </section>
+                                    <section class="col col-12 col-1">
+                                        <label class="label">Cat. Item</label>
+                                        <label class="input">
+                                            @Html.MetsoTextBoxFor(model => model.mod_item_category, SessionsHelper.FieldType.Text, null, true)
+                                        </label>
+                                    </section>
+                                    <section class="col col-12 col-1">
+                                        <label class="label">NF Compl.</label>
+                                        <label class="input">
+                                            @Html.MetsoTextBoxFor(model => model.mod_nf_complementar, SessionsHelper.FieldType.Text, null, true)
+                                        </label>
+                                    </section>
+                                </div>
+                            </fieldset>
+                            <br />
+                        }
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+</section>
+
+@if (Model.id_modo_processo > 0)
+{
+    <div class="row">
+        <article class="col-sm-12 col-md-12 col-lg-12">
+
+            <div class="jarviswidget jarviswidget-color-blueDark" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-deletebutton="false">
+                <header>
+
+                    <ul class="nav nav-tabs pull-left in" id="myTab">
+                        <li class="bg-color-blueDark active">
+                            <a data-toggle="tab" href="#s1"><i class="fa fa-reorder"></i> <span class="hidden-mobile hidden-tablet">CFOP</span></a>
+                        </li>
+                        <li class="bg-color-blueDark">
+                            <a data-toggle="tab" href="#s2"><i class="fa fa-reorder"></i> <span class="hidden-mobile hidden-tablet">Categoria de classificação contábil</span></a>
+                        </li>
+                    </ul>
+
+                </header>
+
+                <div class="widget-body ">
+                    <div id="myTabContent1" class="tab-content">
+                        <div class="tab-pane fade in active" id="s1">
+                            <table id="tbCFOP" class="table table-striped table-bordered table-hover" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th data-class="expand">CFOP</th>
+                                        <th data-hide="phone"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var i in Model.TbModoProcessoCfop.OrderBy(x => x.mpc_cfop_codigo).ToList())
+                                    {
+                                    <tr>
+                                        <td>@i.mpc_cfop_codigo</td>
+                                        <td width="3%">
+                                            <button type="button" title="Excluir" class="btn btn-xs btn-danger" onclick="RemoverCFOP(@i.id_modo_processo_cfop)">
+                                                <i class="fa fa-trash-o"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <br />
+                            <div class="smart-form remove-tab-padding">
+                                <footer>
+                                    <button class="btn btn-primary" type="button" onclick="AdicionaCFOP();">
+                                        <i class="fa fa-plus"></i> Adicionar CFOP
+                                    </button>
+                                </footer>
+                            </div>
+                        </div>
+
+                        <div class="tab-pane fade" id="s2">
+                            @*Carrega os grupos aos que o usuário está vinculado*@
+                            <table id="tbCC" class="table table-striped table-bordered table-hover" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th data-class="expand">Categoria de classificação contábil</th>
+                                        <th data-hide="phone"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach(TbModoProcessoCategoriaContabil c in Model.TbModoProcessoCategoriaContabil.OrderBy(x => x.mcc_categoria_contabil).ToList())
+                                     {
+                                    <tr>
+                                        <td>@c.mcc_categoria_contabil</td>
+                                        <td width="3%">
+                                            <button type="button" title="Excluir" class="btn btn-xs btn-danger" onclick="RemoverCC(@c.id_modo_processo_categoria_contabil)">
+                                                <i class="fa fa-trash-o"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                     }
+                                </tbody>
+                            </table>
+                            <br />
+                            <div class="smart-form remove-tab-padding">
+                                <footer>
+                                    <button class="btn btn-primary" type="button" onclick="AdicionaCC();">
+                                        <i class="fa fa-plus"></i> Adicionar categoria de classificação contábil
+                                    </button>
+                                </footer>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- end widget div -->
+            </div>
+            <!-- end widget -->
+
+        </article>
+    </div>
+}
+
+<section id="widget-grid" class="">
+    <div class="smart-form">
+        <footer class="border">
+            <button type="button" onclick="Salvar();" class="btn btn-primary">
+                <i class="fa fa-check"></i> Salvar
+            </button>
+            <button type="button" class="btn btn-primary" onclick="window.location = '@Url.Action("Index", "ModoProcesso")'">
+                <i class="fa fa-arrow-circle-left"></i> Voltar
+            </button>
+        </footer>
+    </div>
+</section>
+
+@section pagespecific
+    {
+    <script src="~/Scripts/plugin/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.colVis.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.tableTools.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/plugin/datatable-responsive/datatables.responsive.min.js"></script>
+
+    <script src="~/Scripts/views/PermissaoUsuario.js"></script>
+    <script>PermissaoUsuario('@(ViewBag.Acesso)')</script>
+
+    <script src="~/Scripts/plugin/jquery-form/jquery-form.min.js"></script>
+    <script src="~/Scripts/MetsoAdmin.js"></script>
+    <script type="text/javascript">
+
+
+
+        /* BASIC ;*/
+        var responsiveHelper_dt_basic = undefined;
+        var responsiveHelper_datatable_fixed_column = undefined;
+        var responsiveHelper_datatable_col_reorder = undefined;
+        var responsiveHelper_datatable_tabletools = undefined;
+
+        var breakpointDefinition = {
+            tablet: 1024,
+            phone: 480
+        };
+
+
+        function AdicionaCFOP() {
+            //Carrega os CFOPs do banco
+            var Itens = "";
+            $.ajax({
+                async: false,
+                type: 'GET',
+                cache: false,
+                dataType: 'text',
+                url: '@Url.Action("GetCFOPList")',
+                success: function (result) {
+                    Itens = result;
+                }
+            });
+
+
+            $.SmartMessageBox({
+                title: "VNF NELES",
+                content: "Informe o CFOP",
+                buttons: "[Confirmar][Cancelar]",
+                input: "select",
+                options: Itens
+            }, function (ButtonPress, Value) {
+                if (ButtonPress == "Confirmar") {
+
+
+
+                    var Id = $("#id_modo_processo").val();
+                    var CFOP = Value
+                    if (CFOP == "") {
+                        $.SmartMessageBox({
+                            title: "VNF NELES",
+                            content: "Verifique os campos obrigatorios!",
+                            buttons: '[ok]'
+                        });
+                    }
+                    else {
+                        $.ajax({
+                            async: false,
+                            type: 'POST',
+                            cache: false,
+                            dataType: 'text',
+                            url: '@Url.Action("AdicionaCFOP")',
+                            data: { Id: Id, CFOP: CFOP },
+                            success: function (result) {
+                                CarregaCFOP();
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                alert(xhr.status);
+                                alert(thrownError);
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+
+
+        function CarregaCFOP() {
+            $.ajax({
+                async: false,
+                type: 'GET',
+                cache: false,
+                dataType: 'text',
+                url: '@Url.Action("CarregaCFOP")',
+                data: { Id: $("#id_modo_processo").val() },
+                success: function (result) {
+                    $("#tbCFOP tbody").html("");
+                    $("#tbCFOP tbody").append(result);
+                }
+            });
+        }
+
+
+        function RemoverCFOP(id) {
+            $.SmartMessageBox({
+                title: "VNF NELES",
+                content: "Deseja remover o CFOP?",
+                buttons: '[No][Yes]'
+            }, function (ButtonPressed) {
+                if (ButtonPressed === "Yes") {
+                    $.ajax({
+                        async: false,
+                        type: 'POST',
+                        cache: false,
+                        dataType: 'text',
+                        url: '@Url.Action("RemoveCFOP")',
+                        data: { Id: id },
+                        success: function (result) {
+                            CarregaCFOP();
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            alert(xhr.status);
+                            alert(thrownError);
+                        }
+                    });
+                }
+            });
+        }
+
+
+        function Salvar() {
+            var Tipodocumento = $("#mod_tipo_documento").val();
+            var Moeda = $("#mod_moeda").val();
+            var Processo = $("#mod_id_modo_processo_detalhe").val();
+            if (Tipodocumento == "" || Moeda == "" || Processo == "") {
+                $.SmartMessageBox({
+                    title: "VNF NELES",
+                    content: "Preencha os campos obrigatórios",
+                    buttons: "[Ok]"
+                });
+            }
+            else {
+                $("#frmEdit").submit();
+            }
+        }
+
+
+
+
+
+        function AdicionaCC() {
+            $.SmartMessageBox({
+                title: "VNF NELES",
+                content: "Informe o Código Contábil",
+                buttons: "[Confirmar][Cancelar]",
+                input: "text"
+            }, function (ButtonPress, Value) {
+                if (ButtonPress == "Confirmar") {
+                    var Id = $("#id_modo_processo").val();
+                    var CC = Value
+                    if (CC == "") {
+                        $.SmartMessageBox({
+                            title: "VNF NELES",
+                            content: "Verifique os campos obrigatorios!",
+                            buttons: '[ok]'
+                        });
+                    }
+                    else {
+                        $.ajax({
+                            async: false,
+                            type: 'POST',
+                            cache: false,
+                            dataType: 'text',
+                            url: '@Url.Action("AdicionaCC")',
+                            data: { Id: Id, CC: CC },
+                            success: function (result) {
+                                CarregaCC();
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                alert(xhr.status);
+                                alert(thrownError);
+                            }
+                        });
+                    }
+                }
+            });
+        }
+
+
+
+        function CarregaCC() {
+            $.ajax({
+                async: false,
+                type: 'GET',
+                cache: false,
+                dataType: 'text',
+                url: '@Url.Action("CarregaCC")',
+                data: { Id: $("#id_modo_processo").val() },
+                success: function (result) {
+                    $("#tbCC tbody").html("");
+                    $("#tbCC tbody").append(result);
+                }
+            });
+        }
+
+
+        function RemoverCC(id) {
+            $.SmartMessageBox({
+                title: "VNF NELES",
+                content: "Deseja remover o Código Contábil?",
+                buttons: '[No][Yes]'
+            }, function (ButtonPressed) {
+                if (ButtonPressed === "Yes") {
+                    $.ajax({
+                        async: false,
+                        type: 'POST',
+                        cache: false,
+                        dataType: 'text',
+                        url: '@Url.Action("RemoveCC")',
+                        data: { Id: id },
+                        success: function (result) {
+                            CarregaCC();
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            alert(xhr.status);
+                            alert(thrownError);
+                        }
+                    });
+                }
+            });
+        }
+
+
+    </script>
+}

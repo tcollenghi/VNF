@@ -1,0 +1,228 @@
+﻿@using MetsoFramework.Utils
+@using VNF.Portal.Models
+@{
+    ViewBag.Title = "Verificar - Visão Completa";
+
+    string strUsuario = "";
+    List<TbLOGApplication> logApplication = (List<TbLOGApplication>)ViewBag.LogApplication;
+    List<VNF.Portal.ViewsModel.ResumoViewModel> Resumo = (List<VNF.Portal.ViewsModel.ResumoViewModel>)ViewBag.Resumo;
+    string idTipoDocumentoPortalServico = ViewBag.TipoDocumentoPortalServico;
+    string NFEID = (string)ViewBag.NFEID;
+}
+
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-7">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-angle-double-right fa-fw "></i>
+            Processamento Fiscal - Visão Completa
+        </h1>
+    </div>
+</div>
+
+<section id="widget-grid" class="">
+    <div class="row">
+        <article class="col-sm-12 col-md-12 col-lg-12">
+            <div class="jarviswidget jarviswidget-color-blueDark" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-deletebutton="false" data-widget-collapsed="false" data-widget-togglebutton="false">
+                <header>
+                    <span class="widget-icon"><i class="fa fa-file-text-o"></i></span>
+                    <h2>Dados</h2>
+                </header>
+                <div>
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+                    </div>
+                    <div class="widget-body no-padding">
+                        <br />
+                        <article class="col-sm-12 col-md-12 col-lg-6">
+
+
+
+                            <div class="widget-body">
+
+                                <ul class="nav nav-tabs bordered" id="myTab1">
+                                    <li class="bg-color-blueDark active">
+                                        <a href="#tabResumo" data-toggle="tab" @*onclick="MostaResumo();"*@><span class="hidden-mobile hidden-tablet"><i class="fa fa-edit"></i></span> Resumo </a>
+                                    </li>
+                                    <li class="bg-color-blueDark">
+                                        <a href="#tabValidacaoCampos" data-toggle="tab" @*onclick="MostaValidacao();"*@><span class="hidden-mobile hidden-tablet"><i class="fa fa-history"></i></span> Validação de Campos </a>
+                                    </li>
+                                    <li class="bg-color-blueDark">
+                                        <a href="#tabLog" data-toggle="tab" @*onclick="MostraLog();"*@><span class="hidden-mobile hidden-tablet"><i class="fa fa-reorder"></i></span> Log </a>
+                                    </li>
+                                </ul>
+
+                                <div class="tab-content">
+                                    <div class="tab-pane active" id="tabResumo">
+                                        <div>
+                                            <table class="display table table-responsive table-striped table-hover" width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Campo</th>
+                                                        <th>Valor</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (var r in Resumo)
+                                                    {
+                                                        <tr>
+                                                            <td>@r.Campo</td>
+                                                            <td>@r.Valor</td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="tabValidacaoCampos">
+                                        <div>
+                                            <div class="panel-group smart-accordion-default" id="accordion">
+                                                <div class="panel panel-default">
+                                                    @Html.Raw(ViewBag.Validacao)
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane" id="tabLog">
+                                        <div>
+                                            <table id="dt_basic" class="table table-striped table-bordered table-hover" width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th width="20%">Data</th>
+                                                        <th width="20%">Usuário</th>
+                                                        <th width="60%">Descrição</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach (TbLOGApplication l in logApplication)
+                                                    {
+                                                        @*Marcio Spinosa - 28/05/2018 - CR00008351*@
+                                                        //strUsuario = Uteis.GetUserNameBySamId(l.log_user);
+                                                        //strUsuario = strUsuario.Split(' ')[0] + " " + strUsuario.Split(' ')[strUsuario.Split(' ').Count() - 1];
+
+                                                        <tr>
+                                                            <td width="20%"><small>@Convert.ToDateTime(l.log_date).ToString("dd/MM/yyyy HH:mm")</small></td>
+@*                                                            <td width="20%"><small>@strUsuario</small></td>*@
+                                                            <td width="20%"><small>@l.log_user</small></td>
+                                                            @*Marcio Spinosa - 28/05/2018 - CR00008351 - Fim*@
+                                                            <td width="60%"><small>@l.log_description</small></td>
+                                                        </tr>
+                                                    }
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </article>
+
+                        <article class="col-sm-12 col-md-12 col-lg-6">
+                            <div class="jarviswidget" id="wid-id-4" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-deletebutton="false" data-widget-collapsed="false" data-widget-togglebutton="false">
+                                <header>
+                                    <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                                    <h2>DANFE or DACTE - PDF </h2>
+
+                                </header>
+                                <div>
+                                    <div class="widget-body no-padding">
+                                        <input id="chave" type="hidden" value="@NFEID" />
+                                        <iframe id="ifrPdf" style="min-height:600px; width:100%;"></iframe>
+                                        @*@if (idTipoDocumentoPortalServico != "")
+                                            {
+                                                <iframe src='@Url.Action("DownloadAnexoPS", "Compras", new { pIdNfe = NFEID })' style="min-height:600px; width:100%;"></iframe>
+                                            }
+                                            else
+                                            {
+                                                <iframe src='@Url.Action("DownloadDanfe", "Compras", new { pIdNfe = NFEID })' style ="min-height:600px; width:100%;"></iframe>
+                                            }*@
+                                    </div>
+                                </div>
+                            </div>
+
+
+                        </article>
+                    </div>
+
+                </div>
+
+            </div>
+        </article>
+    </div>
+    <div class="smart-form">
+        <footer class="border">
+            <button type="button" class="btn btn-primary" onclick="window.location='@Url.Action("Edit", "Compras", new { id = NFEID })'">
+                <i class="fa fa-search"></i> Detalhes
+            </button>
+            <button type="button" class="btn btn-primary" onclick="window.location.replace(document.referrer)">
+                <i class="fa fa-arrow-circle-left"></i> Voltar
+            </button>
+        </footer>
+    </div>
+</section>
+
+@section pagespecific {
+
+    <!-- PAGE RELATED PLUGIN(S) -->
+    <script src="~/Scripts/plugin/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.colVis.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.tableTools.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/plugin/datatable-responsive/datatables.responsive.min.js"></script>
+        <script src="~/Scripts/Metso.js"></script>
+
+    <script type="text/javascript">
+
+        pageSetUp();
+        /* BASIC ;*/
+        var responsiveHelper_dt_basic = undefined;
+        var responsiveHelper_datatable_fixed_column = undefined;
+        var responsiveHelper_datatable_col_reorder = undefined;
+        var responsiveHelper_datatable_tabletools = undefined;
+
+        var breakpointDefinition = {
+            tablet: 1024,
+            phone: 480
+        };
+
+        $('#dt_basic').dataTable({
+            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
+                "t" +
+                "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+            "autoWidth": true,
+            "preDrawCallback": function () {
+                // Initialize the responsive datatables helper once.
+                if (!responsiveHelper_dt_basic) {
+                    responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dt_basic'), breakpointDefinition);
+                }
+            },
+            "rowCallback": function (nRow) {
+                responsiveHelper_dt_basic.createExpandIcon(nRow);
+            },
+            "drawCallback": function (oSettings) {
+                responsiveHelper_dt_basic.respond();
+            }
+        });
+
+
+
+        /* END BASIC */
+
+        if(@ViewBag.TipoDocumentoPortalServico != "")
+        {
+
+            var chave = $("#chave").val();
+            var caminho =  url + "Compras/DownloadAnexoPS?id="+ chave;
+
+            document.getElementById('ifrPdf').src = caminho;
+
+        }
+        else{
+            var chave = $("#chave").val();
+            var caminho = URL + "Compras/DownloadDanfe?"+chave;
+            document.getElementById('ifrPdf').src = caminho;
+        }
+
+
+    </script>
+}

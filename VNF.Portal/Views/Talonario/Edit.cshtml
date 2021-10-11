@@ -1,0 +1,873 @@
+﻿@using MetsoFramework.Utils
+@using VNF.Portal.Models
+@model Talonario
+@{
+    ViewBag.Title = "Cadastro de talonário";
+    int Id = Model.IdTalonario;
+}
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-angle-double-right fa-fw "></i>
+            Cadastro de Talonário
+        </h1>
+    </div>
+</div>
+
+@Html.Hidden("hdfId", (object)ViewBag.id)
+   
+<section id="widget-grid" class="">
+        <div class="row">
+            <article class="col-sm-12 col-md-12 col-lg-12">
+                <div class="jarviswidget jarviswidget-color-blueDark" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-deletebutton="false">
+                    <header>
+                        <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                        <h2>Documento</h2>
+                    </header>
+                    <div>
+                        <div class="jarviswidget-editbox"></div>
+                        <div class="widget-body no-padding">
+                            @using (Html.BeginForm("CadastroManual", "Talonario", FormMethod.Post, new { id = "frmCadastroManual", @class = "smart-form", enctype = "multipart/form-data" }))
+                            {
+
+                                <input type="hidden" id="IdTalonario" name="IdTalonario" value="@Id" />
+                                <fieldset>
+
+                                    <div class="row">
+                                        <section class="col col-12 col-2">
+                                            <label class="label">Tipo de Doc*</label>
+                                            <label class="select">
+                                                @Html.MetsoDropDownList("TipoDocumento", ViewBag.ddlTipoDocumento as IEnumerable<SelectListItem>, "", new { @onchange = "VerificaTipoDocumento();" })
+                                                <i></i>
+                                            </label>
+                                        </section>
+                                        <section class="col col-12 col-3">
+                                            <label class="label">Número do Documento*</label>
+                                            <label class="input">
+                                                @Html.TextBoxFor(model => model.NumeroDocumento, "", new { @type = "number" })
+                                            </label>
+                                        </section>
+                                        <section class="col col-12 col-1">
+                                            <label class="label">Série</label>
+                                            <label class="input">
+                                                @Html.MetsoTextBoxFor(model => model.Serie, SessionsHelper.FieldType.Text, null, true)
+                                                @Html.HiddenFor(model => model.ChaveAcesso)
+                                            </label>
+                                        </section>
+                                        <section class="col col-12 col-2">
+                                            <label class="label">Valor Total*</label>
+                                            <label class="input">
+                                                @Html.MetsoTextBoxFor(model => model.ValorTotal, SessionsHelper.FieldType.FloatWithoutFormat, null, true)
+                                            </label>
+                                        </section>
+                                        <section class="col col-12 col-2">
+                                            <label class="label">Emissão*</label>
+
+                                            <label class="input">
+                                                @Html.MetsoTextBoxFor(model => model.DataEmissao, SessionsHelper.FieldType.Text, new { @class = "mask-data datepicker" }, true)
+                                            </label>
+                                        </section>
+                                        <section class="col col-12 col-2" id="VencimentoContainer">
+                                            <label class="label">Vencimento*</label>
+                                            <label class="input">
+
+                                                @Html.MetsoTextBoxFor(model => model.Vencimento, SessionsHelper.FieldType.Text, new { @class = "mask-data datepicker" }, true)
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <div class="row">
+                                        <section class="col col-12 col-2">
+                                            <label class="label">CNPJ Emitente*</label>
+                                            <label class="input">
+                                                @Html.MetsoTextBoxFor(model => model.CNPJEmitente, SessionsHelper.FieldType.Cnpj, new { @class = "mask-cnpj", onchange = "GetRazaoSocialIEFornecedor()" }, true)
+                                            </label>
+                                        </section>
+
+                                        <section class="col col-12 col-2">
+                                            <label class="label">IE do Emitente*</label>
+                                            <label class="input">
+                                                @Html.MetsoTextBoxFor(model => model.IE_Emitente, SessionsHelper.FieldType.Text, null, true)
+                                            </label>
+                                        </section>
+
+                                        <section class="col col-12 col-6">
+                                            <label class="label">Razão Social Emitente*</label>
+                                            <label class="input">
+                                                @Html.MetsoTextBoxFor(model => model.RazaoSocialEmitente, SessionsHelper.FieldType.Text, null, true)
+                                            </label>
+                                        </section>
+
+                                    </div>
+                                    
+                                    <div class="row">
+
+                                    
+                                        <section class="col col-12 col-2">
+                                            <label class="label">CNPJ Neles*</label>
+                                            <label class="input">
+                                                @Html.MetsoTextBoxFor(model => model.CNPJMetso, SessionsHelper.FieldType.Cnpj, new { @class = "mask-cnpj", onchange = "GetRazaoSocialIEMetso()" }, true)
+                                            </label>
+                                        </section
+                                        
+>                                       <section class="col col-12 col-2">
+                                            <label class="label">IE da Neles*</label>
+                                            <label class="input">
+                                                @Html.MetsoTextBoxFor(model => model.IE_Metso, SessionsHelper.FieldType.Text, null, true)
+                                            </label>
+                                        </section>    
+
+                                        <section class="col col-12 col-6">
+                                            <label class="label">Razão Social Neles*</label>
+                                            <label class="input">
+                                                @Html.MetsoTextBoxFor(model => model.RazaoSocialMetso, SessionsHelper.FieldType.Text, null, true)
+                                            </label>
+                                        </section>
+                                    </div>
+
+                                    <section>
+                                        <label class="label">Observação*</label>
+                                        <label class="textarea">
+                                            @Html.MetsoTextBoxFor(model => model.Observacao, SessionsHelper.FieldType.TextAreaMedium, new { @class = "custom-scroll" }, true)
+                                        </label>
+                                    </section>
+
+                                    <section>
+                                        <label class="label">Anexo*</label>
+                                        <div class="input input-file">
+                                            <span class="button"><input id="FileInputfileAnexo" type="file" name="file2" onchange="this.parentNode.nextSibling.value = this.value">Add</span><input id="FileTextImput" type="text" placeholder="" readonly="" value=@Model.AnexoNome>
+                                        </div>
+                                    </section>
+
+                                </fieldset>
+
+                                <footer>
+                                    @* Verifica se a intgração com o SAP ainda não foi efetuada *@
+                                    @if (ViewBag.StatusIntegracao != "CONCLUÍDO")
+                                    {
+                                        
+                                        <button type="button" onclick="Salvar();" class="btn btn-primary">
+                                            <i class="fa fa-check"></i> Salvar
+                                        </button>
+                                        <button type="button" onclick="ExcluirTalonario();" class="btn btn-primary">
+                                            <i class="fa fa-check"></i> Excluir
+                                        </button>
+                                        @*Verifica se o talonario ainda foi finalizado para bloquear a edição dos campos chave*@
+                                        @Html.HiddenFor(model => model.Finalizado)
+                                        
+
+                                    }
+                                    <button type="button" class="btn btn-primary" onclick="window.history.back();">
+                                        <i class="fa fa-arrow-circle-left"></i> Voltar
+                                    </button>
+                                </footer>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+@if (Model.IdTalonario > 0 && Model.Finalizado == false && ViewBag.SalvarHeader == true)
+{
+    <div class="row">
+
+        <!-- NEW COL START -->
+        <article class="col-sm-12 col-md-12 col-lg-12">
+
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget jarviswidget-color-blueDark" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-deletebutton="false">
+                <header>
+                    <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                    <h2>Itens do Pedido</h2>
+
+                    @*<ul class="nav nav-tabs pull-right in" id="myTab">
+                            <li class="bg-color-blueDark active">
+                                <a data-toggle="tab" href="#s1"><i class="fa fa-clock-o"></i> <span class="hidden-mobile hidden-tablet">Itens do Documento</span></a>
+                            </li>
+                        </ul>*@
+
+                </header>
+
+                <div class="widget-body ">
+                    <div id="myTabContent1" class="tab-content">
+                        <div class="tab-pane fade in active" id="s1">
+                            @*Carrega os grupos aos que o usuário está vinculado*@
+                            <table id="tbItens" class="table table-striped table-bordered table-hover table-click" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>Descrição</th>
+                                        @*<th data-hide="phone">Pedido</th>
+                                            <th data-hide="phone">Item Pedido</th>*@
+                                        <th data-hide="phone">Qtde</th>
+                                        <th>Valor Unitário</th>
+                                        <th data-hide="phone">Total</th>
+                                        <th data-hide="phone"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var i in Model.TalonarioItem)
+                                    {
+                                        var IdTalonarioItem = @i.IdTalonarioItem.ToString();
+                                        <tr onclick="selectRow('@IdTalonarioItem','@i.Descricao','@i.Pedido','@i.ItemPedido','@i.Quantidade','@i.ValorUnitario','@i.ValorTotal','@i.CFOP','@i.ICMS','@i.IPI','@i.ICMSAliq','@i.FRETE','@i.SEGURO','@i.OUTRASDESPESAS','@i.DESCONTO')">
+                                            <td>@i.Descricao</td>
+                                            <td>@Convert.ToDecimal(i.Quantidade).ToString("N2")</td>
+                                            <td>@Convert.ToDecimal(i.ValorUnitario).ToString("C2")</td>
+                                            <td>@Convert.ToDecimal(i.ValorTotal).ToString("C2")</td>
+                                            <td width="2%">
+                                               @if (ViewBag.StatusIntegracao != "CONCLUÍDO")
+                                               {
+                                                    <button type="button" class="btn btn-xs btn-danger" title="Remover" onclick="Remover(@i.IdTalonarioItem)">
+                                                        <i class="fa fa-trash-o"></i> Remover
+                                                    </button>
+
+                                                }
+
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                            <footer>
+                                @if (ViewBag.StatusIntegracao != "CONCLUÍDO")
+                                {
+                                    <button class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="AdicionarItem();">
+                                        <i class="fa fa-plus"></i> Adicionar Item
+                                    </button>
+
+                                    <button class="btn btn-primary" data-toggle="modal" data-target="#myModal" onclick="Editar();">
+                                        <i class="fa fa-edit"></i> Modificar Item
+                                    </button>
+
+                                    <button type="button" class="btn btn-primary" onclick="Finalizar();">
+                                        <i class="fa fa-check"></i> Finalizar Cadastro
+                                    </button>
+                                }
+                            </footer>
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- end widget div -->
+            </div>
+            <!-- end widget -->
+
+        </article>
+        <!-- END COL -->
+    </div>
+}
+
+
+<!-- Modal -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    &times;
+                </button>
+                <h4 class="modal-title" id="myModalLabel">Novo Item</h4>
+            </div>
+            <div class="modal-body" id="divItem">
+                <fieldset>
+                    <div class="form-group">
+                        <div class="row">
+
+                            <div class="col-sm-12 col-md-7">
+                                <label class="input">
+                                    Descrição*
+                                </label>
+                                @Html.MetsoTextBox("txtDescricao", SessionsHelper.FieldType.Text, null, true, true)
+
+                            </div>
+                            @if (Model.TipoDocumento != "Remessa")
+                            {
+                                <div class="col-sm-12 col-md-3" id="PedidoContainer">
+                                    <label class="input">
+                                        Pedido
+                                    </label>
+                                    @Html.MetsoTextBox("txtPedido", SessionsHelper.FieldType.Text, null, true, true)
+
+                                </div>
+
+                                <div class="col-sm-12 col-md-2" id="ItemContainer">
+                                    <label class="input">
+                                        Item Ped.
+                                    </label>
+                                    @Html.MetsoTextBox("txtItemPedido", SessionsHelper.FieldType.Text, null, true, true)
+
+                                </div>
+                            }
+
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="form-group">
+                        <div class="row">
+
+                            <div class="col-sm-12 col-md-4">
+                                <label class="input">
+                                    Quantidade*
+                                </label>
+                                @Html.MetsoTextBox("txtQuantidade", SessionsHelper.FieldType.Float, null, true, true)
+
+                            </div>
+
+                            <div class="col-sm-12 col-md-4">
+                                <label class="input">
+                                    Valor Unitário*
+                                </label>
+                                @Html.MetsoTextBox("txtUnitario", SessionsHelper.FieldType.Float, null, true, true)
+
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <label class="input">
+                                    Total*
+                                </label>
+                                @Html.MetsoTextBox("txtValorTotal", SessionsHelper.FieldType.FloatWithoutFormat, null, true, true)
+                                @*@Html.TextBoxFor(t=> t.ValorTotal)*@
+
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-4">
+                                <label class="input">
+                                    CFOP
+                                </label>
+                                @Html.MetsoTextBox("txtCFOP", SessionsHelper.FieldType.Text, null, true, true)
+
+                            </div>
+
+                            <div class="col-sm-12 col-md-4">
+                                <label class="input">
+                                    ICMS
+                                </label>
+                                @Html.MetsoTextBox("txtICMS", SessionsHelper.FieldType.FloatWithoutFormat, null, true, true)
+
+                            </div>
+                            <div class="col-sm-12 col-md-4">
+                                <label class="input">
+                                    IPI
+                                </label>
+                                @Html.MetsoTextBox("txtIPI", SessionsHelper.FieldType.FloatWithoutFormat, null, true, true)
+                            </div>
+                        </div>
+
+                    </div>
+                </fieldset>
+
+                <!--Alíquotas dos impostos-->
+
+                <fieldset>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-4">
+                                <label class="input">
+                                    Alíquota ICMS
+                                </label>
+                                @Html.MetsoTextBox("txtICMSAliq", SessionsHelper.FieldType.FloatWithoutFormat, null, true, true)
+                            </div>
+                        </div>
+
+                    </div>
+                </fieldset>
+
+                <fieldset>
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-sm-12 col-md-3">
+                                <label class="input">
+                                    Frete
+                                </label>
+                                @Html.MetsoTextBox("txtFrete", SessionsHelper.FieldType.FloatWithoutFormat, null, true, true)
+
+                            </div>
+                            <div class="col-sm-12 col-md-3">
+                                <label class="input">
+                                    Seguro
+                                </label>
+                                @Html.MetsoTextBox("txtSeguro", SessionsHelper.FieldType.FloatWithoutFormat, null, true, true)
+
+                            </div>
+                            <div class="col-sm-12 col-md-3">
+                                <label class="input">
+                                    Outras Despesas
+                                </label>
+                                @Html.MetsoTextBox("txtOutrasDespesas", SessionsHelper.FieldType.FloatWithoutFormat, null, true, true)
+
+                            </div>
+                            <div class="col-sm-12 col-md-3">
+                                <label class="input">
+                                    Desconto
+                                </label>
+                                @Html.MetsoTextBox("txtDesconto", SessionsHelper.FieldType.FloatWithoutFormat, null, true, true)
+
+                            </div>
+                        </div>
+
+                    </div>
+                </fieldset>
+
+            </div>
+
+
+
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">
+                    Cancelar
+                </button>
+               @if (ViewBag.StatusIntegracao != "CONCLUÍDO")
+               {
+                    <button type="button" class="btn btn-primary" onclick="SalvarItem();">
+                        Salvar Item
+                    </button>
+                }
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<input type="hidden" id="IdTalonarioItem" />
+@section pagespecific
+    {
+    <script src="~/Scripts/views/Talonario/Talonario.js"></script>
+    <script src="~/Scripts/plugin/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.colVis.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.tableTools.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/plugin/datatable-responsive/datatables.responsive.min.js"></script>
+
+    <script src="~/scripts/plugin/jquery-form/jquery-form.min.js"></script>
+    <script src="~/Scripts/jquery.maskedinput.min.js"></script>
+    <script src="~/Scripts/jquery.maskMoney.js"></script>
+    <script src="~/Scripts/Metso.js"></script>
+
+    <script src="~/Scripts/views/PermissaoUsuario.js"></script>
+    <script>PermissaoUsuario('@(ViewBag.Acesso)')</script>
+
+    <script type="text/javascript">
+
+        var Finalizado = $("#Finalizado").val();
+        $(document).ready(function () {
+            if (Finalizado) {
+                $("#NumeroDocumento").prop("disabled", true);
+                $("#Serie").prop("disabled", true);
+                $("#DataEmissao").prop("disabled", true);
+                $("#CNPJEmitente").prop("disabled", true);
+                $("#IE_Emitente").prop("disabled", true);
+                $("#RazaoSocialEmitente").prop("disabled", true);
+            }
+
+        });
+
+   
+        pageSetUp();
+
+        /* BASIC ;*/
+        var responsiveHelper_dt_basic = undefined;
+        var responsiveHelper_datatable_fixed_column = undefined;
+        var responsiveHelper_datatable_col_reorder = undefined;
+        var responsiveHelper_datatable_tabletools = undefined;
+
+        var breakpointDefinition = {
+            tablet: 1024,
+            phone: 480
+        };
+
+   
+        
+        //Select data to edit from selected row click
+        function selectRow(pIdTalonarioItem, pDescricao, pPedido, pPedidoItem, pQuantidade, pValorUnitario, pTotal, pCFOP, pICMS, pIPI, pICMSAliq, pFrete, pSeguro, pOutras, pDesc) {
+
+            //$(".info").removeClass("info");
+            //$("#row_" + id).addClass("info");
+            $("#txtDescricao").val(pDescricao);
+            $("#txtPedido").val(pPedido);
+            $("#txtItemPedido").val(pPedidoItem);
+            $("#txtQuantidade").val(pQuantidade);
+            $("#txtUnitario").val(pValorUnitario);
+            $("#txtValorTotal").val(pTotal);
+            $("#txtCFOP").val(pCFOP);
+            $("#txtICMS").val(pICMS);
+            $("#txtIPI").val(pIPI);
+            $("#txtICMSAliq").val(pICMSAliq);
+            $("#txtFrete").val(pFrete);
+            $("#txtSeguro").val(pSeguro);
+            $("#txtOutrasDespesas").val(pOutras);
+            $("#txtDesconto").val(pDesc);
+            $("#IdTalonarioItem").val(pIdTalonarioItem);
+
+
+
+
+        }
+
+        //Chage row table color selected
+        $(".table-click tr").on('click', function (e) {
+            $(this).siblings().removeClass("selecionado");
+            $(this).toggleClass("selecionado");
+        });
+
+
+        $(document).ready(function () {
+            VerificaTipoDocumento();
+        })
+
+        function VerificaTipoDocumento() {
+            var TipoDocumento = $("#TipoDocumento option:selected").val();
+            if (TipoDocumento == "Remessa") {
+                $("#VencimentoContainer").hide();
+            }
+            else {
+                $("#VencimentoContainer").show();
+            }
+        }
+
+        function AdicionarItem() {
+            LimpaCampos();
+        }
+
+        function Editar(pEditar) {
+            $("#idTitulo").text("Editar");
+
+            pConPag = $("#hdfConPag").val();
+            pNumDia = $("#hdfNumDia").val();
+
+            $("#txtConPag").attr('disabled', true);
+            $("#txtConPag").val(pConPag);
+            $("#txtNumDia").val(pNumDia);
+
+            $("#IdEdit").val(pEditar);
+        }
+
+        function SalvarItem() {
+            var IdTalonario = $("#IdTalonario").val();
+            var Pedido =  $.trim($("#txtPedido").val());
+            var ItemPedido = $.trim($("#txtItemPedido").val());
+            var Descricao = $("#txtDescricao").val();
+            var Quantidade = $("#txtQuantidade").val().replace(".", "");
+            var ValorUnitario = $("#txtUnitario").val().replace(".", "");
+            var ValorTotal = $("#txtValorTotal").val().replace(".", "");
+            var CFOP = $("#txtCFOP").val();
+            var ICMS = $("#txtICMS").val().replace(".", "");
+            var IPI = $("#txtIPI").val().replace(".", "");
+            var Frete = $("#txtFrete").val().replace(".", "");
+            var Seguro = $("#txtSeguro").val().replace(".", "");
+            var OutrasDespesas = $("#txtOutrasDespesas").val().replace(".", "");
+            var Desconto = $("#txtDesconto").val().replace(".", "");
+            var ICMSAliq = $("#txtICMSAliq").val().replace(".", "");
+
+            if (ValorTotal == "" || ValorUnitario == "" || Descricao == "" || Quantidade == "" || ValorTotal == "") {
+                $.SmartMessageBox({
+                    title: "VNF NELES",
+                    content: "Verifique os campos obrigatorios!",
+                    buttons: '[OK]'
+                });
+            }
+            else {
+                $.ajax({
+                    async: false,
+                    type: 'POST',
+                    cache: false,
+                    dataType: 'text',
+                    url: '@Url.Action("AdicionaItem")',
+                    data: { IdTalonarioItem: $("#IdTalonarioItem").val(), IdTalonario: IdTalonario, ValorTotal: ValorTotal, Pedido: Pedido, ItemPedido: ItemPedido, Descricao: Descricao, Quantidade: Quantidade, ValorUnitario: ValorUnitario, CFOP: CFOP, ICMS: ICMS, IPI: IPI, FRETE: Frete, SEGURO: Seguro, DESCONTO: Desconto, OUTRASDESPESAS: OutrasDespesas, ICMSAliq: ICMSAliq },
+                    success: function (result) {
+                        CarregaItens();
+                        LimpaCampos();
+                        $("#myModal").modal('hide');
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        $.SmartMessageBox({
+                            title: 'Erro',
+                            content: thrownError,
+                            buttons: '[OK]'
+                        });
+                    }
+                });
+            }
+        }
+
+        function LimpaCampos() {
+            $("#txtPedido").val("");
+            $("#txtItemPedido").val("");
+            $("#txtDescricao").val("");
+            $("#txtQuantidade").val("");
+            $("#txtUnitario").val("");
+            $("#txtValorTotal").val("");
+            $("#txtCFOP").val("");
+            $("#txtICMS").val("");
+            $("#txtIPI").val("");
+            $("#txtFrete").val("");
+            $("#txtSeguro").val("");
+            $("#txtOutrasDespesas").val("");
+            $("#txtDesconto").val("");
+            $("#txtICMSAliq").val("");
+            $("#IdTalonarioItem").val("");
+        }
+
+        function CarregaItens() {
+            $.ajax({
+                async: false,
+                type: 'GET',
+                cache: false,
+                dataType: 'text',
+                url: '@Url.Action("CarregaItens")',
+                data: { IdTalonario: $("#IdTalonario").val() },
+                success: function (result) {
+                    $("#tbItens tbody").html("");
+                    $("#tbItens tbody").append(result);
+                    $(".table-click tr").on('click', function (e) {
+                        $(this).siblings().removeClass("selecionado");
+                        $(this).toggleClass("selecionado");
+                    });
+                    function selectRow(pIdTalonarioItem, pDescricao, pPedido, pPedidoItem, pQuantidade, pValorUnitario, pTotal, pCFOP, pICMS, pIPI, pICMSAliq, pFrete, pSeguro, pOutras, pDesc) {
+
+                        //$(".info").removeClass("info");
+                        //$("#row_" + id).addClass("info");
+                        $("#txtDescricao").val(pDescricao);
+                        $("#txtPedido").val(pPedido);
+                        $("#txtItemPedido").val(pPedidoItem);
+                        $("#txtQuantidade").val(pQuantidade);
+                        $("#txtUnitario").val(pValorUnitario);
+                        $("#txtValorTotal").val(pTotal);
+                        $("#txtCFOP").val(pCFOP);
+                        $("#txtICMS").val(pICMS);
+                        $("#txtIPI").val(pIPI);
+                        $("#txtICMSAliq").val(pICMSAliq);
+                        $("#txtFrete").val(pFrete);
+                        $("#txtSeguro").val(pSeguro);
+                        $("#txtOutrasDespesas").val(pOutras);
+                        $("#txtDesconto").val(pDesc);
+                        $("#IdTalonarioItem").val(pIdTalonarioItem);
+                    }
+                }
+            });
+        }
+
+
+        function GetRazaoSocialIEFornecedor() {
+            ShowLoading("Aguarde", "carregando dados do fornecedor");
+            ExistMsg = 0;
+            $.ajax({
+                async: false,
+                type: 'GET',
+                cache: false,
+                dataType: 'json',
+                url: '@Url.Action("GetRazaoSocialIEFornecedor", "Talonario")',
+                data: { cnpj: $("#CNPJEmitente").val() },
+                error: function () {
+                    HideLoadingWarning();
+                    $.SmartMessageBox({
+                        title: 'Erro',
+                        content: 'ocorreu uma falha ao consultar a razão social do fornecedor',
+                        buttons: '[OK]'
+                    });
+                },
+                success: function (result) {
+                    HideLoadingWarning();
+                    $("#RazaoSocialEmitente").val(result.RazsocFor);
+                    $("#IE_Emitente").val(result.IEFor);
+                    //if (result != "") {
+                    //    $("#RazaoSocialEmitente").attr('disabled', 'disabled');
+                    //}
+                }
+            });
+        }
+
+        function GetRazaoSocialIEMetso() {
+            ShowLoading("Aguarde", "carregando dados da Neles");
+            ExistMsg = 0;
+            $.ajax({
+                async: false,
+                type: 'GET',
+                cache: false,
+                dataType: 'json',
+                url: '@Url.Action("GetRazaoSocialIEMetso", "Talonario")',
+                data: { cnpj: $("#CNPJMetso").val() },
+                error: function () {
+                    HideLoadingWarning();
+                    $.SmartMessageBox({
+                        title: 'Erro',
+                        content: 'ocorreu uma falha ao consultar a razão social da Neles',
+                        buttons: '[OK]'
+                    });
+                },
+                success: function (result) {
+                   HideLoadingWarning();
+                   $("#RazaoSocialMetso").val(result.RazsocMetso);
+                   $("#IE_Metso").val(result.IEMetso);
+                    //if (result != "") {
+                    //    $("#RazaoSocialMetso").attr('disabled', 'disabled');
+                    //}
+                }
+            });
+        }
+
+
+        function Remover(id) {
+            $.SmartMessageBox({
+                title: "VNF NELES",
+                content: "Deseja remover o item?",
+                buttons: '[No][Yes]'
+            }, function (ButtonPressed) {
+                if (ButtonPressed === "Yes") {
+                    $.ajax({
+                        async: false,
+                        type: 'POST',
+                        cache: false,
+                        dataType: 'text',
+                        url: '@Url.Action("RemoveItem")',
+                        data: { Id: id },
+                        success: function (result) {
+                            CarregaItens();
+                        },
+                        error: function (xhr,   ajaxOptions, thrownError) {
+                            $.SmartMessageBox({
+                                title: 'Erro',
+                                content: thrownError,
+                                buttons: '[OK]'
+                            });
+                        }
+                    });
+                }
+            });
+        }
+
+        function Salvar() {
+            //validação
+            
+            if ($("#TipoDocumento").val() == "" || $("#NumeroDocumento").val() == "" || $("#ValorTotal").val() == "0" || $("#DataEmissao").val() == "" || ($("#Vencimento").val() == "" && $("#TipoDocumento").val() == "Compra") ||
+                $("#CNPJEmitente").val() == "" || $("#IE_Emitente").val() == "" || $("#RazaoSocialEmitente").val() == "" ||
+                $("#CNPJMetso").val() == "" || $("#RazaoSocialMetso").val() == "" ||
+                $("#ValorTotal").val() == "" ||
+                $("#Observacao").val() == "") {
+                showAlertMessage("VNF", "Verifique os campos obrigatorios!");
+            } else if ($("#FileTextImput").val().length == 0 && $("#FileInputfileAnexo").val().length == 0) {
+                showAlertMessage("VNF", "Verifique os campos obrigatorios!");
+            } else {
+                if (!validarCNPJ($("#CNPJEmitente").val())) {
+                    $.SmartMessageBox({
+                        title: "VNF NELES",
+                        content: "CNPJ do emitente inválido!",
+                        buttons: '[No][Yes]'
+                    });
+
+                }
+                else {
+                    if (!validarCNPJ($("#CNPJMetso").val())) {
+                        $.SmartMessageBox({
+                            title: "VNF NELES",
+                            content: "CNPJ Neles inválido!",
+                            buttons: '[No][Yes]'
+                        });
+                    }
+                    else {
+                            $("#NumeroDocumento").prop("disabled", false);
+                            $("#Serie").prop("disabled", false);
+                            $("#DataEmissao").prop("disabled", false);
+                            $("#IE_Emitente").prop("disabled", false);
+                            $("#CNPJEmitente").prop("disabled", false);
+                            $("#RazaoSocialEmitente").prop("disabled", false);
+                            $("#ValorTotal").val($("#ValorTotal").val().replace(".", ""));
+                            $("#IE_Emitente").val($("#IE_Emitente").val().trim());
+                            $("#IE_Metso").val($("#IE_Metso").val().trim());
+                            $("#frmCadastroManual").submit();
+                            $("#NumeroDocumento").prop("disabled", true);
+                            $("#Serie").prop("disabled", true);
+                            $("#DataEmissao").prop("disabled", true);
+                            $("#CNPJEmitente").prop("disabled", true);
+                            $("#IE_Emitente").prop("disabled", true)
+                            $("#RazaoSocialEmitente").prop("disabled", true);
+                            showAlertMessage("VNF", "Atenção, seus dados só serão totalmente salvos após clicar em 'Finalizar Cadastro'!");
+                    }
+                }
+            }
+        }
+
+        ///////////Verificar se o talonario ja tem a chave de acesso preenchida.
+        var tal = "@(TempData["TalonarioExistente"])";
+        if (tal != "") {
+            $.SmartMessageBox({
+                title: "VNF NELES",
+                content: tal,
+                buttons: '[OK]'
+            });
+        }
+        ///////////////////////////////////////////////////////////////////////
+
+        function Finalizar() {
+            $.SmartMessageBox({
+                title: "VNF NELES",
+                content: "Deseja finalizar a digitação do documento?",
+                buttons: '[No][Yes]'
+            }, function (ButtonPressed) {
+                if (ButtonPressed == "Yes") {
+                    var IdTalonario = $("#IdTalonario").val();
+                    var urlReload = "Talonario/CadastroManual";
+                    $.ajax({
+                        async: false,
+                        type: 'POST',
+                        cache: false,
+                        dataType: 'text',
+                        url: '@Url.Action("FinalizaTalonario")',
+                        data: { Id: IdTalonario },
+                        success: function (result) {
+                            window.location = url + urlReload;
+                        },
+                        error: function (xhr, ajaxOptions, thrownError) {
+                            alert(xhr.status);
+                            alert(thrownError);
+                        }
+                    });
+                }
+            });
+        }
+
+        function ExcluirTalonario() {
+
+            var IdTalonario = $("#IdTalonario").val();
+            if (IdTalonario > 0) {
+                $.SmartMessageBox({
+                    title: "VNF NELES",
+                    content: "Deseja excluir permanentemente o talonário?" ,
+                    buttons: '[No][Yes]'
+                }, function (ButtonPressed) {
+                    if (ButtonPressed === "Yes") {
+                        var urlReload = url + "Talonario/CadastroManual";
+                        $.ajax({
+                            async: false,
+                            type: 'POST',
+                            cache: false,
+                            dataType: 'text',
+                            url: '@Url.Action("ExcluirTalonario")',
+                            data: { Id: IdTalonario },
+                            success: function (result) {
+                                window.location = urlReload;
+                            },
+                            error: function (xhr, ajaxOptions, thrownError) {
+                                alert(xhr.status);
+                                alert(thrownError);
+                            }
+                        });
+                    }
+                });
+            }
+            else {
+                $.SmartMessageBox({
+                    title: "VNF NELES",
+                    content: "Talonário ainda não foi criado, não é necessário excluí-lo!",
+                    buttons: '[OK]'
+                });
+            }
+
+        }
+    </script>
+}

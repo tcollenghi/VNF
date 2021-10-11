@@ -1,0 +1,45 @@
+﻿@{
+    string strActivePage = Model.PageNumber.ToString();
+}
+
+<br />
+
+<div class="row">
+
+    <div class="col-md-4 left">
+        Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+    </div>
+    
+    <div class="col-md-8 right">
+        <ul class="pagination pagination-sm">
+        @if (Model.HasPreviousPage)
+        {
+            <li>@Html.ActionLink("<<", "Index", new { page = Model.PageNumber - 1 })</li>
+            
+            for (int i = Model.PageNumber - 3; i < Model.PageNumber; i++)
+            {
+                if (i > 0)
+                {
+                    <li>@Html.ActionLink((i).ToString(), "Index", new { page = i })</li>
+                }
+            }
+        }
+        
+        <li class="active">@Html.ActionLink(strActivePage, "Index", new { page = Model.PageNumber })</li>
+        
+        @if (Model.HasNextPage) 
+        {
+            for (int i = Model.PageNumber + 1; i < Model.PageNumber + 4; i++)
+            {
+                if (i <= Model.PageCount)
+                {
+                    <li>@Html.ActionLink((i).ToString(), "Index", new { page = i })</li>
+                }
+            }
+            
+            <li>@Html.ActionLink(">>", "Index", new { page = Model.PageNumber + 1 })</li>
+        }
+        </ul>
+    </div>
+
+</div>

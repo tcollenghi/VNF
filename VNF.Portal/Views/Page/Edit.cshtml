@@ -1,0 +1,76 @@
+﻿@using MetsoFramework.Utils
+@model VNF.Pages
+@{
+    ViewBag.Title = "Pages";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Edit", "Page", FormMethod.Post, new { id = "frmEdit", role = "form", enctype = "multipart/form-data" }))
+{
+    <h2>Page</h2>
+    <br />
+    
+    @Html.HiddenFor(model => @model.IdPage)
+    @Html.Hidden("hfIcon", @Model.Icon)
+
+    <div class="form-group col-xs-12">
+        @Html.MetsoLabelFor(model => model.Title)
+        @Html.MetsoTextBoxFor(model => model.Title, SessionsHelper.FieldType.Text, null, true)
+    </div>
+    
+    <div class="form-group col-xs-12">
+        @Html.MetsoLabelFor(model => model.Description)
+        @Html.MetsoTextBoxFor(model => model.Description, SessionsHelper.FieldType.TextAreaMedium, null, true)
+    </div>
+    
+    <div class="form-group col-xs-12">
+        @Html.MetsoLabelFor(model => model.Action)
+        @Html.MetsoTextBoxFor(model => model.Action, SessionsHelper.FieldType.Text, null, true)
+    </div>
+
+    <div class="form-group col-xs-12">
+        @Html.MetsoLabelFor(model => model.Controller)
+        @Html.MetsoTextBoxFor(model => model.Controller, SessionsHelper.FieldType.Text, null, true)
+    </div>
+    
+    <div class="form-group col-xs-11">
+        @Html.MetsoLabelFor(model => model.Icon)
+        @Html.MetsoDropDownListFor(model => model.Icon, (SelectList)ViewBag.Icon, "", new { onChange = "ChangeIconImage()" })
+    </div>
+    
+    <div class="form-group col-xs-1">
+        <h2><span id="iconImage"></span></h2>
+    </div>
+        
+    <div class="form-group col-xs-12">
+        @Html.MetsoCheckBoxFor(model => model.SettingsPage, "Settings page")        
+    </div>
+        
+    
+    <div class="clearfix"></div>
+    
+    <br />
+    <hr />
+    
+    <button type="button" class="btn btn-default" onclick="window.location='@Url.Action("Index")'">Voltar</button>
+    <button type="button" class="btn btn-default" onclick="PostPage('Edit', 'Page')">Salvar</button>
+}
+
+
+@section head{
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#Icon").val($("#hfIcon").val());
+            ChangeIconImage();
+        });
+
+        function ChangeIconImage() {
+            $("#iconImage").removeClass();
+            $("#iconImage").addClass("glyphicon glyphicon-" + $("#ddlIcon option:selected").val());
+            $("#Icon").val($("#ddlIcon option:selected").val())
+        }
+
+    </script>
+
+}

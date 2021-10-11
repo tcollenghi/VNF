@@ -1,0 +1,68 @@
+﻿@using MetsoFramework.Utils
+@model List<VNF.Pages>
+@{
+    ViewBag.Title = "Pages";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-xs-2">
+        <h1>Pages</h1>
+    </div>
+  
+    <div class="col-xs-10 right">
+        <br class="hide-mobile" />
+        <div class="btn-group">
+            <button id="btnNovo" class="btn btn-primary" type="button" onclick="window.location='@Url.Action("Edit", "Page")'">New</button>            
+            <button id="btnEdit" class="btn btn-primary disabled" type="button" onclick="Edit('Page')">Edit</button>
+            <button id="btnDelete" class="btn btn-danger disabled" type="button" onclick="ConfirmDeletion()">Delete</button>
+        </div>
+        <div class="break-line20 hide-computer"></div>
+    </div>
+</div> 
+<hr />
+
+@Html.ConfirmDeletion("Do you really confirm this deletion ?", "This action cannot be undone.", "Page")
+
+<input type="hidden" id="hfIdPage" /><br />
+
+<table id="myDataTable" class="display table table-responsive table-striped table-hover" width="100%">
+    <thead>
+      <tr>
+        <th>Description</th>
+        <th>Action</th>
+        <th>Controller</th>
+        <th>Settings Page</th>
+      </tr>
+    </thead>
+    <tbody>
+        @foreach (var page in (IEnumerable<VNF.Pages>)Model)
+        {
+            <tr id="@page.IdPage" class="@page.IdPage" onclick="SelectRow('Page', @page.IdPage)">
+                <td>@page.Title</td>
+                <td>@page.Action</td>
+                <td>@page.Controller</td>
+                <td>@page.SettingsPage</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#myDataTable').dataTable({
+            responsive: true,
+            "bLengthChange": false,
+            "bSort": false,
+            "pagingType": "simple_numbers",
+            "pageLength": 15,
+            "fnCreatedRow": function (nRow, aData, iDataIndex) {
+                $(nRow).children("th").css("overflow", "hidden");
+                $(nRow).children("th").css("white-space", "nowrap");
+                $(nRow).children("th").css("text-overflow", "ellipsis");
+            }
+        });
+    });
+
+</script>

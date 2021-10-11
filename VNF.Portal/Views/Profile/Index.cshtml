@@ -1,0 +1,68 @@
+﻿@using MetsoFramework.Utils
+@model List<VNF.Profiles>
+@{
+    ViewBag.Title = "Profiles";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-xs-6">
+        <h1>
+            Profiles</h1>
+    </div>
+    <div class="col-xs-6 right">
+        <br class="hide-mobile" />
+        <div class="btn-group">
+            <button id="btnNovo" class="btn btn-primary" type="button" onclick="window.location='@Url.Action("Edit", "Profile")'">
+                Novo</button>
+            <button id="btnEdit" class="btn btn-primary disabled" type="button" onclick="Edit('Profile')">
+                Editar</button>
+        </div>
+        <div class="break-line20 hide-computer">
+        </div>
+    </div>
+</div>
+<hr />
+<input type="hidden" id="hfIdProfile" /><br />
+<table id="myDataTable" class="display table table-responsive table-striped table-hover" width="100%">
+    <thead>
+        <tr>
+            <th style="width: 30%">
+                Nome
+            </th>
+            <th style="width: 70%">
+                Descrição
+            </th>       
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var profile in (IEnumerable<VNF.Profiles>)Model)
+        {
+            <tr id="@profile.IdProfile" class="@profile.IdProfile" 
+                onclick="SelectRow('Profile', @profile.IdProfile)">
+                <td>@profile.Name
+                </td>
+                <td>@profile.Description
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#myDataTable').dataTable({
+            responsive: true,
+            "bLengthChange": false,
+            "bSort": false,
+            "pagingType": "simple_numbers",
+            "pageLength": 15,
+            "fnCreatedRow": function (nRow, aData, iDataIndex) {
+                $(nRow).children("th").css("overflow", "hidden");
+                $(nRow).children("th").css("white-space", "nowrap");
+                $(nRow).children("th").css("text-overflow", "ellipsis");
+            }
+        });
+    });
+
+</script>

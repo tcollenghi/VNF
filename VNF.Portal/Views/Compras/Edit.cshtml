@@ -1,0 +1,480 @@
+﻿@using MetsoFramework.Utils
+@using VNF.Business;
+@model modNF
+@{
+    ViewBag.Title = "Documento Fiscal";
+    string strStatusColor = "";
+    if (Model != null && Model.VNF_STATUS == "ACEITA")
+    {
+        strStatusColor = "state-success";
+    }
+    else if (Model != null && (Model.VNF_STATUS == "REJEITADA" || Model.VNF_STATUS == "CANCELADA"))
+    {
+        strStatusColor = "state-error";
+    }
+}
+
+<style>
+    .padding0 {
+        padding: 0px !important;
+    }
+
+    .margin0 {
+        margin: 0px !important;
+    }
+</style>
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-angle-double-right fa-fw "></i>
+            Detalhes da Nota Fiscal
+        </h1>
+    </div>
+</div>
+@Html.Hidden("hfIdNfe", (object)ViewBag.id)
+<section id="widget-grid" class="">
+    <div class="row">
+        <article class="col-sm-12 col-md-12 col-lg-12">
+            <div class="jarviswidget jarviswidget-color-blueDark" data-widget-sortable="false" data-widget-collapse="true" data-widget-colorbutton="true" data-widget-editbutton="true" data-widget-custombutton="true" data-widget-deletebutton="true">
+                <header>
+                    <span class="widget-icon"><i class="fa fa-file-text-o"></i></span>
+                    <h2>Dados</h2>
+                </header>
+
+                <div>
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+                    </div>
+                    <div class="widget-body no-padding">
+                        <form class="smart-form">
+                            <fieldset>
+                                <div class="row">
+                                    <section class="col col-4">
+                                        <label class="input">
+                                            CHAVE
+                                            @Html.TextBoxFor(model => model.VNF_CHAVE_ACESSO, new { @readonly = true })
+                                        </label>
+                                    </section>
+                                    <section class="col col-2">
+                                        <label class="input">
+                                            Data Emissão
+                                            @if (Model.NF_IDE_DHEMI == new DateTime())
+                                            {
+                                                @Html.TextBoxFor(model => model.NF_IDE_DHEMI, new { @readonly = true, @Value = "" })
+
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(model => model.NF_IDE_DHEMI, new { @readonly = true, @Value = Convert.ToDateTime(Model.NF_IDE_DHEMI).ToString("dd/MM/yyyy") })
+                                            }
+
+                                        </label>
+                                    </section>
+                                    <section class="col col-2">
+                                        <label class="input">
+                                            Número
+                                            @Html.TextBoxFor(model => model.NF_IDE_NNF, new { @readonly = true })
+                                        </label>
+                                    </section>
+                                    <section class="col col-1">
+                                        <label class="input">
+                                            Série
+                                            @Html.TextBoxFor(model => model.NF_IDE_SERIE, new { @readonly = true })
+                                        </label>
+                                    </section>
+                                    <section class="col col-1">
+                                        <label class="input">
+                                            Tipo
+                                            @Html.TextBoxFor(model => model.VNF_TIPO_DOCUMENTO, new { @readonly = true })
+                                        </label>
+                                    </section>
+                                    <section class="col col-2">
+                                        <label class="input @strStatusColor">
+                                            Situação
+                                            @Html.TextBoxFor(model => model.VNF_STATUS, new { @readonly = true })
+                                        </label>
+                                    </section>
+                                </div>
+                                @if (Model.VNF_TIPO_DOCUMENTO == "CTE")
+                                {
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label class="input">
+                                                Transportadora
+                                                @Html.TextBoxFor(model => model.NF_EMIT_XNOME, new { @readonly = true })
+                                            </label>
+                                        </section>
+                                        <section class="col col-2">
+                                            <label class="input">
+                                                CNPJ
+                                                @Html.TextBox("cnpjEmitente", Model.NF_EMIT_CNPJ.ToCnpj(), new { @readonly = true, @class = "mascarar_cnpj" })
+                                            </label>
+                                        </section>
+                                        <section class="col col-2">
+                                            <label class="input">
+                                                Classificação
+                                                @Html.TextBoxFor(model => model.VNF_CLASSIFICACAO, new { @readonly = true })
+                                            </label>
+                                        </section>
+                                        <section class="col col-2">
+                                            <label class="input">
+                                                Início do Transporte
+                                                @Html.TextBoxFor(model => model.CT_IDE_XMUNINI, new { @readonly = true })
+                                            </label>
+                                        </section>
+                                        <section class="col col-2">
+                                            <label class="input">
+                                                Término do Transporte
+                                                @Html.TextBoxFor(model => model.CT_IDE_XMUNFIM, new { @readonly = true })
+                                            </label>
+                                        </section>
+                                    </div>
+                                }
+                                <div class="row">
+                                    @if (Model.VNF_TIPO_DOCUMENTO == "CTE")
+                                    {
+                                        <section class="col col-4">
+                                            <label class="input">
+                                                Remetente
+                                                @Html.TextBoxFor(model => model.NF_REM_XNOME, new { @readonly = true })
+                                            </label>
+                                        </section>
+                                        <section class="col col-2">
+                                            <label class="input">
+                                                CNPJ
+                                                @Html.TextBox("cnpjRemetente", Model.NF_REM_CNPJ.ToCnpj(), new { @readonly = true })
+                                            </label>
+                                        </section>
+                                    }
+                                    else
+                                    {
+                                        <section class="col col-4">
+                                            <label class="input">
+                                                Emissor
+                                                @Html.TextBoxFor(model => model.NF_EMIT_XNOME, new { @readonly = true })
+                                            </label>
+                                        </section>
+                                        <section class="col col-2">
+                                            <label class="input">
+                                                CNPJ
+                                                @Html.TextBox("cnpjEmissor", Model.NF_EMIT_CNPJ.ToCnpj(), new { @readonly = true })
+                                            </label>
+                                        </section>
+                                    }
+                                    <section class="col col-4">
+                                        <label class="input">
+                                            Destinatário
+                                            @Html.TextBoxFor(model => model.NF_DEST_XNOME, new { @readonly = true })
+                                        </label>
+                                    </section>
+                                    <section class="col col-2">
+                                        <label class="input">
+                                            CNPJ
+                                            @Html.TextBox("cnpjDestinatario", Model.NF_DEST_CNPJ.ToCnpj(), new { @readonly = true, @class = "mascarar_cnpj" })
+                                        </label>
+                                    </section>
+                                </div>
+                                @if (Model.VNF_TIPO_DOCUMENTO == "CTE" && (Model.CT_IDE_TOMA == "1" || Model.CT_IDE_TOMA == "2"))
+                                {
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label class="input">
+                                                Expedidor
+                                                @Html.TextBoxFor(model => model.NF_EXPED_XNOME, new { @readonly = true })
+                                            </label>
+                                        </section>
+                                        <section class="col col-2">
+                                            <label class="input">
+                                                CNPJ
+                                                @Html.TextBox("cnpjExpedidor", Model.NF_EXPED_CNPJ.ToCnpj(), new { @readonly = true })
+                                            </label>
+                                        </section>
+                                        <section class="col col-4">
+                                            <label class="input">
+                                                Recebedor
+                                                @Html.TextBoxFor(model => model.NF_RECEB_XNOME, new { @readonly = true })
+                                            </label>
+                                        </section>
+                                        <section class="col col-2">
+                                            <label class="input">
+                                                CNPJ
+                                                @Html.TextBox("cnpjRecebedor", Model.NF_RECEB_CNPJ.ToCnpj(), new { @readonly = true })
+                                            </label>
+                                        </section>
+                                    </div>
+                                }
+                                @if (Model.VNF_TIPO_DOCUMENTO == "CTE")
+                                {
+                                    <hr class="padding5" />
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label class="input">
+                                                Tomador
+                                                @Html.TextBoxFor(model => model.CT_IDE_TOMA_DESC, new { @readonly = true })
+                                            </label>
+                                        </section>
+                                        <section class="col col-6">
+                                            <label class="input">
+                                                Razão Social
+                                                @Html.TextBoxFor(model => model.CT_TOMA_XNOME, new { @readonly = true })
+                                            </label>
+                                        </section>
+                                        <section class="col col-2">
+                                            <label class="input">
+                                                CNPJ
+                                                @Html.TextBox("CT_TOMA_CNPJ", Model.CT_TOMA_CNPJ.ToCnpj(), new { @readonly = true })
+                                            </label>
+                                        </section>
+                                    </div>
+                                }
+                                <div class="row">
+                                    <section class="col col-lg-12">
+                                        <label class="textarea">
+                                            Informações Adicionais
+                                            @Html.TextAreaFor(model => model.NF_OUTROS_INFORMACAO_ADICIONAL, new { @readonly = true, @rows = "3" })
+                                        </label>
+                                    </section>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+    <div class="row">
+        <article class="col-sm-12 col-md-12 col-lg-12">
+            <div class="tabbable">
+                <div class="jarviswidget jarviswidget-color-blueDark" data-widget-sortable="false" data-widget-collapse="true" data-widget-colorbutton="true" data-widget-editbutton="true" data-widget-custombutton="true" data-widget-deletebutton="true">
+                    <header>
+                        <ul class="nav nav-tabs in" id="myTab1">
+                            <li class="bg-color-blueDark active">
+                                <a href="#tabItens" data-toggle="tab"><span class="hidden-mobile hidden-tablet"><i class="fa fa-list"></i> Itens</span> </a>
+                            </li>
+                            <li class="bg-color-blueDark">
+                                <a href="#tabDivergencias" data-toggle="tab">
+                                    <span class="hidden-mobile hidden-tablet">
+                                        <i class="fa fa-exclamation-circle"></i> Divergências
+                                        <span id="lblPendentes" class="label bg-color-red txt-color-white"></span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="bg-color-blueDark">
+                                <a href="#tabMensagens" data-toggle="tab"><span class="hidden-mobile hidden-tablet"><i class="fa fa-send"></i> Mensagens</span> </a>
+                            </li>
+                            <li class="bg-color-blueDark">
+                                <a href="#tabComparacoes" data-toggle="tab"><span class="hidden-mobile hidden-tablet"><i class="fa fa-history"></i> Comparações</span> </a>
+                            </li>
+                            <li class="bg-color-blueDark">
+                                <a href="#tabDocumentosRelacionados" data-toggle="tab"><span class="hidden-mobile hidden-tablet"><i class="fa fa-copy"></i> Documentos relacionados</span> </a>
+                            </li>
+                            <li class="bg-color-blueDark">
+                                <a href="#tabAnexos" data-toggle="tab">
+                                    <span class="hidden-mobile hidden-tablet"><i class="fa fa-paperclip"></i> Anexos </span>
+                                    <span id="lblQtdAnexos" class="label bg-color-red txt-color-white"></span>
+                                </a>
+                            </li>
+                            <li class="bg-color-blueDark">
+                                <a href="#tabLog" data-toggle="tab"><span class="hidden-mobile hidden-tablet"><i class="fa fa-database"></i> Log</span> </a>
+                            </li>
+                        </ul>
+                    </header>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tabItens">
+                            <div class="panel-group smart-accordion-default">
+                                @Html.Partial("LoadItensNF", Model)
+                            </div>
+                            <br />
+                            <div class="clear"></div>
+                        </div>
+                        <div class="tab-pane" id="tabDivergencias">
+                            <div class="panel-group smart-accordion-default">
+                                <div id="divDivergencia"></div>
+                            </div>
+                            <br />
+                            <div class="clear"></div>
+                        </div>
+                        <div class="tab-pane" id="tabMensagens">
+                            <div class="panel-group smart-accordion-default">
+                                <div id="divMensagens"></div>
+                            </div>
+                            <br />
+                            <div class="clear"></div>
+                        </div>
+                        <div class="tab-pane" id="tabComparacoes">
+                            <div class="row">
+                                <div class="col-md-3 col-xs-1">
+                                    <div class="widget-body">
+                                        <div class="table-responsive smart-form">
+                                            <table id="dttDatasComparacoes" datatables_fixedheader="top" datatables_fixedheader_offsettop="60" class="table table-striped table-bordered table-hover table-click" width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Data</th>
+                                                        <th>Usuário</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-9 col-xs-3">
+                                    <div class="widget-body">
+                                        <div class="panel-group smart-accordion-default">
+                                            <div class="panel panel-default">
+                                                <div id="divComparacoes" class="table-responsive smart-form"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tabDocumentosRelacionados">
+                            <div class="panel-group smart-accordion-default">
+                                <div id="divDocsRelacionados">
+                                    @Html.Partial("LoadDocumentosRelacionados")
+                                </div>
+                            </div>
+                            <br />
+                            <div class="clear"></div>
+                        </div>
+                        <div class="tab-pane" id="tabAnexos">
+                            <div class="panel-group smart-accordion-default">
+                                <table id="dtAnexos" datatables_fixedheader="top" datatables_fixedheader_offsettop="60" class="table table-striped table-bordered table-hover table-click" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th>Nomes</th>
+                                            <th width="4%">Download</th>
+                                            <th width="4%">Excluir</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>Data</td>
+                                            <td><i title="Download" onclick="DownloadAnexo();" class="fa fa-download"></i></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="smart-form">
+                                    <section class="col col-lg-10">
+
+                                        Selecione um arquivo
+                                        <div class="input input-file">
+                                            <span class="button"><input id="FileInputfileAnexo" type="file" name="FileInputfileAnexo" onchange="this.parentNode.nextSibling.value = this.value">Add</span><input type="text" placeholder="" readonly="">
+
+                                        </div>
+                                    </section>
+                                    <section class="col col-lg-2"></section>
+                                </div>
+                                <button type="button" id="btnUpload" onclick="UploadAnexo();" class="btn btn-primary"><i class="fa fa-upload"></i><span class="text-btn"> Enviar</span></button>
+                            </div>
+                            <br />
+                            <div class="clear"></div>
+                        </div>
+                        <div class="tab-pane" id="tabLog">
+                            <div class="panel-group smart-accordion-default" style="max-height:300px; overflow-y:auto;">
+                                @Html.Partial("Log", Model)
+                            </div>
+                            <br />
+                            <div class="clear"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <div class="row">
+        <article class="col-sm-12 col-md-12 col-lg-12">
+
+            <div class="widget-body">
+                <div class="smart-form">
+                    <footer class="border">
+                        <button id="btnReenviar" type="button" class="btn btn-primary" onclick="ReenviarEmail();">
+                            <i class="fa fa-send"></i> Reenviar e-mail
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="GetDanfe();">
+                            <i class="fa fa-file-pdf-o"></i> DANFE
+                        </button>
+                        @if (Model.VNF_TIPO_DOCUMENTO != modNF.tipo_doc_talonario)
+                        {
+                            <button id="btnXML" type="button" class="btn btn-primary" onclick="GetXml();">
+                                <i class="fa fa-file-code-o"></i> XML
+                            </button>
+                        }
+                        @if (ViewBag.PodeModificar != null && (bool)ViewBag.PodeModificar == true)
+                        {
+                            if ((bool)ViewBag.AcessoModificar)
+                            {
+                                <button id="btnModificar" type="button" class="btn btn-primary" onclick="Modificar();">
+                                    <i class="fa fa-pencil"></i> Modificar
+                                </button>
+                            }
+
+                            if (ViewBag.MaterialRecebido == "True")
+                            {
+                                <button id="btnEstornarMaterialRecebido" type="button" class="btn btn-primary" onclick="EstornarMaterialRecebido();">
+                                    <i class="fa fa-check"></i> Estornar Material Recebido
+                                </button>
+                                <button id="btnMaterialRecebido" type="button" class="btn btn-primary disabled hide" onclick="MaterialRecebido();">
+                                    <i class="fa fa-check"></i> Material Recebido
+                                </button>
+
+
+                            }
+                            else
+                            {
+                                <button id="btnEstornarMaterialRecebido" type="button" class="btn btn-primary disabled hide" onclick="EstornarMaterialRecebido();">
+                                    <i class="fa fa-check"></i> Estornar Material Recebido
+                                </button>
+                                <button id="btnMaterialRecebido" type="button" class="btn btn-primary" onclick="MaterialRecebido();">
+                                    <i class="fa fa-check"></i> Material Recebido
+                                </button>
+                            }
+                        }
+                        <button type="button" class="btn btn-primary" onclick="window.location.replace(document.referrer)">
+                            <i class="fa fa-arrow-circle-left"></i> Voltar
+                        </button>
+                        @if (Model.VNF_STATUS == "CANCELADA")
+                        {
+                            <button type="button" class="btn btn-danger hide" onclick="DesfazerCancelamento();">
+                                <i class="fa fa-undo"></i> Desfazer cancelamento
+                            </button>
+                        }
+                    </footer>
+                </div>
+            </div>
+        </article>
+    </div>
+
+</section>
+
+@section pagespecific {
+    <script src="~/Scripts/plugin/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.colVis.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.tableTools.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/plugin/datatable-responsive/datatables.responsive.min.js"></script>
+    <script src="~/Scripts/jquery.maskMoney.js"></script>
+    <script src="~/Scripts/Metso.js"></script>
+
+    <script src="~/Scripts/views/_global.js"></script>
+    <script src="~/Scripts/views/compras/compras_edit.js"></script>
+    <script type="text/javascript">
+        if ($("#VNF_TIPO_DOCUMENTO").val() == "NFS" || $("#VNF_TIPO_DOCUMENTO").val() == "FAT" || $("#VNF_TIPO_DOCUMENTO").val() == "TLC") {
+            $("#btnMaterialRecebido").prop("disabled", true);
+            $("#btnModificar").prop("disabled", true);
+            $("#btnXML").prop("disabled", true);
+            $("#btnReenviar").prop("disabled", true);
+        }
+        else {
+            $("#btnMaterialRecebido").prop("disabled", false);
+            $("#btnModificar").prop("disabled", false);
+            $("#btnXML").prop("disabled", false);
+            $("#btnReenviar").prop("disabled", false);
+        }
+        $("#lblQtdAnexos").hide();
+        CarregaAnexos();
+    </script>
+}

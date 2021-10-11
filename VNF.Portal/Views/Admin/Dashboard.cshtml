@@ -1,0 +1,27 @@
+﻿@using MetsoFramework.Utils
+@{
+    ViewBag.Title = "Settings";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    int indiceSettings = 1;
+}
+
+<h1>Settings</h1><hr /><br />
+
+<div class="row">
+        
+    @foreach (var page in (IEnumerable<VNF.Pages>)Model)
+    {
+        <div class="col-lg-4">
+            <h3 class="left"><span class="glyphicon glyphicon-@page.Icon"></span> @page.Title <span class="badge"></span></h3>
+            <p class="left"><a href="@Url.Action(page.Action, page.Controller)">@page.Description</a></p>
+        </div>
+        
+        if (indiceSettings == 3)
+        { 
+            <div class="clearfix"></div>
+            indiceSettings = 0;
+        }
+        indiceSettings++;
+    }
+
+</div>

@@ -1,0 +1,4 @@
+C:\source\VNF\VNF.WinService\obj\Debug\VNF.WinService.csprojAssemblyReference.cache
+C:\source\VNF\VNF.WinService\obj\Debug\VNF.WinService.ProjectInstaller.resources
+C:\source\VNF\VNF.WinService\obj\Debug\VNF.WinService.csproj.GenerateResource.cache
+C:\source\VNF\VNF.WinService\obj\Debug\VNF.WinService.csproj.CoreCompileInputs.cache

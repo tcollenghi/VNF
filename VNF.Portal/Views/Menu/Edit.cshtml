@@ -1,0 +1,110 @@
+﻿@using MetsoFramework.Utils
+@model VNF.Menus
+@{
+    ViewBag.Title = "Menu";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Edit", "Menu", FormMethod.Post, new { id = "frmEdit", role = "form", enctype = "multipart/form-data" }))
+{
+    <h2>Menu</h2>
+    <br />
+    
+    @Html.MetsoHiddenFor(model => @model.IdMenu)
+    @Html.MetsoHidden("hfIcon", @Model.Icon)
+    @Html.MetsoHidden("hfSequence", @Model.Sequence)
+    @Html.MetsoHidden("hfMenuParent", @Model.IdMenuParent)
+    @Html.MetsoHidden("hfPage", @Model.IdPage)
+    
+    <div class="form-group col-xs-10">
+        @Html.MetsoLabelFor(model => model.Description)
+        @Html.MetsoTextBoxFor(model => model.Description, SessionsHelper.FieldType.Text, null, true)
+    </div>
+    
+    <div class="form-group col-xs-2">
+        &nbsp;
+        @Html.MetsoCheckBoxFor(model => model.Released, "Released for users")
+    </div>
+    
+    <div class="form-group col-xs-10">
+        @Html.MetsoLabelFor(model => model.Icon)
+        @Html.MetsoDropDownListFor(model => model.Icon, (SelectList)ViewBag.Icon, "", new { onChange = "ChangeIconImage()" })
+    </div>
+    
+    <div class="form-group col-xs-2">
+        <h2><span id="iconImage"></span></h2>
+    </div>
+        
+    <div class="form-group col-xs-12">
+        @Html.MetsoLabelFor(model => model.IdMenuParent, "Parent Menu")        
+        @Html.MetsoDropDownListFor(model => model.IdMenuParent, (SelectList)ViewBag.IdMenuParent, "", new { onChange = "LoadChildrensMenu()" })
+    </div>
+    
+    <div class="form-group col-xs-12">
+        @Html.MetsoLabelFor(model => model.Sequence, "Show after") 
+        @Html.MetsoDropDownListFor(model => model.Sequence, (SelectList)ViewBag.Sequence)
+    </div>
+
+    <div class="form-group col-xs-12">
+        @Html.MetsoLabelFor(model => model.IdPage, "Page") 
+        @Html.MetsoDropDownListFor(model => model.IdPage, (SelectList)ViewBag.IdPage)
+    </div>
+    
+    <div class="clearfix"></div>     
+         
+    <br />
+    <hr />
+    
+    <button type="button" class="btn btn-default" onclick="window.location='@Url.Action("Index")'">Voltar</button>
+    <button type="button" class="btn btn-default" onclick="PostPage('Edit', 'Menu')">Salvar</button>
+    
+    if (Model.IdMenu != 0)
+    {
+        <button type='button' class='btn btn-default hide-mobile' onclick='ViewLog("Menus", @Model.IdMenu)'> View log</button>
+    }
+    
+    
+    @Html.Partial("ViewLog")
+}
+@section head{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            $("#ddlIcon").val($("#hfIcon").val());
+            $("#IdMenuParent").val($("#hfMenuParent").val());
+            $("#Sequence").val($("#hfSequence").val());
+            $("#IdPage").val($("#hfPage").val());
+            ChangeIconImage();
+            LoadChildrensMenu();
+        });
+        
+        function ChangeIconImage() {
+            $("#iconImage").removeClass();
+            $("#iconImage").addClass("glyphicon glyphicon-" + $("#ddlIcon option:selected").val());
+            $("#Icon").val($("#ddlIcon option:selected").val())
+        }
+
+        function LoadChildrensMenu() {
+            $.ajax({
+                async: false,
+                cache: false,
+                type: 'GET',
+                url: '@Url.Action("LoadSubMenu", "Menu")',
+                dataType: 'json',
+                data: { pIdMenu: $("#IdMenu").val(), pIdMenuParent: $("#IdMenuParent").val(), pOnlyReleased: false },
+                success: function (data) {
+                    $("#Sequence").empty();
+                    $("#Sequence").append("<option></option>");
+                    if (data.idMenu != null) {
+                        for (var i = 0; i < data.idMenu.length; i++) {
+                            $("#Sequence").append("<option value='" + data.idMenu[i] + "'>" + data.DescricaoMenu[i] + "</option>");
+                        }
+
+                        $("#Sequence").val($("#hfSequence").val());
+                    }
+                }
+            });
+        }
+
+    </script>
+}
+

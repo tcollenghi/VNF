@@ -1,0 +1,233 @@
+﻿@using MetsoFramework.Utils
+@using VNF.Portal.Models
+@model TbModoProcessoDetalhe
+@{
+    ViewBag.Title = "Detalhe do Modo Processo";
+    int Id = Model.id_modo_processo_detalhe;
+    string AL = Convert.ToBoolean(Model.mdp_aguardar_liberacao_migo) == true ? "checked=\"checked\"" : "";
+    string CM = Convert.ToBoolean(Model.mdp_criar_miro) == true ? "checked=\"checked\"" : "";
+    string DP = Convert.ToBoolean(Model.mdp_debito_posterior) == true ? "checked=\"checked\"" : "";
+    string TM = Convert.ToBoolean(Model.mdp_enviar_taxcode_migo) == true ? "checked=\"checked\"" : "";    
+}
+
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-angle-double-right fa-fw "></i>
+            Detalhe do Modo Processo
+        </h1>
+    </div>
+
+</div>
+<!-- widget grid -->
+<section id="widget-grid" class="">
+
+    <!-- START ROW -->
+    <div class="row">
+
+        <!-- NEW COL START -->
+        <article class="col-sm-12 col-md-12 col-lg-12">
+
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget jarviswidget-color-blueDark" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-deletebutton="false">
+
+                <header>
+                    <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                    <h2>Editar informações</h2>
+
+                </header>
+
+                <div>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+
+                    </div>
+                    <!-- end widget edit box -->
+                    <div class="widget-body no-padding">
+                        @using (Html.BeginForm("Edit", "DetalheModoProcesso", FormMethod.Post, new { id = "frmEdit", @class = "smart-form", enctype = "multipart/form-data" }))
+                        {
+                            @Html.HiddenFor(model => model.id_modo_processo_detalhe)
+                            @*<input type="hidden" id="id_modo_processo" value="@Id" />*@
+                            @*@Html.MetsoTextBoxFor(model => model.IdTalonario, SessionsHelper.FieldType.Text, null, true)*@
+
+                            <fieldset>
+
+                                <div class="row">
+                                    <section class="col col-12 col-3">
+                                        <label class="label">Modo*</label>
+                                        <label class="input">
+                                            @Html.MetsoTextBoxFor(model => model.mpd_modo, SessionsHelper.FieldType.Date, null, true)
+                                        </label>
+                                    </section>
+                                    <section class="col col-12 col-3">
+                                        <label class="label">Processo*</label>
+                                        <label class="input">
+                                            @Html.MetsoTextBoxFor(model => model.mdp_processo, SessionsHelper.FieldType.Date, null, true)
+                                        </label>
+                                    </section>
+                                    <section class="col col-12 col-2">
+                                        <label class="label">Tipo Movimento Migo</label>
+                                        <label class="input">
+
+                                            @Html.MetsoTextBoxFor(model => model.mdp_tipo_movimento_migo, SessionsHelper.FieldType.Date, null, true)
+                                        </label>
+                                    </section>
+                                    <section class="col col-12 col-2">
+                                        <label class="label">Tipo Miro</label>
+                                        <label class="input">
+
+                                            @Html.MetsoTextBoxFor(model => model.mdp_tipo_miro, SessionsHelper.FieldType.Date, null, true)
+                                        </label>
+                                    </section>
+                                    <section class="col col-12 col-2">
+                                        <label class="label">Tipo NF</label>
+                                        <label class="input">
+
+                                            @Html.MetsoTextBoxFor(model => model.mdp_tipo_nf, SessionsHelper.FieldType.Date, null, true)
+                                        </label>
+                                    </section>
+                                    <section class="col col-12 col-10">
+                                        <label class="input">
+                                            <label class="checkbox">
+                                          
+                                            </label>
+                                        </label>
+                                    </section>
+                                </div>
+                                <div class="row">
+                                    <section class="col col-12 col-3">
+                                        <label class="input">
+                                            <label class="checkbox">
+                                                <input type="checkbox" id="AguardarLiberacao" name="AguardarLiberacao" @AL onclick="CheckaAguardarLiberacao();">
+                                                <i></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Aguardar Liberação
+                                                @Html.HiddenFor(model => model.mdp_aguardar_liberacao_migo)
+                                            </label>
+                                        </label>
+                                    </section>
+
+
+                                    <section class="col col-12 col-3">
+                                        <label class="input">
+                                            <label class="checkbox">
+                                                <input type="checkbox" id="CriarMiro" name="CriarMiro" @CM onclick="CheckaCriarMiro();">
+                                                <i></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Criar Miro
+                                                @Html.HiddenFor(model => model.mdp_criar_miro)
+                                            </label>
+                                        </label>
+                                    </section>
+                                    <section class="col col-12 col-2">
+                                        <label class="input">
+                                            <label class="checkbox">
+                                                <input type="checkbox" id="DebitoPosterior" name="DebitoPosterior" @DP onclick="CheckaDebitoPosterior();">
+                                                <i></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Débito Posterior
+                                                @Html.HiddenFor(model => model.mdp_debito_posterior)
+                                            </label>
+                                        </label>
+                                    </section>
+
+                                    <section class="col col-12 col-4">
+                                        <label class="input">
+                                            <label class="checkbox">
+                                                <input type="checkbox" id="EnviarTaxCodeMigo" name="EnviarTaxCodeMigo" @TM onclick="CheckaEnviarTaxCodeMigo();">
+                                                <i></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Enviar Código de Imposto (TaxCode) na MIGO
+                                                @Html.HiddenFor(model => model.mdp_enviar_taxcode_migo)
+                                            </label>
+                                        </label>
+                                    </section>
+                                </div>
+                            </fieldset>
+                            <footer>
+                                <button type="button" onclick="Salvar();" class="btn btn-primary">
+                                    <i class="fa fa-check"></i> Salvar
+                                </button>
+                                <button type="button" class="btn btn-primary" onclick="window.location = '@Url.Action("Index", "DetalheModoProcesso")'">
+                                    <i class="fa fa-arrow-circle-left"></i> Voltar
+                                </button>
+                            </footer>
+                        }
+                    </div>
+                    <!-- end widget content -->
+
+                </div>
+                <!-- end widget div -->
+
+            </div>
+            <!-- end widget -->
+
+        </article>
+        <!-- END COL -->
+
+    </div>
+
+    <!-- END ROW -->
+</section>
+
+@section pagespecific
+    {
+    <script src="~/Scripts/plugin/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.colVis.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.tableTools.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/plugin/datatable-responsive/datatables.responsive.min.js"></script>
+
+    <script src="~/Scripts/views/PermissaoUsuario.js"></script>
+    <script>PermissaoUsuario('@(ViewBag.Acesso)')</script>
+
+    <script src="~/Scripts/plugin/jquery-form/jquery-form.min.js"></script>
+    <script src="~/Scripts/MetsoAdmin.js"></script>
+    <script type="text/javascript">
+        
+        /* BASIC ;*/
+        var responsiveHelper_dt_basic = undefined;
+        var responsiveHelper_datatable_fixed_column = undefined;
+        var responsiveHelper_datatable_col_reorder = undefined;
+        var responsiveHelper_datatable_tabletools = undefined;
+
+        var breakpointDefinition = {
+            tablet: 1024,
+            phone: 480
+        };
+
+        function CheckaAguardarLiberacao() {
+            if ($("#AguardarLiberacao").is(':checked')) {
+                $("#mdp_aguardar_liberacao_migo").val("true");
+            }
+            else {
+                $("#mdp_aguardar_liberacao_migo").val("false");
+            }
+        }
+ 
+        function CheckaCriarMiro() {
+            if ($("#CriarMiro").is(':checked')) {
+                $("#mdp_criar_miro").val("true");
+            }
+            else {
+                $("#mdp_criar_miro").val("false");
+            }
+        }
+
+        function CheckaDebitoPosterior() {
+            if ($("#DebitoPosterior").is(':checked')) {
+                $("#mdp_debito_posterior").val("true");
+            }
+            else {
+                $("#mdp_debito_posterior").val("false");
+            }
+        }
+
+        function CheckaEnviarTaxCodeMigo() {
+            if ($("#EnviarTaxCodeMigo").is(':checked')) {
+                $("#mdp_enviar_taxcode_migo").val("true");
+            }
+            else {
+                $("#mdp_enviar_taxcode_migo").val("false");
+            }
+        }        
+
+        function Salvar() {
+             $("#frmEdit").submit(); 
+        }
+        
+    </script>
+}

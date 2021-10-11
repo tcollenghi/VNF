@@ -1,0 +1,467 @@
+﻿@using MetsoFramework.Utils
+@model VNF.Users
+@{
+    ViewBag.Title = "User";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Edit", "Users", FormMethod.Post, new { id = "frmUsers", role = "form", enctype = "multipart/form-data" }))
+{
+    <h2>
+        User</h2>
+    <br />
+        
+    @Html.MetsoHiddenFor(model => @model.IdUser)
+    
+    <div class="form-group col-xs-10">
+        @Html.MetsoLabelFor(model => model.Mail)
+        @Html.MetsoTextBoxFor(model => model.Mail, SessionsHelper.FieldType.Email, new { onChange = "LoadUserInfo();" }, true)
+    </div>
+    
+    <div class="form-group col-xs-2">
+        @Html.MetsoLabelFor(model => model.Active)
+        @Html.MetsoCheckBoxFor(model => model.Active)
+    </div>
+
+    <div class="form-group col-xs-4">
+        @Html.MetsoLabelFor(model => model.LogonName, "Logon Name")
+        @Html.MetsoTextBox("txtLogonName", SessionsHelper.FieldType.Text, new { @Value = Model.LogonName }, true, false)
+        @Html.HiddenFor(model => model.LogonName)
+    </div>
+    
+    <div class="form-group col-xs-8">
+        @Html.MetsoLabelFor(model => model.Name)
+        @Html.MetsoTextBox("txtName", SessionsHelper.FieldType.Text, new { @Value = Model.Name }, true, false)
+        @Html.HiddenFor(model => model.Name)
+    </div>    
+
+    <div class="clearfix">
+    </div>
+    
+    string classDivCentrosServico = Model.IdUser != 0 ? "form-group col-xs-12" : "form-group col-xs-12 hide";
+    string classDivProfile = Model.IdUser != 0 ? "form-group col-xs-12" : "form-group col-xs-12 hide";
+    string classDivPeriodoAusencia = Model.IdUser != 0 ? "form-group col-xs-12" : "form-group col-xs-12 hide";
+    
+    <hr />
+    <div class="clearfix">
+    </div>
+    
+    <br />
+    
+    <hr />
+    <div id="divUsersProfiles" class="@classDivProfile">
+        @{int rowIndex = 0;}
+        <h4>
+            Profiles</h4>
+        <table id="tableProfiles" class="display table table-responsive table-striped table-hover">
+            <thead>
+                <tr>
+                    <th style="width: 90%">
+                        Profiles
+                    </th>
+                    <th style="width: 10%">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.UsersProfiles.Count(); i++)
+                {
+                    rowIndex++;
+                    string idRow = "rowUserProfile" + rowIndex;
+                    <tr id="@idRow">
+                        <td>
+                            @Model.UsersProfiles.ToList()[i].Profiles.Name
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-default" onclick="removerProfile(@rowIndex, @Model.UsersProfiles.ToList()[i].IdUserProfile)">
+                                <span class="glyphicon glyphicon-remove"></span>&nbsp Remover</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                        <div id="divProfiles" class="form-group">
+                            @Html.MetsoDropDownList("ddlProfiles", Enumerable.Empty<SelectListItem>(), "")
+                        </div>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-default" onclick="addProfile()">
+                            <span class="glyphicon glyphicon-plus"></span>&nbsp Adicionar
+                        </button>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+        <input type="hidden" id="rowIndexUserProfile" value="@rowIndex" />
+    </div>
+    <div class="clearfix">
+    </div>
+    
+    <br />
+    
+    <hr />
+    <div id="divUserPeriodoAusencia" class="@classDivPeriodoAusencia">
+        @{int rowIndexPeriodoAusencia = 0;}
+        <h4>
+            Período de ausência</h4>
+        <table id="tablePeriodoAusencia" class="display table table-responsive table-striped table-hover">
+            <thead>
+                <tr>
+                    <th style="width: 45%">
+                        Início
+                    </th>
+                    <th style="width: 45%">
+                        Fim
+                    </th>
+                    <th style="width: 10%">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.UserPeriodoAusencia.Count(); i++)
+                {
+                    rowIndexPeriodoAusencia++;
+                    string idRowPeriodoAusencia = "rowPeriodoAusencia" + rowIndex;
+                    <tr id="@idRowPeriodoAusencia">
+                        <td>
+                            @Convert.ToDateTime(Model.UserPeriodoAusencia.ToList()[i].DataInicio).ToString("dd/MM/yyyy")
+                        </td>
+                        <td>
+                            @Convert.ToDateTime(Model.UserPeriodoAusencia.ToList()[i].DataFim).ToString("dd/MM/yyyy")
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-default" onclick="removerPeriodoAusencia(@rowIndexPeriodoAusencia, @Model.UserPeriodoAusencia.ToList()[i].IdUserPeriodoAusencia)">
+                                <span class="glyphicon glyphicon-remove"></span>&nbsp Remover</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                        <div id="divDataInicio" class="form-group">
+                            @Html.MetsoTextBox("txtDataInicio", SessionsHelper.FieldType.Date)
+                        </div>
+                    </td>
+                    <td>
+                        <div id="divDataFim" class="form-group">
+                            @Html.MetsoTextBox("txtDataFim", SessionsHelper.FieldType.Date)
+                        </div>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-default" onclick="addPeriodoAusencia()">
+                            <span class="glyphicon glyphicon-plus"></span>&nbsp Adicionar
+                        </button>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+        <input type="hidden" id="rowIndexPeriodoAusencia" value="@rowIndexPeriodoAusencia" />
+    </div>
+    <div class="clearfix">
+    </div>
+    
+    <br />
+    
+    <div class="col-xs-12 right">
+        <button type="button" class="btn btn-default" onclick="window.location='@Url.Action("Index")'">
+            Voltar</button>
+        <button type="button" class="btn btn-default" onclick="salvarUsuario()">
+            Salvar</button>
+    </div>
+}
+@section head{
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+            LoadDropDownListProfiles();
+            LoadDropDownListCentrosServico();
+        });
+
+        function LoadUserInfo() {
+            $("#Mail").parent().removeClass("has-error");
+            $("#txtName").val("");
+            $("#txtLogonName").val("");
+
+            $.ajax({
+                async: false,
+                cache: false,
+                type: 'GET',
+                url: '@Url.Action("LoadUserInfo", "Users")',
+                dataType: 'json',
+                data: { pUserMail: $("#Mail").val() },
+                success: function (data) {
+                    if (data.Success == true) {
+                        if (data.Name == null) {
+                            $("#Mail").parent().addClass("has-error");
+                        } else {
+                            $("#txtName").val(data.Name);
+                            $("#Name").val(data.Name);
+                            $("#txtLogonName").val(data.LogonName);
+                            $("#LogonName").val(data.LogonName);
+                        }
+                    } else {
+                        jAlert("Erro: " + data.Message);
+                    }
+                }
+            });
+        }
+
+        function LoadDropDownListProfiles() {
+            $.ajax({
+                async: false,
+                type: 'GET',
+                cache: false,
+                dataType: 'text',
+                url: '@Url.Action("LoadDropDownListProfiles")',
+                data: { idUser: $("#IdUser").val() },
+                success: function (result) {
+                    $("#ddlProfiles").empty();
+                    $("#ddlProfiles").append(result);
+                }
+            });
+        }
+
+        function LoadDropDownListCentrosServico() {
+            $.ajax({
+                async: false,
+                type: 'GET',
+                cache: false,
+                dataType: 'text',
+                url: '@Url.Action("LoadDropDownListCentrosServico")',
+                data: { idUser: $("#IdUser").val() },
+                success: function (result) {
+                    $("#ddlCentrosServico").empty();
+                    $("#ddlCentrosServico").append(result);
+                }
+            });
+        }
+
+        function salvarUsuario() {
+            PostPage('Edit', 'Users');
+            $("#divUsersProfiles").removeClass("hide");
+            $("#divUserPeriodoAusencia").removeClass("hide");
+
+            var timer = window.setTimeout(function () {
+                $("#IdUser").val(postReturn);
+                LoadDropDownListProfiles();
+                window.clearTimeout(timer);
+            }, 2000);
+
+        }
+
+        function addCentroServico() {
+            //=>Remover a classe de erros dos campos
+            $("#divCentrosServico").removeClass("has-error");
+
+            var idCentroServicoUser = 0;
+            var todasPreenchidas = true;
+
+            //=>Verificar se os campos estão preenchidos
+            if ($("#ddlCentrosServico option:selected").val() == "") {
+                $("#divCentrosServico").addClass("has-error");
+                todasPreenchidas = false;
+            }
+
+            if (todasPreenchidas) {
+
+                //=>Salvar no banco de dados
+                $.ajax({
+                    async: false,
+                    type: 'POST',
+                    cache: false,
+                    dataType: 'json',
+                    url: '@Url.Action("AddCentroServico")',
+                    data: { idUser: $("#IdUser").val(), idCentroServico: $("#ddlCentrosServico option:selected").val() },
+                    success: function (result) {
+                        idCentroServicoUser = result.IdCentroServicoUser;
+                    }
+                });
+
+
+                //=>Adicionar a atividade na tabela
+                var rowIndex = parseInt($("#rowIndexCentroServicoUser").val()) + 1;
+
+                var row = "<tr id='rowCentroServicoUser" + rowIndex + "'>";
+
+                //Page
+                row += "<td>" + $("#ddlCentrosServico option:selected").text() + "</td>";
+
+                //Botao
+                row += "<td><button type='button' class='btn btn-default' onclick='removerCentroServico(" + rowIndex + ", " + idCentroServicoUser + ")'><span class='glyphicon glyphicon-remove'></span>&nbsp Remover</button></td>";
+
+                row += "</tr>";
+
+                $("#tableCentrosServico tbody").append(row);
+
+                $("#rowIndexCentroServicoUser").val(parseInt($("#rowIndexCentroServicoUser").val()) + 1);
+
+                LoadDropDownListCentrosServico();
+            }
+        }
+
+        function removerCentroServico(rowIndex, idCentroServicoUser) {
+            //=>Salvar no banco de dados
+            $.ajax({
+                async: false,
+                type: 'POST',
+                cache: false,
+                dataType: 'json',
+                url: '@Url.Action("RemoverCentroServico")',
+                data: { idCentroServicoUser: idCentroServicoUser }
+            });
+
+            $("#rowCentroServicoUser" + rowIndex).remove();
+            $("#rowIndexCentroServicoUser").val(parseInt($("#rowIndexCentroServicoUser").val()) - 1);
+
+            LoadDropDownListCentrosServico();
+        }        
+
+        function addProfile() {
+            //=>Remover a classe de erros dos campos
+            $("#divProfiles").removeClass("has-error");
+
+            var idUserProfile = 0;
+            var todasPreenchidas = true;
+
+            //=>Verificar se os campos estão preenchidos
+            if ($("#ddlProfiles option:selected").val() == "") {
+                $("#divProfiles").addClass("has-error");
+                todasPreenchidas = false;
+            }
+
+            if (todasPreenchidas) {
+
+                //=>Salvar no banco de dados
+                $.ajax({
+                    async: false,
+                    type: 'POST',
+                    cache: false,
+                    dataType: 'json',
+                    url: '@Url.Action("AddProfile")',
+                    data: { idUser: $("#IdUser").val(), idProfile: $("#ddlProfiles option:selected").val() },
+                    success: function (result) {
+                        idUserProfile = result.IdUserProfile;
+                    }
+                });
+
+
+                //=>Adicionar a atividade na tabela
+                var rowIndex = parseInt($("#rowIndexUserProfile").val()) + 1;
+
+                var row = "<tr id='rowUserProfile" + rowIndex + "'>";
+
+                //Page
+                row += "<td>" + $("#ddlProfiles option:selected").text() + "</td>";
+
+                //Botao
+                row += "<td><button type='button' class='btn btn-default' onclick='removerProfile(" + rowIndex + ", " + idUserProfile + ")'><span class='glyphicon glyphicon-remove'></span>&nbsp Remover</button></td>";
+
+                row += "</tr>";
+
+                $("#tableProfiles tbody").append(row);
+
+                $("#rowIndexUserProfile").val(parseInt($("#rowIndexUserProfile").val()) + 1);
+
+                LoadDropDownListProfiles();
+            }
+        }
+
+        function removerProfile(rowIndex, idUserProfile) {
+            //=>Salvar no banco de dados
+            $.ajax({
+                async: false,
+                type: 'POST',
+                cache: false,
+                dataType: 'json',
+                url: '@Url.Action("RemoverProfile")',
+                data: { idUserProfile: idUserProfile }
+            });
+
+            $("#rowUserProfile" + rowIndex).remove();
+            $("#rowIndexUserProfile").val(parseInt($("#rowIndexUserProfile").val()) - 1);
+
+            LoadDropDownListProfiles();
+        }
+
+        function addPeriodoAusencia() {
+            //=>Remover a classe de erros dos campos
+            $("#divDataInicio").removeClass("has-error");
+            $("#divDataFim").removeClass("has-error");
+
+            var idUserPeriodoAusencia = 0;
+            var todasPreenchidas = true;
+
+            //=>Verificar se os campos estão preenchidos
+            if ($("#txtDataInicio").val() == "") {
+                $("#divDataInicio").addClass("has-error");
+                todasPreenchidas = false;
+            }
+            if ($("#txtDataFim").val() == "") {
+                $("#divDataFim").addClass("has-error");
+                todasPreenchidas = false;
+            }
+
+            if (todasPreenchidas) {
+
+                //=>Salvar no banco de dados
+                $.ajax({
+                    async: false,
+                    type: 'POST',
+                    cache: false,
+                    dataType: 'json',
+                    url: '@Url.Action("AddPeriodoAusencia")',
+                    data: { idUser: $("#IdUser").val(), dataInicio: $("#txtDataInicio").val(), dataFim: $("#txtDataFim").val() },
+                    success: function (result) {
+                        if (result.Erro != "") {
+                            jAlert(result.Erro, "Erro");
+                        }
+                        else {
+                            idUserPeriodoAusencia = result.IdUserPeriodoAusencia;
+
+                            //=>Adicionar o período na tabela
+                            var rowIndex = parseInt($("#rowIndexPeriodoAusencia").val()) + 1;
+
+                            var row = "<tr id='rowPeriodoAusencia" + rowIndex + "'>";
+
+                            //DataInicio
+                            row += "<td>" + $("#txtDataInicio").val() + "</td>";
+
+                            //DataFim
+                            row += "<td>" + $("#txtDataFim").val() + "</td>";
+
+                            //Botao
+                            row += "<td><button type='button' class='btn btn-default' onclick='removerPeriodoAusencia(" + rowIndex + ", " + idUserPeriodoAusencia + ")'><span class='glyphicon glyphicon-remove'></span>&nbsp Remover</button></td>";
+
+                            row += "</tr>";
+
+                            $("#tablePeriodoAusencia tbody").append(row);
+
+                            $("#rowIndexPeriodoAusencia").val(parseInt($("#rowIndexPeriodoAusencia").val()) + 1);
+
+                            $("#txtDataInicio").val("");
+                            $("#txtDataFim").val("");
+                        }
+                    }
+                });
+            }
+        }
+
+        function removerPeriodoAusencia(rowIndex, idPeriodoAusencia) {
+            //=>Salvar no banco de dados
+            $.ajax({
+                async: false,
+                type: 'POST',
+                cache: false,
+                dataType: 'json',
+                url: '@Url.Action("RemoverPeriodoAusencia")',
+                data: { idPeriodoAusencia: idPeriodoAusencia }
+            });
+
+            $("#rowPeriodoAusencia" + rowIndex).remove();
+            $("#rowIndexPeriodoAusencia").val(parseInt($("#rowIndexPeriodoAusencia").val()) - 1);
+        }
+
+    </script>
+}

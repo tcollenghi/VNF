@@ -1,0 +1,107 @@
+﻿@using MetsoFramework.Utils
+@using MetsoAdmin.Controllers
+@model System.Data.DataTable
+@{
+    ViewBag.Title = "Cancelamento de notas de saída - Triangulus";
+}
+
+<style>
+    .margin-bottom0 {
+        margin-bottom: 0px !important;
+    }
+
+    .higth0 {
+        height: 0px !important;
+    }
+</style>
+
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-angle-double-right fa-fw "></i>
+            Enviar Xml
+        </h1>
+    </div>
+
+    <article class="col-sm-12 col-md-12 col-lg-12">
+
+        <div class="jarviswidget jarviswidget-color-blueDark margin-bottom0" data-widget-editbutton="false">
+
+            <header class="navigation-wrap">
+                <span class="widget-icon"><i class="fa fa-file-text"></i></span>
+                <h2>Enviar DOC-e</h2>
+            </header>
+
+            <div id="divSelecionarArquivo">
+                <!-- widget edit box -->
+                <div class="jarviswidget-editbox">
+                    <!-- This area used as dropdown edit box -->
+                </div>
+
+                <div class="widget-body no-padding">
+                    @using (Html.BeginForm("Upload", "EnvioXML", FormMethod.Post, new { enctype = "multipart/form-data", id = "frmXML", @class = "smart-form" }))
+                    {
+                        <fieldset>
+
+                            <section>
+                                <div class="input input-file">
+                                    <span class="button">
+                                        <input type="file" id="btnProcurar" name="btnProcurar" onchange="this.parentNode.nextSibling.value = this.value">Browse
+                                    </span><input type="text" placeholder="Informe o arquivo" readonly="">
+
+                                </div>
+                            </section>
+
+                        </fieldset>
+                    }
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="divInformacoesXML">
+            <div id="definicaoTabela">
+                @{
+                    Html.RenderPartial("ConsultarXML");
+                }
+            </div>
+        </div>
+
+        <br />
+
+        <div class="widget-body">
+            <div class="smart-form">
+                <footer class="border">
+                    <a class="btn btn-primary" onclick="GetDanfe();" id="btnVisualizarDanfe"><span class="text-btn"><i class="fa fa-file-pdf-o"></i> Visualizar Danfe</span></a>
+                    <a class="btn btn-primary" onclick="GetXml();" id="btnVisualizarXML"><span class="text-btn"><i class="fa fa-file-code-o"></i> Visualizar XML</span></a>
+                    <a class="btn btn-primary" onclick="NovoDOC();" id="btnNovoDOC"><span class="text-btn"><i class="fa fa-arrow-circle-left"></i> Carregar novo DOC-e</span></a>
+                    <a class="btn btn-primary" onclick="LoadData();" id="btnCarregarXML"><span class="text-btn"><i class="fa fa-upload"></i> Carregar XML</span></a>
+                </footer>
+            </div>
+        </div>
+
+    </article>
+
+</div>
+
+@section pagespecific {
+    <link href="~/Content/Site.css" rel="stylesheet" />
+
+    <!-- PAGE RELATED PLUGIN(S) -->
+    <script src="~/Scripts/plugin/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.colVis.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.tableTools.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/plugin/datatable-responsive/datatables.responsive.min.js"></script>
+    <script src="~/Scripts/jquery.maskMoney.js"></script>
+    <script src="~/Scripts/Metso.js"></script>
+
+    <!-- Page Script -->
+    <script src="~/Scripts/views/_global.js"></script>
+    <script src="~/Scripts/views/EnvioXml/EnvioXml_Index.js"></script>
+    <script src="~/Scripts/views/PermissaoUsuario.js"></script>
+    <script>PermissaoUsuario('@(ViewBag.Acesso)')</script>
+}
+

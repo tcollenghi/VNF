@@ -1,0 +1,63 @@
+﻿@model System.Data.DataTable
+<!-- NEW COL START -->
+<!-- Widget ID (each widget will need unique ID)-->
+
+<div class="jarviswidget jarviswidget-color-blueDark" data-widget-editbutton="false">
+
+    <header class="navigation-wrap">
+        <div class="col-md-12 col-xs-12">
+            <div class="btn-group margin-top-5 right">
+                <a class="btn btn-primary" data-toggle="modal" data-target="#modalNovaMetsoPadrao" onclick="Novo()">
+                    <i class="fa fa-plus"></i>
+                    Novo
+                </a>
+                <a class="btn btn-primary" data-toggle="modal" data-target="#modalNovaMetsoPadrao" onclick="Editar('EDITAR')">
+                    <i class="fa fa-pencil"></i>
+                    Editar
+                </a>
+                <a class="btn btn-danger" onclick="Excluir()">
+                    <i class="fa fa-trash-o"></i>
+                    Excluir
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <input type="hidden" id="hdfCNPJ" />
+    <input type="hidden" id="hdfPlanta" />
+    <input type="hidden" id="hdfFornMetso" />
+
+    <div id="divData">
+        <!-- end widget edit box -->
+        <!-- widget content -->
+        <div class="widget-body no-padding">
+            <table id="dttTabela" datatables_fixedheader="top" datatables_fixedheader_offsettop="60" class="table table-striped table-bordered table-hover table-click" width="100%">
+                <thead>
+                    <tr>
+                        <th>CNPJ</th>
+                        <th>Planta</th>
+                        <th>ID. Fornecedor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        if (Model != null)
+                        {
+                            for (int i = 0; i < Model.Rows.Count; i++)
+                            {
+
+                                string Planta = Model.Rows[i]["PLANTA"].ToString().Replace("\\", "\\\\");
+                                string IDForn = Model.Rows[i]["ID_FORN_METSO"].ToString().Replace("\\", "\\\\");
+                                <tr id="i" onclick="selectRow('@Model.Rows[i]["CNPJ"].ToString()','@Planta', '@IDForn')">
+                                    <td>@Model.Rows[i]["CNPJ"].ToString()</td>
+                                    <td>@Model.Rows[i]["PLANTA"].ToString()</td>
+                                    <td>@Model.Rows[i]["ID_FORN_METSO"].ToString()</td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

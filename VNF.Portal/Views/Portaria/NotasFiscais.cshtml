@@ -1,0 +1,110 @@
+﻿<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+            <h4 class="modal-title">Nova Pasta</h4>
+        </div>
+        <div class="modal-body">
+            <div class="row">
+                <div class="col-md-2">
+                    <p>Pasta</p>
+                    <p>
+                        <input class="form-control" type="text" id="txtPasta" maxlength="6">
+                    </p>
+                </div>
+                <div class="col-md-5">
+                    <p>Setor</p>
+                    <p>
+                        <input class="form-control" maxlength="255" type="text" id="txtSetor">
+                    </p>
+                </div>
+                <div class="col-md-5">
+                    <p>Transportadora</p>
+                    <p>
+                        <input class="form-control" maxlength="255" type="text" id="txtTransportadora">
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-5">
+                    <p>Motorista</p>
+                    <p>
+                        <input class="form-control" maxlength="255" type="text" id="txtMotorista">
+                    </p>
+                </div>
+                <div class="col-md-5">
+                    <p>Placa</p>
+                    <p>
+                        <input class="form-control" type="text" maxlength="8" id="txtPlaca">
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-2">
+                </div>
+                <div class="col-md-8">
+                    <p>DANFE</p>
+                    <p>
+                        <input class="form-control" maxlength="255" type="text" id="txtDanfe">
+                    </p>
+                </div>
+                <div class="col-md-2">
+                    <p></p>
+                    <p class="right">
+                        <a class="btn btn-primary" onclick="ConsultarDanfe();"><i class="fa fa-search"></i><span class="text-btn"></span></a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div id="divDataNotas">
+            <!-- end widget edit box -->
+            <!-- widget content -->
+            <div class="widget-body no-padding">
+                
+                <table id="dttNotas" datatables_fixedheader="top" datatables_fixedheader_offsettop="60" class="table table-striped table-bordered table-hover table-click" width="100%">
+                    <thead>
+                        <tr>
+                            <th>Prioridade Alta</th>
+                            <th>Chave de Acesso</th>
+                            <th>DOC-e</th>
+                            <th>Fornecedor</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (System.Data.DataRow item in Model.Rows)
+                        {
+                            <tr>
+                                <td></td>
+                                <td>@item["NFEID"]</td>
+                                <td>@item["NFNUM"]</td>
+                                <td>@item["RAZFOR"]</td>
+                                <td>@item["SITUACAO"]</td>
+                            </tr>
+                        }
+                    </tbody>
+                    <tfoot class="hide">
+                        <tr>
+                            <th colspan="9">
+                                <div class="loading-grid">
+                                    <img alt="loading" class="left" id="imgLoadingNotas" name="imgLoadingNotas" src="/images/loading-small_white.gif" title="loading"><h4 class="left">carregando...</h4>
+                                </div>
+                            </th>
+                        </tr>
+                    </tfoot>
+                </table>
+
+            </div>
+            <!-- end widget content -->
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+            <button type="button" class="btn btn-primary" onclick="validarForm();">Salvar</button>
+        </div>
+    </div>
+    <!-- /.modal-content -->
+</div>
+<!-- /.modal-dialog -->

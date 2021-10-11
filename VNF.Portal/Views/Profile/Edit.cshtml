@@ -1,0 +1,189 @@
+﻿@using MetsoFramework.Utils
+@model VNF.Profiles
+@{
+    ViewBag.Title = "Profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@using (Html.BeginForm("Edit", "Profile", FormMethod.Post, new { id = "frmProfile", role = "form", enctype = "multipart/form-data" }))
+{
+    <h2>
+        Profile</h2>
+    <br />
+    
+    @Html.HiddenFor(model => @model.IdProfile)    
+
+    <div class="form-group col-xs-12">
+        @Html.MetsoLabel("Nome")
+        @Html.MetsoTextBoxFor(model => model.Name, SessionsHelper.FieldType.Text, null, true)
+    </div>
+    
+    <div class="form-group col-xs-12">
+        @Html.MetsoLabel("Descrição")
+        @Html.MetsoTextBoxFor(model => model.Description, SessionsHelper.FieldType.TextAreaMedium, null, true)
+    </div>
+    
+    <div class="clearfix">
+    </div>
+    
+    string classDivProfile = Model.IdProfile != 0 ? "form-group col-xs-12" : "form-group col-xs-12 hide";
+    
+   
+    <hr />
+    <div id="divUserProfiles" class="form-group col-xs-12 hide">
+        @{int rowIndex = 0;}
+        <h4>
+            Pages</h4>
+        <table id="tablePages" class="display table table-responsive table-striped table-hover">
+            <thead>
+                <tr>
+                    <th style="width: 90%">
+                        Página
+                    </th>
+                    <th style="width: 10%">
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @for (int i = 0; i < Model.ProfilesPages.Count(); i++)
+                {
+                    rowIndex++;
+                    string idRow = "rowProfilePage" + rowIndex;
+                    <tr id="@idRow">
+                        <td>
+                            @Model.ProfilesPages.ToList()[i].Pages.Title
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-default" onclick="removerPage(@rowIndex, @Model.ProfilesPages.ToList()[i].IdProfilePage)">
+                                <span class="glyphicon glyphicon-remove"></span>Remover</button>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                        <div id="divPages" class="form-group">                            
+                            @Html.MetsoDropDownList("ddlPages", Enumerable.Empty<SelectListItem>(), "")
+                        </div>
+                    </td>
+                    <td>
+                        <button type="button" class="btn btn-default" onclick="addPage()">
+                            <span class="glyphicon glyphicon-plus"></span>Adicionar
+                        </button>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+        <input type="hidden" id="rowIndexProfilePage" value="@rowIndex" />
+    </div>
+    <div class="clearfix">
+    </div>
+    
+    <br />
+    <div class="col-xs-12 right">
+        <button type="button" class="btn btn-default" onclick="window.location='@Url.Action("Index")'">
+            Voltar</button>
+        <button type="button" class="btn btn-default" onclick="salvarProfile()" >
+            Salvar</button>
+    </div>
+}
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        LoadDropDownListPages();
+    });
+
+    function LoadDropDownListPages() {
+        $.ajax({
+            async: false,
+            type: 'GET',
+            cache: false,
+            dataType: 'text',
+            url: '@Url.Action("LoadDdlPages")',
+            data: { idProfile : $("#IdProfile").val() },
+            success: function (result) {
+                $("#ddlPages").empty();
+                $("#ddlPages").append(result);
+            }
+        });
+    }
+
+    function salvarProfile() {        
+        PostPage('Edit', 'Profile');
+        $("#divUserProfiles").removeClass("hide");
+
+        var timer = window.setTimeout(function () {
+            $("#IdProfile").val(postReturn);
+            LoadDropDownListPages();
+            window.clearTimeout(timer);
+        }, 2000);
+    }
+
+    function addPage() {
+        //=>Remover a classe de erros dos campos
+        $("#divPages").removeClass("has-error");
+
+        var idProfilePage = 0;
+        var todasPreenchidas = true;
+
+        //=>Verificar se os campos estão preenchidos
+        if ($("#ddlPages option:selected").val() == "") {
+            $("#divPages").addClass("has-error");
+            todasPreenchidas = false;
+        }
+
+        if (todasPreenchidas) {
+
+            //=>Salvar no banco de dados
+            $.ajax({
+                async: false,
+                type: 'POST',
+                cache: false,
+                dataType: 'json',
+                url: '@Url.Action("AddPage")',
+                data: { idProfile: $("#IdProfile").val(), idPage: $("#ddlPages option:selected").val() },
+                success: function (result) {
+                    idProfilePage = result.IdProfilePage;
+                }
+            });
+
+
+            //=>Adicionar a atividade na tabela
+            var rowIndex = parseInt($("#rowIndexProfilePage").val()) + 1;
+
+            var row = "<tr id='rowProfilePage" + rowIndex + "'>";
+            
+            //Page
+            row += "<td>" + $("#ddlPages option:selected").text() + "</td>";
+
+            //Botao
+            row += "<td><button type='button' class='btn btn-default' onclick='removerPage(" + rowIndex + ", " + idProfilePage + ")'><span class='glyphicon glyphicon-remove'></span>&nbsp Remover</button></td>";
+
+            row += "</tr>";
+
+            $("#tablePages tbody").append(row);
+
+            $("#rowIndexProfilePage").val(parseInt($("#rowIndexProfilePage").val()) + 1);
+
+            LoadDropDownListPages();
+        }
+    }
+
+    function removerPage(rowIndex, idProfilePage) {
+        //=>Salvar no banco de dados
+        $.ajax({
+            async: false,
+            type: 'POST',
+            cache: false,
+            dataType: 'json',
+            url: '@Url.Action("RemoverPage")',
+            data: { idProfilePage: idProfilePage }
+        });
+
+        $("#rowProfilePage" + rowIndex).remove();
+        $("#rowProfilePage").val(parseInt($("#rowIndexProfilePage").val()) - 1);
+
+        LoadDropDownListPages();
+    }
+
+</script>

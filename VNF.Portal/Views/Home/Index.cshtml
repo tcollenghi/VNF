@@ -1,0 +1,346 @@
+﻿@using MetsoFramework.Utils;
+@using System.Data;
+@{
+    ViewBag.Title = "VNF";
+}
+
+@section pagespecific {
+    <script src="~/Scripts/plugin/flot/jquery.flot.cust.min.js"></script>
+    <script src="~/Scripts/plugin/flot/jquery.flot.resize.min.js"></script>
+    <script src="~/Scripts/plugin/flot/jquery.flot.time.min.js"></script>
+    <script src="~/Scripts/plugin/flot/jquery.flot.tooltip.min.js"></script>
+    <script src="~/Scripts/views/_global.js"></script>
+    <script src="~/Scripts/views/home_index.js"></script>
+    <script type="text/javascript">
+        @*var varDadosRecebimentoNF = @Html.Raw(ViewBag.DadosRecebimentoNF)
+        var varLegendaRecebimentoNF = @Html.Raw(ViewBag.LegendaRecebimentoNF)*@
+        @*var varDadosDivergenciasAtivas = @Html.Raw(ViewBag.DadosDivergenciasAtivas)
+        var varLegendaDivergenciasAtivas = @Html.Raw(ViewBag.LegendaDivergenciasAtivas)*@
+    </script>
+
+    <style type="text/css">
+        .cursor-default{
+            cursor:default !important;
+        }
+    </style>
+}
+
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark"><i class="fa-fw fa fa-home"></i> Home <span>> Dashboard</span></h1>
+    </div>
+</div>
+<section id="widget-grid" class="">
+    <div class="row">
+        <article class="col-sm-12">
+            <div class="jarviswidget" id="wid-id-0" data-widget-sortable="false" data-widget-togglebutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-colorbutton="false" data-widget-collapsed="false" data-widget-deletebutton="false" data-widget-togglebutton="false">
+                <header>
+                    <span class="widget-icon"> <i class="glyphicon glyphicon-stats txt-color-darken"></i> </span>
+                    <h2>Gráficos </h2>
+                    <ul class="nav nav-tabs pull-right in" id="myTab">
+                        <li class="active">
+                            <a data-toggle="tab" href="#Processamento"><i class="fa fa-clock-o"></i> <span class="hidden-mobile hidden-tablet">Processamento de DOC-e</span></a>
+                        </li>
+                        <li>
+                            <a data-toggle="tab" href="#Divergencias"><i class="fa fa-tachometer"></i> <span class="hidden-mobile hidden-tablet">Divergências ativas</span></a>
+                        </li>
+                    </ul>
+                </header>
+                <div class="no-padding">
+                    <div class="widget-body">
+                        <div id="myTabContent" class="tab-content">
+                            <div class="tab-pane fade active in padding-10 no-padding-bottom" id="Processamento">
+                                <div class="row no-space">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div id="updating-chart" class="chart-large txt-color-blue"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade active in padding-10 no-padding-bottom" id="Divergencias">
+                                <div class="row no-space">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div id="statsChart" class="chart-large txt-color-blue"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="show-stat-microcharts padding-10 no-padding-bottom no-padding-top hide">
+                        @{
+                            int intDadosUsage = Uteis.GetDatabaseUsage();
+                            string strColorDadosUsage = intDadosUsage < 40 ? "txt-color-greenLight" : "txt-color-red";
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                <div class="easy-pie-chart @strColorDadosUsage" data-percent="@intDadosUsage" data-pie-size="50">
+                                    <span class="small-chart-home">@intDadosUsage</span>
+                                </div>
+                                <span class="easy-pie-title">Dados</span>
+                            </div>
+                        }
+                        @{
+                            int intRamUsage = Uteis.GetRamUsage();
+                            string strColorRamUsage = intRamUsage < 90 ? "txt-color-greenLight" : "txt-color-red";
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                <div class="easy-pie-chart @strColorRamUsage" data-percent="@intRamUsage" data-pie-size="50">
+                                    <span class="percent percent-sign">@intRamUsage</span>
+                                </div>
+                                <span class="easy-pie-title">Memória</span>
+                            </div>
+                        }
+                        @{
+                            int intCpuUsage = Uteis.GetCpuUsage();
+                            string strColorCpuUsage = intCpuUsage < 90 ? "txt-color-greenLight" : "txt-color-red";
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                <div class="easy-pie-chart @strColorCpuUsage" data-percent="@intCpuUsage" data-pie-size="50">
+                                    <span class="percent percent-sign">@intCpuUsage</span>
+                                </div>
+                                <span class="easy-pie-title">CPU</span>
+                            </div>
+                        }
+                        @{
+                            int intNetworkUsage = Uteis.GetNetworkUsage();
+                            string strColorNetworkUsage = intCpuUsage < 50 ? "txt-color-greenLight" : "txt-color-red";
+                            <div class="col-xs-12 col-sm-3 col-md-3 col-lg-3">
+                                <div class="easy-pie-chart @strColorNetworkUsage" data-percent="@intNetworkUsage" data-pie-size="50">
+                                    <span class="percent percent-sign">@intNetworkUsage</span>
+                                </div>
+                                <span class="easy-pie-title">Rede</span>
+                            </div>
+                        }
+                    </div>*@
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+    <div class="row">
+        <article class="col-sm-12 col-md-12 col-lg-6">
+            <div class="jarviswidget jarviswidget-color-blueDark" id="wid-id-1" data-widget-sortable="false" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-fullscreenbutton="false" data-widget-collapsed="false" data-widget-deletebutton="false" data-widget-togglebutton="false">
+                <header>
+                    <span class="widget-icon"> <i class="fa fa-comments txt-color-white"></i> </span>
+                    <h2> Histórico </h2>
+                    <div class="widget-toolbar">
+                    </div>
+                </header>
+                <div>
+                    <div class="widget-body widget-hide-overflow no-padding">
+                        <div id="chat-body" class="chat-body custom-scroll">
+                            <ul id="lstLogApplication">
+                                 <li class="message" id="defaultLogApplication">
+                                    <img src="log_user" class="online" alt="log_user" onerror="this.src='@Url.Content("~/Images/Users/user_undefined_square.png")'">
+                                    <div class="message-text">
+                                        <time>
+                                            log_date
+                                        </time>
+                                        <a href="#" class="username cursor-default">
+                                            log_user
+                                        </a>
+                                        @*log_description log_icon*@
+                                    </div>
+                                </li>
+
+                               @* @foreach (DataRow dtrLogUsuarios in ((DataTable)ViewBag.LogApplication).Rows)
+                                {
+                                    <li class="message">
+                                        <img src="@Html.AvenuePicture(dtrLogUsuarios["log_user"].ToString())" class="online" alt="@Uteis.GetUserNameBySamId(dtrLogUsuarios["log_user"].ToString())" onerror="this.src='@Url.Content("~/Images/Users/user_undefined_square.png")'">
+                                        <div class="message-text">
+                                            <time>
+                                                @Convert.ToDateTime(dtrLogUsuarios["log_date"].ToString()).ToString("dd/MM/yyyy HH:mm")
+                                            </time>
+                                            <a href="#" class="username cursor-default">
+                                                @Uteis.GetUserNameBySamId(dtrLogUsuarios["log_user"].ToString())
+                                            </a>
+                                            @dtrLogUsuarios["log_description"].ToString() &nbsp; @Html.Raw(dtrLogUsuarios["log_icon"].ToString())
+                                        </div>
+                                    </li>
+                                }*@
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="jarviswidget jarviswidget-color-blueDark" data-widget-sortable="false" id="wid-id-3" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-collapsed="false" data-widget-deletebutton="false" data-widget-togglebutton="false">
+                <header>
+                    <span class="widget-icon"> <i class="fa fa-history"></i> </span>
+                    <h2> Últimos eventos </h2>
+                </header>
+                <div>
+                    <div class="jarviswidget-editbox">
+                        <input class="form-control" type="text">
+                    </div>
+                    <div class="widget-body  no-padding">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="timeline-body custom-scroll">
+                                    <div class="smart-timeline">
+                                        <ul class="smart-timeline-list" id="lstLogService">
+                                            <li id="defaultLogService">
+                                                log_icon
+                                                <div class="smart-timeline-icon"><i class="fa fa-truck"></i></div>
+                                                <div class="smart-timeline-time">
+                                                    <small>log_date</small>
+                                                </div>
+                                                <div class="smart-timeline-content">
+                                                    <p class="cursor-default">
+                                                        log_title
+                                                    </p>
+                                                    <p>
+                                                        log_description
+                                                    </p>
+                                                </div>
+                                            </li>
+                                            
+
+                                           @* @foreach (DataRow dtrLogUsuarios in ((DataTable)ViewBag.LogService).Rows)
+                                            {
+                                                <li>
+                                                    @Html.Raw(dtrLogUsuarios["log_icon"].ToString())
+                                                    <div class="smart-timeline-time">
+                                                        <small>@Convert.ToDateTime(dtrLogUsuarios["log_date"].ToString()).GetRelativeTimeNow()</small>
+                                                    </div>
+                                                    <div class="smart-timeline-content">
+                                                        <p class="cursor-default">
+                                                            @Html.Raw(dtrLogUsuarios["log_title"].ToString())
+                                                        </p>
+                                                        <p>
+                                                            @dtrLogUsuarios["log_description"].ToString()
+                                                        </p>
+                                                    </div>
+                                                </li>
+                                            }*@
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+        <article class="col-sm-12 col-md-12 col-lg-6">
+            <div class="jarviswidget jarviswidget-color-blueDark" data-widget-sortable="false" id="wid-id-2" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-fullscreenbutton="false" data-widget-collapsed="false" data-widget-deletebutton="false" data-widget-togglebutton="false">
+                <header>
+                    <span class="widget-icon"> <i class="fa fa-truck"></i> </span>
+                    <h2>Documentos recentes</h2>
+                </header>
+                <div>
+                    <div class="jarviswidget-editbox">
+                        <div>
+                            <label>Titulo:</label>
+                            <input type="text" />
+                        </div>
+                    </div>
+                    <div class="widget-body no-padding" style="min-height: 270px;">
+                        <table class="table table-striped table-hover table-condensed" id="tbDocumentosRecebidos">
+                            <thead>
+                                <tr>
+                                    <th>Documento</th>
+                                    <th>Fornecedor</th>
+                                    <th>Qtd Itens</th>
+                                    <th>Status</th>
+                                    <th>Prioritário</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                 <tr id="defaultDocumentoRecebido">
+                                    <td><a href="@Url.Action("Edit", "Compras", new { id = "" })"></a></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+
+
+                                @*@foreach (DataRow dtrLinha in ((DataTable)ViewBag.DocumentosRecebidos).Rows)
+                                {
+                                    <tr>
+                                        <td><a href="@Url.Action("Edit", "Compras", new { id = dtrLinha["NFEID"].ToString() })">@dtrLinha["VNF_TIPO_DOCUMENTO"].ToString() @dtrLinha["NF_IDE_NNF"].ToString()</a></td>
+                                        <td>@dtrLinha["NF_NOME_EMITENTE"].ToString()</td>
+                                        <td>@dtrLinha["NF_QTD_ITENS"].ToString()</td>
+                                        <td>@dtrLinha["SITUACAO"].ToString()</td>
+                                        <td>@dtrLinha["PRIORIDADE_ALTA"].ToString()</td>
+                                    </tr>
+                                }*@
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="jarviswidget jarviswidget-color-blueDark" data-widget-sortable="false" id="wid-id-4" data-widget-editbutton="false" data-widget-colorbutton="false" data-widget-fullscreenbutton="false" data-widget-collapsed="false" data-widget-deletebutton="false" data-widget-togglebutton="false">
+                <header>
+                    <span class="widget-icon"> <i class="fa fa-exclamation-circle txt-color-white"></i> </span>
+                    <h2> Notificações </h2>
+                </header>
+                <div>
+                    <div class="jarviswidget-editbox">
+                        <div>
+                            <label>Title:</label>
+                            <input type="text" />
+                        </div>
+                    </div>
+                    <div id="divNotificacoes" class="widget-body no-padding smart-form">
+                        <h5 class="todo-group-title"><i class="fa fa-warning"></i> Tarefas Críticas (<small class="num-of-tasks">3</small>)</h5>
+                        <ul id="sortable1" class="todo">
+                            <li id="liMateriaisBloqueado">
+                                <span class="handle">
+                                    <label class="checkbox state-disabled">
+                                        <input id="chkMateriaisBloqueado" type="checkbox" name="checkbox-inline" disabled="disabled">
+                                        <i></i>
+                                    </label>
+                                </span>
+                                <p>
+                                    <strong>Materiais bloqueados</strong> - Existem <label id="lblMateriaisBloqueados"></label> documentos bloqueados na portaria @*[<a href="javascript:void(0);" class="font-xs">Mais detalhes</a>]*@ <span class="text-muted">A entrada destes materiais será liberada quando as divergências forem corrigidas ou anuladas. </span>
+                                </p>
+                            </li>
+                            <li id="liPedidosPrioritarios">
+                                <span class="handle">
+                                    <label class="checkbox state-disabled">
+                                        <input id="chkPedidosPrioritarios" type="checkbox" name="checkbox-inline" disabled="disabled">
+                                        <i></i>
+                                    </label>
+                                </span>
+                                <p>
+                                    <strong>Pedidos prioritários</strong> - Existem <label id="lblPedidosPrioritarios"></label> pedidos prioritários @*[<a href="javascript:void(0);" class="font-xs">Mais detalhes</a>]*@ <span class="text-muted">Estes pedidos devem ter a entrada priorizada pela portaria. </span>
+                                </p>
+                            </li>
+                            <li id="liProcessamentoFiscal">
+                                <span class="handle">
+                                    <label class="checkbox state-disabled">
+                                        <input id="chkProcessamentoFiscal" type="checkbox" name="checkbox-inline" disabled="disabled">
+                                        <i></i>
+                                    </label>
+                                </span>
+                                <p>
+                                    <strong>Processamento fiscal</strong> - Existem <label id="lblProcessamentoFiscal"></label> documentos recebidos <span class="text-muted">Estes documentos podem ser enviados para o fluxo de processamento fiscal. </span>
+                                </p>
+                            </li>
+                        </ul>
+                        <h5 class="todo-group-title"><i class="fa fa-exclamation"></i> Tarefas Importantes (<small class="num-of-tasks">2</small>)</h5>
+                        <ul id="sortable2" class="todo">
+                            <li id="liDivergenciasAtivas">
+                                <span class="handle">
+                                    <label class="checkbox state-disabled">
+                                        <input id="chkDivergenciasAtivas" type="checkbox" name="checkbox-inline" disabled="disabled">
+                                        <i></i>
+                                    </label>
+                                </span>
+                                <p>
+                                    <strong>Divergências</strong> - Você possui <label id="lblDivergenciasAtivas"></label> divergências ativas <span class="text-muted">Corriga o pedido de compras ou cancele a nota fiscal recebida.</span>
+                                </p>
+                            </li>
+                            <li id="liDocumentosPendentes">
+                                <span class="handle">
+                                    <label class="checkbox state-disabled">
+                                        <input id="chkDocumentosPendentes" type="checkbox" name="checkbox-inline" disabled="disabled">
+                                        <i></i>
+                                    </label>
+                                </span>
+                                <p>
+                                    <strong>Documentos pendentes</strong> - Existem <label id="lblDocumentosPendentes"></label> documentos sem associação <span class="text-muted">Informe o pedido de compra e item para realizar a associação destes documentos.</span>
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+</section>

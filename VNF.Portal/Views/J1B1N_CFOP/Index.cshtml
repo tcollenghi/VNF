@@ -1,0 +1,124 @@
+﻿@using MetsoFramework.Utils
+@using MetsoAdmin.Controllers
+@model System.Data.DataTable
+@{
+    ViewBag.Title = "J1B1N_CFOP";
+}
+
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-angle-double-right fa-fw "></i>
+            CFOP´s
+        </h1>
+    </div>
+</div>
+<div id="divGrid">
+    @{
+        Html.RenderPartial("Grid");
+    }
+</div>
+
+
+
+
+<div class="modal fade" id="modalNovaCFOP" tabindex="-1" role="dialog" aria-hidden="true" style="margin-top:50px">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                    ×
+                </button>
+                <h4 id="idItem" class="modal-title"></h4>
+            </div>
+            <div class="modal-body">
+                <form class="smart-form">
+                    <fieldset>
+                        <div class="row">
+                            <section class="col col-3">
+                                <label class="input">
+                                    CFOP
+                                    @Html.TextBox("txtCFOP", "", new { @maxlength = 20 })
+                                </label>
+                            </section>
+                            <section class="col col-md-8">
+                                <label class="input">
+                                    Descrição
+                                    @Html.TextBox("txtDescricao", "", new { @maxlength = 255 })
+                                </label>
+                            </section>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" id="btnSalvar" onclick="SalvarCFOP()"><i class="fa fa-check"></i><span class="text-btn"> Salvar</span></a>
+                <a class="btn btn-primary" id="btnFecharModal" data-dismiss="modal"><i class="fa fa-times"></i><span class="text-btn"> Fechar</span></a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section pagespecific {
+
+    <!-- PAGE RELATED PLUGIN(S) -->
+    <script src="~/Scripts/plugin/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.colVis.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.tableTools.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/plugin/datatable-responsive/datatables.responsive.min.js"></script>
+
+    <!-- Page Script -->
+    <script src="~/Scripts/views/_global.js"></script>
+    <script src="~/Scripts/views/J1B1N_CFOP/J1B1N_CFOP.js"></script>
+    <script type="text/javascript">
+
+        var Index = 0;
+        var PageSize = 30;
+        function selectRow(id, pParametro) {
+            $("#hdfIdCFOP").val(id);
+            $("#hdfDescricao").val(pParametro);
+        }
+
+        $(".table-click tr").on('click', function (e) {
+            $(this).siblings().removeClass("selecionado");
+            $(this).toggleClass("selecionado");
+        });
+        /* BASIC ;*/
+        var responsiveHelper_dt_basic = undefined;
+        var responsiveHelper_datatable_fixed_column = undefined;
+        var responsiveHelper_datatable_col_reorder = undefined;
+        var responsiveHelper_datatable_tabletools = undefined;
+
+        var breakpointDefinition = {
+            tablet: 1024,
+            phone: 480
+        };
+        ///* COLUMN SHOW - HIDE */
+        $('#dttTabela').dataTable({
+            "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
+                             "t" +
+                             "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+            "autoWidth": true,
+            "preDrawCallback": function () {
+                // Initialize the responsive datatables helper once.
+                if (!responsiveHelper_dt_basic) {
+                    responsiveHelper_dt_basic = new ResponsiveDatatablesHelper($('#dttTabela'), breakpointDefinition);
+                }
+            },
+            "rowCallback": function (nRow) {
+                responsiveHelper_dt_basic.createExpandIcon(nRow);
+            },
+            "drawCallback": function (oSettings) {
+                responsiveHelper_dt_basic.respond();
+            }
+        });
+
+        ///* END COLUMN SHOW - HIDE */
+
+    </script>
+    <script src="~/Scripts/views/PermissaoUsuario.js"></script>
+    <script>PermissaoUsuario('@(ViewBag.Acesso)')</script>
+}
+

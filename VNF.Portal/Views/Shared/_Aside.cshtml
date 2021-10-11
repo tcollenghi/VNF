@@ -1,0 +1,297 @@
+﻿@using MetsoFramework.Utils;
+@using VNF.Portal.Util; @*Marcio Spinosa - 30/08/2018*@
+@{
+    string strAction = ViewContext.RouteData.Values["Action"].ToString();
+    string strController = ViewContext.RouteData.Values["Controller"].ToString();
+    string strId = this.ViewContext.RouteData.Values["id"] == null ? "" : this.ViewContext.RouteData.Values["id"].ToString();
+
+    string strHome = strController == "Home" ? "active" : "";
+    string strTalonario = strController == "Talonario" ? "active" : "";
+    string strMinhasOcorrencia = strController == "Ocorrencias" && !String.IsNullOrEmpty(strId) ? "active" : "";
+
+    string strCompras = "";
+    if ((strController == "Compras" && strAction == "NotaFiscal") || (strController == "Associacao" && strAction == "Index") || (strController == "Compras" && strAction == "DIVE") ||
+        (strController == "Priorizacao" && strAction == "Index") || (strController == "Compradores" && strAction == "Index") || (strController == "Fornecedores" && strAction == "Index"))
+    {
+        strCompras = "active";
+    }
+
+    string strFiscal = "";
+    if ((strController == "Compras" && strAction == "Verif") || (strController == "Ocorrencias" && String.IsNullOrEmpty(strId)))
+    {
+        strFiscal = "active";
+    }
+
+    string strPortaria = "";
+    if ((strController == "Portaria" && strAction == "Equipamentos") || (strController == "Portaria" && strAction == "Fundicao"))
+    {
+        strPortaria = "active";
+    }
+
+    string strTriangulus = strController == "EnvioXml" ? "active" : "";
+
+    string strConfiguracao = "";
+    if (strController == "Acesso" || strController == "Parametros" || strController == "MotivoCorrecao" || strController == "Groups" || strController == "RegimeEspecial" ||
+        strController == "CondicaoPagamento" || strController == "ModoProcesso" || strController == "DetalheModoProcesso" || strController == "StatusMaterialBloqueados" || strController == "Validacoes" || strController == "ToleranciaValidacao")
+    {
+        strConfiguracao = "active";
+    }
+}
+<aside id="left-panel">
+    <div class="login-info">
+        <span id="activity" class="activity-dropdown">
+            @*Marcio Spinosa - 30/08/2018*@
+@*            <img src="@Html.AvenuePicture(Uteis.LogonName())" alt="@Html.UserName()" class="online" onerror="this.src='@Url.Content("~/Images/Users/user_undefined.png")'" />*@
+            <img src="@Html.AvenuePicture(Uteis.LogonName())" alt="@Html.getNameByLogonName()" class="online" onerror="this.src='@Url.Content("~/Images/Users/user_undefined.png")'" />
+  @*          <span>@Html.UserName()</span>*@
+            <span>@Html.getNameByLogonName()</span>
+            @*Marcio Spinosa - 30/08/2018 - Fim*@
+        </span>
+    </div>
+    <nav>
+        <ul>
+            <li class="@strHome">
+                <a href="@Url.Action("Index", "Home")" title="Dashboard"><i class="fa fa-lg fa-fw fa-home"></i> <span class="menu-item-parent">Dashboard</span></a>
+            </li>
+            <li class="@strTalonario">
+                <a href="@Url.Action("CadastroManual", "Talonario")"><i class="fa fa-lg fa-fw fa-file"></i> <span class="menu-item-parent">Talonário</span></a>
+            </li>
+            <li class="@strMinhasOcorrencia">
+                <a href="@Url.Action("Index", "Ocorrencias", new { id = "MinhaAtividade" } )"><i class="fa fa-lg fa-fw fa-exclamation-triangle"></i> <span class="menu-item-parent">Ocorrências</span></a>
+            </li>
+            <li class="@strCompras">
+                <a href="#"><i class="fa fa-lg fa-fw fa-shopping-cart"></i> <span class="menu-item-parent">Compras</span></a>
+                <ul>
+                    <li>
+                        <a href="@Url.Action("NotaFiscal", "Compras")" title="Nota Fiscal">Nota Fiscal</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "Associacao")" title="Associação">Associação</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("DIVE", "Compras")" title="Divergências">Divergências</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "Priorizacao")" title="Priorização">Priorização</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "Compradores")" title="Compradores">Compradores</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "Fornecedores")" title="Fornecedores">Fornecedores</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="@strFiscal">
+                <a href="#"><i class="fa fa-lg fa-fw fa-file-text"></i> <span class="menu-item-parent">Fiscal</span></a>
+                <ul>
+                    <li>
+                        <a href="@Url.Action("Verif", "Compras")" title="Registro Fiscal">Registro Fiscal</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "Ocorrencias", new { id = "" })" title="Registro de Ocorrências">Registro de Ocorrências</a>
+                    </li>
+                    @*<li>
+                            <a href="#"><i class="fa fa-lg fa-fw fa-file-text"></i> <span class="menu-item-parent">Relatórios</span></a>
+                            <ul>
+                                <li>
+                                    <a href="@Url.Action("RelatorioSucatas", "Relatorios")" title="Relatório Sucatas">Sucatas</a>
+                                </li>
+                            </ul>
+                        </li>*@
+                </ul>
+            </li>
+            <li class="@strPortaria">
+                <a href="#"><i class="fa fa-lg fa-fw fa-truck"></i> <span class="menu-item-parent">Portaria</span></a>
+                <ul>
+                    <li>
+                        <a href="@Url.Action("Neles", "Portaria")" title="Equipamentos">Portaria Neles</a>
+                    </li>
+                    @*<li>
+                        <a href="@Url.Action("Fundicao", "Portaria")" title="Fundição">Fundição</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("PedroLeopoldo", "Portaria")" title="PedroLeopoldo">Pedro Leopoldo</a>
+                    </li>*@
+                </ul>
+            </li>
+            <li class="@strTriangulus">
+                <a href="#"><i class="fa fa-lg fa-fw fa-file-code-o"></i> <span class="menu-item-parent">Triangulus</span></a>
+                <ul>
+                    @*<li>
+            <a href="@Url.Action("Index", "EnvioXml")" title="Enviar XML">Enviar XML</a>
+        </li>*@
+                    <li>
+                        <a href="@Url.Action("NFCancel", "Triangulus")" title="Cancelar Notas de Saída Neles">Cancelar NF Neles</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("NFChangeStatus", "Triangulus")" title="Alterar Status NF de Entrada">Alterar Status Nota Fiscal de Entrada</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("AddReferenceNF", "Triangulus")" title="Adicionar Nota Referência">Adicionar Nota de Referência</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("ICMSSTBaseReduzida", "Triangulus")" title="ICMS ST - Base Reduzida">ICMS ST - Base Reduzida</a>
+                    </li>
+
+                </ul>
+            </li>
+            @*<li>
+                    <a href="#"><i class="fa fa-lg fa-fw fa-bar-chart-o"></i> <span class="menu-item-parent">Relatórios</span></a>
+                    <ul>
+                        <li>
+                            <a href="#">Indicadores</a>
+                        </li>
+                        <li>
+                            <a href="#">IP LOG</a>
+                        </li>
+                        <li>
+                            <a href="#">Anulação</a>
+                        </li>
+                        <li>
+                            <a href="#">Itens s/ Entrada</a>
+                        </li>
+                        <li>
+                            <a href="#">Divergências</a>
+                        </li>
+                        <li>
+                            <a href="#">NFs Enviadas IP</a>
+                        </li>
+                        <li>
+                            <a href="#">Fornecedores</a>
+                        </li>
+
+                    </ul>
+                </li>*@
+            <li class="@strConfiguracao">
+                <a href="#"><i class="fa fa-lg fa-fw fa-wrench"></i> <span class="menu-item-parent">Configuração</span></a>
+                <ul>
+                    <li>
+                        <a href="@Url.Action("Index", "Acesso")" title="Acessos">Acessos</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "CondicaoPagamento")" title="Condições de Pagamento">Condições de Pagamento</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "RegimeEspecial")" title="Regime Especial">Regime Especial</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "Groups")" title="Grupos">Grupos</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "MotivoCorrecao")" title="Motivo Correção">Motivo Correção</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "ModoProcesso")" title="Modo Processo">Modo Processo</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "DetalheModoProcesso")" title="Modo Processo Detalhe">Modo Processo Detalhe</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "Parametros")" title="Parâmetros">Parâmetros</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "StatusMaterialBloqueados")" title="Status Material">Status Material</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "Validacoes")" title="Validações">Validações</a>
+                    </li>
+                    <li>
+                        <a href="@Url.Action("Index", "ToleranciaValidacao")" title="Tolerância Validação">Tolerância Validação</a>
+                    </li>
+                    <li>
+                        <a href="#"><i class="fa fa-lg fa-fw fa-wrench"></i> <span class="menu-item-parent">Cadastros J1B1N</span></a>
+                        <ul>
+                            <li>
+                                <a href="@Url.Action("Index", "J1B1N_Material")" title="Material">Material</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "J1B1N_CFOP")" title="CFOP">CFOP</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "J1B1N_CFOP_Parceiro")" title="CFOP Parceiros">CFOP Parceiros</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "J1B1N_CFOP_Escriturar")" title="CFOP Escriturar">CFOP Escriturar</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "J1B1N_Metso_Padrao")" title=" Neles Padrão"> Neles Padrão</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "J1B1N_Planta_Metso_Parceiro")" title=" Neles Parceiro"> Neles Parceiro</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "J1B1N_Direito_Fiscal")" title="Direito Fiscal">Direito Fiscal</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "J1B1N_Imposto_CFOP")" title="Imposto por CFOP">Imposto por CFOP</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "CFOP_MIRO")" title="CFOP MIRO">CFOP MIRO</a>
+                            </li>
+                            <li>
+                                <a href="@Url.Action("Index", "Parametros", new { pType = "NF_TYPES"})" title="CFOP MIRO">NF Types</a> @*Marcio Spinosa - 21/02/2019 - CR00009165*@
+                            </li>
+                        </ul>
+                    </li>
+                    <li>
+                        <a href="https://metso.sharepoint.com/:p:/r/sites/it_sa_kb/lean_ir/Project%20documents/LEAN_Invoice%20Receiving_E-GR_MainFlow.pptx?d=w40a462ce98374ba0ae6b057ec273ee4b&csf=1">Documentação</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a href="#"><i class="fa fa-lg fa-fw fa-file-text"></i> <span class="menu-item-parent">Monitoramento</span></a>
+                <ul>
+                    <li>
+                        <a href="@Url.Action("MonitorDivergencias", "Relatorios")" title="Monitor de Divergências">Monitor de Divergências</a>
+                    </li>
+                </ul>
+            </li>
+
+            @*<li >
+                    <a href="#"><i class="fa fa-lg fa-fw fa-wrench"></i> <span class="menu-item-parent">Relatórios</span></a>
+                    <ul>
+                        <li>
+                            <a href="@Url.Action("Index", "Acesso")" title="Acessos">Acessos</a>
+                        </li>
+
+                    </ul>
+                </li>*@
+
+            @*<li>
+                    <a href="#"><i class="fa fa-lg fa-fw fa-support"></i> <span class="menu-item-parent">Ajuda</span></a>
+                    <ul>
+                        <li>
+                            <a href="#">Suporte</a>
+                        </li>
+                        <li>
+                            <a href="#">Sobre</a>
+                        </li>
+
+                    </ul>
+                </li>*@
+            >
+        </ul>
+    </nav>
+
+    <span class="minifyme" data-action="minifyMenu">
+        <i class="fa fa-arrow-circle-left hit"></i>
+    </span>
+
+</aside>
+
+<script type="text/javascript">
+
+    function showNotificacoes() {
+        $("#divNotificacoes").hide();
+        $("#divAlertas").hide();
+        $("#divNotificacoes").show();
+    }
+
+    function showAlertas() {
+        $("#divNotificacoes").hide();
+        $("#divNotificacoes").hide();
+        $("#divAlertas").show();
+    }
+
+</script>

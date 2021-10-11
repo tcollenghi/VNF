@@ -1,0 +1,38 @@
+﻿@using System.Data
+@using MetsoFramework.Utils
+@using VNF.Business;
+
+@if (ViewBag.DocumentosRelacionados == null || ((DataTable)ViewBag.DocumentosRelacionados).Rows.Count == 0)
+{ 
+    <span>não existe informação</span>
+    return;
+}
+
+<table class="table table-bordered tab-cust" width="100%">
+    <thead>
+        <tr>
+            <th width="5%">Tipo</th>
+            <th width="35%">Chave da NF</th>
+            <th width="10%">Número da NF</th>
+            <th width="25%">Emitente</th>
+            <th width="10%">Data de Emissão</th>
+            <th width="15%">Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (DataRow dtrLinha in ((DataTable)ViewBag.DocumentosRelacionados).Rows)
+        {
+            if (!String.IsNullOrEmpty(@dtrLinha["NFEID"].ToString()))
+            { 
+                <tr>
+                    <td>@dtrLinha["VNF_TIPO_DOCUMENTO"].ToString()</td>
+                    <td><a href="@Url.Action("Edit", "Compras", new { id = @dtrLinha["NFEID"].ToString() })">@dtrLinha["NFEID"].ToString()</a></td>
+                    <td>@dtrLinha["NF_IDE_NNF"].ToString()</td>
+                    <td>@dtrLinha["NF_EMIT_XNOME"].ToString()</td>
+                    <td>@dtrLinha["NF_IDE_DHEMI"].ToString()</td>
+                    <td>@dtrLinha["SITUACAO"].ToString()</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

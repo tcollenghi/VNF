@@ -1,0 +1,148 @@
+﻿@using MetsoFramework.Utils
+@using VNF.Portal.Models
+@model TbCOM
+@{
+    ViewBag.Title = "Compradores";
+}
+
+
+
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-angle-double-right fa-fw "></i>
+            Compradores
+        </h1>
+    </div>
+
+</div>
+<!-- widget grid -->
+<section id="widget-grid" class="">
+
+    <!-- START ROW -->
+    <div class="row">
+
+        <!-- NEW COL START -->
+        <article class="col-sm-12 col-md-12 col-lg-12">
+
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget jarviswidget-color-blueDark" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-deletebutton="false">
+
+                <header>
+                    <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                    <h2>Compradores</h2>
+
+                </header>
+
+                <div>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+
+                    </div>
+                    <!-- end widget edit box -->
+                    <div class="widget-body no-padding">
+                        @using (Html.BeginForm("Edit", "Compradores", FormMethod.Post, new { id = "frmEdit", @class = "smart-form", enctype = "multipart/form-data" }))
+                        {
+ 
+                            <fieldset> 
+                                <div class="row">
+                                    <section class="col col-12 col-3">
+                                        <label class="label">Código*</label>
+                                        <label class="select">
+                                            @Html.MetsoTextBoxFor(model => model.CODCOM, SessionsHelper.FieldType.Text, null, true)
+
+                                        </label>
+                                    </section>
+                                    <section class="col col-12 col-9">
+                                        <label class="label">Nome*</label>
+                                        <label class="input">
+                                            @Html.MetsoTextBoxFor(model => model.NOMCOM, SessionsHelper.FieldType.Text, null, true)
+                                        </label>
+                                    </section> 
+                                </div>
+
+
+                            </fieldset>
+                            <fieldset>
+                                <div class="row">
+                                    <section class="col col-12 col-3">
+                                        <label class="label">Telefone*</label>
+                                        <label class="select">
+                                            @Html.MetsoTextBoxFor(model => model.TELCOM, SessionsHelper.FieldType.Text, null, true)
+
+                                        </label>
+                                    </section>
+                                    <section class="col col-12 col-9">
+                                        <label class="label">Email*</label>
+                                        <label class="input">
+                                            @Html.MetsoTextBoxFor(model => model.EMAIL, SessionsHelper.FieldType.Text, null, true)
+                                        </label>
+                                    </section> 
+                                </div>
+
+
+                            </fieldset>
+
+                            <footer>
+
+                                <button type="button" onclick="Salvar();" class="btn btn-primary">
+                                    <i class="fa fa-check"></i> Salvar
+                                </button>
+
+                                <button type="button" class="btn btn-primary" onclick="window.history.back();">
+                                    <i class="fa fa-arrow-circle-left"></i> Voltar
+                                </button>
+                            </footer>
+                        }
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+</section>
+
+
+@section pagespecific
+    {
+    <script src="~/Scripts/plugin/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.colVis.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.tableTools.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/plugin/datatable-responsive/datatables.responsive.min.js"></script>
+
+    <script src="~/scripts/plugin/jquery-form/jquery-form.min.js"></script>
+    <script src="~/Scripts/jquery.maskedinput.min.js"></script>
+    <script src="~/Scripts/jquery.maskMoney.js"></script>
+    <script src="~/Scripts/Metso.js"></script>
+
+    <script type="text/javascript">
+
+        pageSetUp();
+
+        /* BASIC ;*/
+        var responsiveHelper_dt_basic = undefined;
+        var responsiveHelper_datatable_fixed_column = undefined;
+        var responsiveHelper_datatable_col_reorder = undefined;
+        var responsiveHelper_datatable_tabletools = undefined;
+
+        var breakpointDefinition = {
+            tablet: 1024,
+            phone: 480
+        }; 
+
+        function Salvar() {
+            //validação
+            if ($("#CODCOM").val() == "" || $("#NOMCOM").val() == "" || $("#EMAIL").val() == "" || $("#TELCOM").val() == "") {
+                $.SmartMessageBox({
+                    title: "VNF NELES",
+                    content: "Verifique os campos obrigatorios!",
+                    buttons: '[OK]'
+                });
+            }
+            else {
+                $("#frmEdit").submit();
+            }
+        }
+    </script>
+}

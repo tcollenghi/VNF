@@ -1,0 +1,36 @@
+﻿@using System.Data
+@using MetsoFramework.Utils
+@using VNF.Business;
+@model modNF
+@{ 
+    List<VNF.Portal.Models.TbLOGApplication> Log = (List<VNF.Portal.Models.TbLOGApplication>)ViewBag.LogApplication;
+}
+
+@if (Log == null || Log.Count == 0)
+{
+    <span>não existe informação</span>
+    return;
+}
+
+<table class="table table-bordered tab-cust" width="100%">
+    <thead>
+        <tr>
+            <th width="15%">Data</th>
+            <th width="15%">Usuário</th> 
+            <th width="70%">Detalhes</th> 
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var i in Log)
+        {
+            <tr>
+                <td>@i.log_date</td>
+                @*Marcio Spinosa - 28/05/2018 - CR00008351*@
+                @*<td>@Uteis.GetUserNameBySamId(i.log_user)</td>*@
+                <td>@i.log_user</td>
+                @*Marcio Spinosa - 28/05/2018 - CR00008351 - Fim*@
+                <td>@i.log_description</td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,173 @@
+﻿@using MetsoFramework.Utils
+@using VNF.Business;
+@model System.Data.DataTable
+@{
+    ViewBag.Title = "Itens Pedido";
+}
+
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-angle-double-right fa-fw "></i>
+            Pedido
+        </h1>
+    </div>
+</div>
+@Html.Hidden("hfIdNfe", (object)ViewBag.id)
+<!-- widget grid -->
+<section id="widget-grid" class="">
+
+    <!-- START ROW -->
+    <div class="row">
+
+        <!-- NEW COL START -->
+        <article class="col-sm-12 col-md-12 col-lg-12">
+
+            <!-- Widget ID (each widget will need unique ID)-->
+            <div class="jarviswidget jarviswidget-color-blueDark"  data-widget-sortable="false"  data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-deletebutton="false">
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>Dados</h2>
+                </header>
+
+                <div>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+
+                    </div>
+                    <!-- end widget edit box -->
+                    <div class="widget-body no-padding">
+                        <form class="smart-form">
+                            <fieldset>
+                                
+                                <div class="row">
+                                    
+                                     <section class="col col-4">
+                                        <label class="input">
+                                            Razão Social
+                                            @Html.TextBox("RAZFOR", (string)ViewBag.RAZFOR, new { @readonly = "readonly" })
+                                            
+                                        </label>
+                                    </section>
+
+                                    <section class="col col-4">
+                                        <label class="input">
+                                            CNPJ
+                                            @Html.TextBox("CNPJ", (string)ViewBag.CNPJ, new { @readonly = "readonly" })
+                                            
+                                        </label>
+                                    </section>
+                                   
+                                </div>
+                                
+                            </fieldset>
+                            <footer>
+                                <button type="button" class="btn btn-default" onclick="goBack();">
+                                    Voltar
+                                </button>
+
+                            </footer>
+                        </form>
+                    </div>
+                    <!-- end widget content -->
+
+                </div>
+                <!-- end widget div -->
+
+            </div>
+            <!-- end widget -->
+
+        </article>
+        <!-- END COL -->
+
+    </div>
+    <!-- END ROW -->
+
+    <!-- START ROW -->
+    <div class="row">
+
+        <!-- NEW COL START -->
+        <article class="col-sm-12 col-md-12 col-lg-12">
+
+            <div class="jarviswidget jarviswidget-color-blueDark"  data-widget-sortable="false" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-deletebutton="false">
+                <header>
+                    <span class="widget-icon"><i class="fa fa-edit"></i></span>
+                    <h2>Itens </h2>
+
+                </header>
+                <div>
+                    <!-- widget edit box -->
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+
+                    </div>
+
+                    <div class="widget-body">
+                        <div class="table-responsive smart-form">
+                            <table class="table table-bordered tab-cust" id="tbNotas" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th>NF_NUMERO</th>
+                                        <th>NF_SERIE</th>
+                                        <th>NFEID</th>
+                                        <th>NF_DATA_EMISSAO</th>
+                                        <th>SITUACAO</th>
+                                        <th>RAZFOR</th>
+
+                                    </tr>
+                                </thead>
+
+                                <tbody>
+
+                                    @foreach (System.Data.DataRow item in Model.Rows)
+                                        
+                    {
+                            <tr role='row' id='row_@item[1]' >
+                                
+                            <td>@item["NF_NUMERO"]</td>
+                            <td>@item["NF_SERIE"]</td>
+                            <td>@item["NFEID"]</td>
+                            <td>@item["NF_DATA_EMISSAO"]</td>
+                            <td>@item["SITUACAO"]</td>
+                            <td>@item["RAZFOR"]</td>
+                        </tr>
+                    }@if (Model.Rows.Count==0)
+                     {
+                         <tr><td colspan="6" style="color:red;font-size:x-large;">Não existem notas para este fornecedor.</td></tr>
+                     }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+    <div class="row">
+        <article class="col-sm-12 col-md-12 col-lg-12">
+            <div class="widget-body">
+                <div class="smart-form">
+                    <footer class="border">
+                        <button type="button" class="btn btn-default" onclick="window.location.replace(document.referrer)">
+                            Voltar
+                        </button>
+                    </footer>
+                </div>
+            </div>
+        </article>
+    </div>
+</section>
+
+@section pagespecific {
+    <!-- PAGE RELATED PLUGIN(S) -->
+    <script src="~/Scripts/plugin/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.colVis.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.tableTools.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/plugin/datatable-responsive/datatables.responsive.min.js"></script>
+    
+    <!-- Page Script -->
+    <script src="~/Scripts/views/_global.js"></script>
+    <script src="~/Scripts/views/Fornecedores/Fornecedores_ViewDados.js"></script>
+}

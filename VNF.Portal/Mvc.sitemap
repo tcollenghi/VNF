@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<mvcSiteMap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0" xsi:schemaLocation="http://mvcsitemap.codeplex.com/schemas/MvcSiteMap-File-4.0 MvcSiteMapSchema.xsd">
+
+  <mvcSiteMapNode title="Home" controller="Home" action="Index">
+
+    <mvcSiteMapNode title="Compras" clickable="false">
+      
+      <mvcSiteMapNode title="Nota Fiscal" controller="Compras" action="NotaFiscal">
+        <mvcSiteMapNode title="Detalhe Nota Fiscal" controller="Compras" action="Edit" preservedRouteParameters="id"/>
+        <mvcSiteMapNode title="Associação Nota Fiscal" controller="Associacao" action="Edit" preservedRouteParameters="id" />
+       <mvcSiteMapNode title="Processamento Fiscal Visão Completa" controller="Compras" action="VerifVisaoCompleta" preservedRouteParameters="id" />
+      </mvcSiteMapNode>
+      
+      <mvcSiteMapNode title="Associação" controller="Associacao" action="Index">
+        <mvcSiteMapNode title="Associação Nota Fiscal" controller="Associacao" action="Edit" preservedRouteParameters="id" />
+      </mvcSiteMapNode>
+      
+      <mvcSiteMapNode title="Divergência" controller="Compras" action="Dive">
+      </mvcSiteMapNode>
+      
+      <mvcSiteMapNode title="Priorização" controller="Priorizacao" action="Index">
+      </mvcSiteMapNode>
+      
+      <mvcSiteMapNode title="Compradores" controller="Compradores" action="Index">
+      </mvcSiteMapNode>
+      
+      <mvcSiteMapNode title="Fornecedores" controller="Fornecedores" action="Index">
+        <mvcSiteMapNode title="Notas Fiscais" controller="Fornecedores" action="ViewDados" preservedRouteParameters="id"/>
+      </mvcSiteMapNode>
+      
+    </mvcSiteMapNode>
+
+    <mvcSiteMapNode title="Fiscal" clickable="false">
+      <mvcSiteMapNode title="Registro Fiscal" controller="Compras" action="Verif"></mvcSiteMapNode>
+      <mvcSiteMapNode title="Regime Especial" controller="RegimeEspecial" action="Index"></mvcSiteMapNode>
+      <mvcSiteMapNode title="Ocorrências" controller="Ocorrencias" action="Index" preservedRouteParameters="id"></mvcSiteMapNode>
+    </mvcSiteMapNode>
+
+    <mvcSiteMapNode title="Portaria" clickable="false">
+      <mvcSiteMapNode title="Equipamentos" controller="Portaria" action="Equipamentos">
+      </mvcSiteMapNode>
+      <mvcSiteMapNode title="Fundição" controller="Portaria" action="Fundicao">
+      </mvcSiteMapNode>
+    </mvcSiteMapNode>
+
+    <mvcSiteMapNode title="Triangulos" clickable="false">
+      <mvcSiteMapNode title="Envio XML" controller="EnvioXML" action="Index">
+        <mvcSiteMapNode title="XML Enviado" controller="EnvioXML" action="Upload">
+        </mvcSiteMapNode>
+      </mvcSiteMapNode>
+    </mvcSiteMapNode>
+
+    <mvcSiteMapNode title="Configuração" clickable="false">
+      <mvcSiteMapNode title="Acesso" controller="Acesso" action="Index"></mvcSiteMapNode>
+      <mvcSiteMapNode title="Parâmetros" controller="Parametros" action="Index"></mvcSiteMapNode>
+      <mvcSiteMapNode title="Condição de Pagamento" controller="CondicaoPagamento" action="Index"></mvcSiteMapNode>
+      <mvcSiteMapNode title="Status de materiais bloqueados" controller="StatusMaterialBloqueados" action="Index"></mvcSiteMapNode>
+      <mvcSiteMapNode title="Validações" controller="Validacoes" action="Index"></mvcSiteMapNode>
+      
+      <mvcSiteMapNode title="Grupos de usuários" controller="Groups" action="Index">
+        <mvcSiteMapNode title="Detalhes" controller="Groups" action="Edit" preservedRouteParameters="id"></mvcSiteMapNode>
+      </mvcSiteMapNode>
+      
+      <mvcSiteMapNode title="Motivos de correção" controller="MotivoCorrecao" action="Index">
+        <mvcSiteMapNode title="Detalhes" controller="MotivoCorrecao" action="Edit" preservedRouteParameters="id"></mvcSiteMapNode>
+      </mvcSiteMapNode>
+
+      <mvcSiteMapNode title="Modo e Processo de Integração" controller="ModoProcesso" action="Index">
+        <mvcSiteMapNode title="Detalhes" controller="ModoProcesso" action="Edit" preservedRouteParameters="id"></mvcSiteMapNode>
+      </mvcSiteMapNode>
+
+      <mvcSiteMapNode title="Detalhes do Modo e Processo de Integração" controller="DetalheModoProcesso" action="Index" preservedRouteParameters="id"></mvcSiteMapNode>
+      <mvcSiteMapNode title="Detalhes do Modo e Processo de Integração" controller="ModoProcesso" action="Index">
+        <mvcSiteMapNode title="Cadastro de detalhes" controller="DetalheModoProcesso" action="Edit" preservedRouteParameters="id"></mvcSiteMapNode>
+      </mvcSiteMapNode>
+
+      <mvcSiteMapNode title="Tolerâncias" controller="ToleranciaValidacao" action="Index" preservedRouteParameters="id"></mvcSiteMapNode>
+      <mvcSiteMapNode title="Tolerâncias" clickable="false">
+        <mvcSiteMapNode title="Cadastro de tolerância" controller="ToleranciaValidacao" action="Edit" preservedRouteParameters="id"></mvcSiteMapNode>
+      </mvcSiteMapNode>
+
+    </mvcSiteMapNode>
+
+    <mvcSiteMapNode title="Talonario" clickable="false">
+      <mvcSiteMapNode title="Consultar notas de talonário" controller="Talonario" action="Index" preservedRouteParameters="id"></mvcSiteMapNode>
+      <mvcSiteMapNode title="Cadastrar documento" controller="Talonario" action="CadastroManual" preservedRouteParameters="id"></mvcSiteMapNode>
+    </mvcSiteMapNode>
+
+  </mvcSiteMapNode>
+
+</mvcSiteMap>
+
+
+

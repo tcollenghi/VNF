@@ -1,0 +1,391 @@
+﻿@model VNF.Portal.Models.Login
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="en-us" id="lock-page">
+<head>
+    <meta charset="utf-8">
+    <title> VNF NELES</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- #CSS Links -->
+    <!-- Basic Styles -->
+    <link rel="stylesheet" type="text/css" media="screen" href="~/Content/Themes/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="~/Content/Themes/css/font-awesome.min.css">
+    <!-- SmartAdmin Styles : Caution! DO NOT change the order -->
+    <link rel="stylesheet" type="text/css" media="screen" href="~/Content/Themes/css/smartadmin-production-plugins.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="~/Content/Themes/css/smartadmin-production.min.css">
+    <link rel="stylesheet" type="text/css" media="screen" href="~/Content/Themes/css/smartadmin-skins.min.css">
+    <!-- SmartAdmin RTL Support -->
+    <link rel="stylesheet" type="text/css" media="screen" href="~/Content/Themes/css/smartadmin-rtl.min.css">
+    <!-- We recommend you use "your_style.css" to override SmartAdmin
+         specific styles this will also ensure you retrain your customization with each SmartAdmin update.
+    <link rel="stylesheet" type="text/css" media="screen" href="/Content/css/your_style.css"> -->
+    <!-- Demo purpose only: goes with demo.js, you can delete this css when designing your own WebApp -->
+    <link rel="stylesheet" type="text/css" media="screen" href="~/Content/Themes/css/demo.min.css">
+    <!-- page related CSS -->
+    <link rel="stylesheet" type="text/css" media="screen" href="~/Content/Themes/css/lockscreen.min.css">
+
+    <link href="~/Content/themes/css/custom.css" rel="stylesheet" />
+
+    <!-- #FAVICONS -->
+    <link rel="shortcut icon" href="~/Content/images/favicon/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="~/Content/images/favicon/favicon.ico" type="image/x-icon">
+    <!-- #GOOGLE FONT -->
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Open+Sans:400italic,700italic,300,400,700">
+    <!-- #APP SCREEN / ICONS -->
+    <!-- Specifying a Webpage Icon for Web Clip
+         Ref: https://developer.apple.com/library/ios/documentation/AppleApplications/Reference/SafariWebContent/ConfiguringWebApplications/ConfiguringWebApplications.html -->
+
+</head>
+<body>
+    <div id="main" role="main">
+        <!-- MAIN CONTENT -->
+        <form class="lockscreen animated flipInY" action="@Url.Action("index", "home")">
+
+            <div class="row" style="margin-left: 110px; margin-right: -110px;">@*retira o style qdo ativar a opção do fornecedor*@
+                <div class="col-xs-5 enter-user">
+
+                    <a href="#" id="btn-admin">
+                        <h1>
+                            <i class="fa fa-user fa-4x text-muted air air-top-right hidden-mobile"></i>Neles
+                            <br />
+                            <small><i class="fa fa-lock text-muted"></i>&nbsp;Entrar</small>
+                        </h1>
+                    </a>
+                </div>
+                @*Desativado opcao fornecedor conforme solicitacao do Fernando*@
+                <div class="col-xs-5 enter-user" style="display:none;">                    
+                    <a href="http://www.metsopartners.com.br/PortalServico/Users/Login/Fornecedor" id="btn-fornecedor">
+                        <h1>
+                            <i class="fa fa-user fa-4x text-muted air air-top-right hidden-mobile"></i>Fornecedor
+                            <br />
+                            <small><i class="fa fa-lock text-muted"></i>&nbsp;Entrar</small>
+                        </h1>
+                    </a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div id="fornecedor" class="container" style="display: none;">
+        <form method="POST">
+            <div id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="text-center">
+                                <i class="fa fa-angle-left left voltar pointer" aria-hidden="true"></i>VNF - Fornecedor
+                            </h1>
+                        </div>
+                        <div class="modal-body">
+                            <br />
+                            <div>
+                                <div class="form-group">
+                                    <input type="text" name="" value="" class="form-control input-lg" placeholder="Informe seu CNPJ" />
+                                    @*@Html.MetsoTextBox("LogonName", SessionsHelper.FieldType.Cnpj, new { @class = "form-control input-lg", @placeholder = "Informe seu CNPJ" }, true, true)*@
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" name="" value="" class="form-control input-lg" placeholder="Informe seu codigo SAP" />
+                                    @*@Html.MetsoTextBox("SapCode", SessionsHelper.FieldType.Text, new { @class = "form-control input-lg", @placeholder = "Informe seu codigo SAP" }, true, true)*@
+                                </div>
+                                <div id="divRecaptcha" class="form-group text-center">
+                                    <div class="form col-md-12 center-block" style="padding-left: 110px !important;">
+                                        <div class="row-fluid">
+                                            <div class="span7 text-center" style="margin: 0 auto !important;">
+                                                <div class="g-recaptcha" data-sitekey="6LcNJQ8TAAAAAGEbVIFgAiWykP48fsUCe6Y6vvJA" data-callback="recaptchaCallback"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="clearfix">
+                                </div>
+                                <div class="form-group">
+                                    <button id="btnSubmit" type="button" value="Entrar" class="btn btn-primary btn-lg btn-block hide" onclick="LoginFornecedor()">Entrar</button>
+                                </div>
+                                <div class="clearfix">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div id="admin" class="container" style="display: none;">
+        @using (Html.BeginForm("LoginMetso", "User", FormMethod.Post, new { id = "frmLogin", role = "form", enctype = "multipart/form-data" }))
+        {
+
+            <div id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="text-center">
+                                <i class="fa fa-angle-left left voltar pointer" aria-hidden="true"></i>VNF Neles - Acesso Neles
+                            </h1>
+                        </div>
+                        <div class="modal-body">
+                            <br />
+                            <div>
+                                <div class="form-group smart-form">
+                                    <section>
+                                        <label class="input">
+                                            <i class="icon-append fa fa-envelope-o" style="height: 30px; padding-top:5px;"></i>
+                                            @Html.TextBoxFor(c => c.Email, "", new { @class = "form-control input-lg", @placeholder = "Informe seu E-mail" })
+                                            <b class="tooltip tooltip-bottom-right">Informe seu Email</b>
+                                        </label>
+                                    </section>
+                                </div>
+                                <div class="form-group smart-form">
+                                    <section>
+                                        <label class="input">
+                                            <i class="icon-append fa fa-lock" style="height: 30px; padding-top:5px;"></i>
+                                            @Html.PasswordFor(c => c.Senha, new { @class = "form-control input-lg", @placeholder = "Informe sua Senha" })
+                                            <b class="tooltip tooltip-bottom-right">Informe sua Senha</b>
+                                        </label>
+                                    </section>
+                                </div>
+                                <div class="clearfix">
+                                </div>
+                                <div class="form-group">
+                                    <button id="btnSubmit2" type="submit" value="Entrar" class="btn btn-primary btn-lg btn-block" onclick="fn_Mgs2()">Entrar</button>
+                                </div>
+                                <div class="clearfix">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script src="~/Scripts/libs/jquery-2.1.1.min.js"></script>
+            <script src="~/Scripts/notification/SmartNotification.min.js" security="none"></script>
+            <script>
+                function fn_Mgs2() {
+                    $.SmartMessageBox({
+                        title: "VNF Neles - Acesso Neles",
+                        content: "<i class='fa fa-cog fa-spin'></i> <i>  Por favor aguarde, estamos autenticando seu usuário.",
+                        buttons: ''
+                    })
+                }
+
+                $(document).ready(function () {
+                    var invLogin = "@(TempData["LoginInvalido"])";
+                    if (invLogin != "") {
+                        $("#admin").show();
+                        $("#main").hide();
+                        $.smallBox({
+                            title: "Informações Incorretas",
+                            content: "Usuário ou senha incorreto. Favor verificar as informações digitadas.</i> <p> server msg:" + invLogin,
+                            color: "#C46A69",
+                            icon: "fa fa-user",
+                            timeout: 8000
+                        });
+                    }
+                });
+
+            </script>
+        }
+
+        @*<form action="~/Users/ValidateCaptcha" method="POST" id="frmLogin">
+                <div id="loginModal" tabindex="-1" role="dialog" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="text-center">
+                                    <i class="fa fa-angle-left left voltar pointer" aria-hidden="true"></i>VNF - Metso
+                                </h1>
+                            </div>
+                            <div class="modal-body">
+                                <br />
+                                <div>
+                                    <div class="form-group">
+                                        @Html.MetsoTextBox("txtMail", SessionsHelper.FieldType.Email, new { @class = "form-control input-lg", @placeholder = "Informe seu Email" }, true, true)
+                                    </div>
+                                    <div class="form-group">
+                                        @Html.MetsoTextBox("txtPassword", SessionsHelper.FieldType.Password, new { @class = "form-control input-lg", @placeholder = "Informe sua Senha", @onkeypress = "KeyEnter(event);" }, true, true)
+                                    </div>
+                                    <div class="clearfix">
+                                    </div>
+                                    <div class="form-group">
+                                        <button id="btnSubmit2" type="button" value="Entrar" class="btn btn-primary btn-lg btn-block" onclick="LoginMetso()">Entrar</button>
+                                    </div>
+                                    <div class="clearfix">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>*@
+    </div>
+    <!--================================================== -->
+    <!-- PACE LOADER - turn this on if you want ajax loading to show (caution: uses lots of memory on iDevices)-->
+    @*<script src="~/scripts/plugin/pace/pace.min.js"></script>*@
+    <!-- Link to Google CDN's jQuery + jQueryUI; fall back to local -->
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script> if (!window.jQuery) { document.write('<script src="/scripts/libs/jquery-2.1.1.min.js"><\/script>'); } </script>
+    <script src="//ajax.googleapis.com/ajax/libs/jqueryui/1.10.3/jquery-ui.min.js"></script>
+    <script> if (!window.jQuery.ui) { document.write('<script src="/scripts/libs/jquery-ui-1.10.3.min.js"><\/script>'); } </script>
+    <!-- IMPORTANT: APP CONFIG -->
+    <script src="~/scripts/app.config.js"></script>
+    <!-- JS TOUCH : include this plugin for mobile drag / drop touch events
+    <script src="/scripts/plugin/jquery-touch/jquery.ui.touch-punch.min.js"></script> -->
+    <!-- BOOTSTRAP JS -->
+    <script src="~/scripts/bootstrap/bootstrap.min.js"></script>
+    <script src="~/Scripts/notification/SmartNotification.min.js" security="none"></script>
+    <!-- JQUERY VALIDATE -->
+    <script src="~/scripts/plugin/jquery-validate/jquery.validate.min.js"></script>
+    <!-- JQUERY MASKED INPUT -->
+    <script src="~/scripts/plugin/masked-input/jquery.maskedinput.min.js"></script>
+    <script src="~/Scripts/plugin/recaptcha/api.js"></script>
+    <script src="~/Scripts/Metso.js"></script>
+    <script src="~/Scripts/jquery.maskMoney.js"></script>
+    <!--[if IE 8]>
+
+        <h1>Your browser is out of date, please update your browser by going to www.microsoft.com/download</h1>
+
+    <![endif]-->
+    <!-- MAIN APP JS FILE -->
+    <script src="~/scripts/app.min.js"></script>
+
+    <script type="text/javascript">
+
+
+        if ($("#hfLoginResult").val() != "") {
+            $.smallBox({
+                title: "Falha no login",
+                content: $("#hfLoginResult").val(),
+                color: "#C46A69",
+                icon: "fa fa-exclamation-circle fadeInLeft animated",
+                buttons: '[Fechar]',
+                timeout: 4000
+            })
+        }
+
+
+        function KeyEnter(e) {
+            if (e.keyCode == 13) {
+                LoginMetso();
+            }
+        }
+
+        function recaptchaCallback() {
+            $("#divRecaptcha").hide(900);
+            $("#btnSubmit").removeClass("hide");
+            $("#btnSubmit").show();
+        }
+
+        $("#btn-admin").click(function () {
+            $("#admin").show();
+            $("#main").hide();
+        });
+
+        $("#btn-fornecedor").click(function () {
+            $("#fornecedor").show();
+            $("#main").hide();
+        });
+
+        $(".voltar").click(function () {
+            $("#admin").hide();
+            $("#fornecedor").hide();
+            $("#main").show();
+        });
+
+
+
+        @*function LoginFornecedor() {
+            ShowLoading("Aguarde", "Validando Usuário");
+
+            var captcharesponse = $("#g-recaptcha-response").val();
+            $.ajax({
+                async: true,
+                type: "POST",
+                cache: false,
+                url: '@Url.Action("LoginFornecedor", "User")',
+                dataType: 'json',
+                data: {
+                    LogonName: $("#LogonName").val(),
+                    SapCode: $("#SapCode").val(),
+                    Recaptcha: captcharesponse
+                },
+                error: function () {
+                    HideLoading();
+                    $.smallBox({
+                        title: "Informações Incorretas",
+                        content: "<i class='fa fa-clock-o'></i> <i>Favor verificar as informações digitadas</i>",
+                        color: "#C46A69",
+                        iconSmall: "fa fa-times fa-2x fadeInRight animated",
+                        timeout: 4000
+                    });
+
+                },
+                success: function (data) {
+                    if (data.Success == true) {
+                        window.location = url + data.Url;
+                    } else {
+                        HideLoading();
+                        $("#divRecaptcha").show();
+                        $("#btnSubmit").hide();
+                        grecaptcha.reset();
+
+                        $.smallBox({
+                            title: "Falha no login",
+                            content: data.Text,
+                            color: "#C46A69",
+                            icon: "fa fa-exclamation-circle fadeInLeft animated",
+                            buttons: '[Fechar]'
+                        });
+                    }
+                }
+            });
+        }*@
+
+        @*function LoginMetso() {
+            ShowLoading("Aguarde", "Validando Usuário");
+            $.ajax({
+                async: true,
+                type: "POST",
+                cache: false,
+                url: '@Url.Action("LoginMetso", "User")',
+                dataType: 'json',
+                data: {
+                    mail: $("#txtMail").val(),
+                    password: $("#txtPassword").val()
+                },
+                error: function () {
+                    HideLoading();
+                    $.smallBox({
+                        title: "Informações Incorretas",
+                        content: "<i class='fa fa-clock-o'></i> <i>Favor verificar as informações digitadas</i>",
+                        color: "#C46A69",
+                        iconSmall: "fa fa-times fa-2x fadeInRight animated",
+                        timeout: 4000
+                    });
+                },
+                success: function (data) {
+                    if (data.Success == true) {
+                        if (data.Url.substring(0, 3) == "VNF") {
+                            data.Url = data.Url.replace("VNF/", "");
+                        }
+                        window.location = url + data.Url;
+                    } else {
+                        HideLoading();
+                        $.smallBox({
+                            title: "Falha no login",
+                            content: data.Text,
+                            color: "#C46A69",
+                            icon: "fa fa-exclamation-circle fadeInLeft animated",
+                            buttons: '[Fechar]'
+                        });
+
+                    }
+                }
+            });
+        }*@
+
+    </script>
+</body>
+</html>

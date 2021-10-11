@@ -1,0 +1,284 @@
+﻿@using MetsoFramework.Utils
+@using VNF.Portal.Models
+@model model_J1B1N
+@{
+    ViewBag.Title = "Nota Manual";
+    
+}
+
+
+@Html.Hidden("itemdata", ViewBag.NFItens as string)
+@Html.Hidden("itemtax", ViewBag.NFItensTax as string)
+@Html.Hidden("hdfNFEID", ViewBag.NFEID as string)
+@Html.Hidden("hdfSalvo", ViewBag.Salvo as string)
+@Html.Hidden("hdfLog", ViewBag.LogApplication as string)
+@Html.Hidden("hdfPodeModificar", ViewBag.PodeModificar as string)
+@Html.Hidden("hdfCriadoManualmente", ViewBag.CriadoManualmente as string)
+@Html.Hidden("hdfModelo", ViewBag.Modelo as string)
+@Html.Hidden("hdfCFOP_List", ViewBag.CFOP_List as string)
+
+
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-angle-double-right fa-fw "></i>
+            Registro de Nota Manual
+        </h1>
+    </div>
+</div>
+
+<div class="row" id="SAPDocNum">
+    <div class="col-sm-12 col-md-12 col-lg-12">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="widget-icon"></i>
+            @if (ViewBag.SAPDocNumJ1B1N != null)
+	        {
+		         @Html.Label((string)ViewBag.SAPDocNumJ1B1N)
+	        } 
+        </h1>
+    </div>
+</div>
+
+<section id="widget-grid" class="">
+    <div class="row">
+        <article class="col-sm-12 col-md-12 col-lg-12">
+            <div class="jarviswidget jarviswidget-color-blueDark" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-deletebutton="false">
+                <header>
+                    <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                    <h2>NF Header</h2>
+                </header>
+                <div>
+                    <div class="widget-body no-padding">
+                        @using (Html.BeginForm("NotaManual", "NotaManual_J1B1N", FormMethod.Post, new { id = "frmnotaManual", @class = "smart-form", enctype = "multipart/form-data" }))
+                        {
+                            <fieldset>
+                                <div class="row">
+                                    <section class="col col-12 col-1">
+                                        <label class="label">Tipo NF*</label>
+                                        <label class="select">
+                                            @Html.MetsoDropDownList("CategoriaNF", ViewBag.NFTypes as IEnumerable<SelectListItem>, "Selecione")
+                                            <i></i>
+                                        </label>
+                                    </section>
+                                    <section class="col-sm-1">
+                                        <label class="label">Função Parceiro*</label>
+                                        <label class="select">
+                                            @Html.MetsoDropDownList("FuncaoParceiro", ViewBag.PartnerFunction as IEnumerable<SelectListItem>, "Selecione")
+                                            <i></i>
+                                        </label>
+                                    </section>
+                                    <section class="col col-12 col-2">
+                                        <label class="label">CNPJ Emitente</label>
+                                        <label class="input">
+                                            @Html.MetsoTextBoxFor(model => model.TBDOC_CAB_NFE.NF_EMIT_CNPJ, SessionsHelper.FieldType.Cnpj, new { @class = "mask-cnpj", onchange = "GetRazaoSocialIEFornecedor()" }, true, false)
+                                        </label>
+                                    </section>
+                                    <section class="col-md-3">
+                                        <label class="label">Id Parceito - Razão Social*</label>
+                                        <label class="select">
+                                            @Html.MetsoDropDownList("IdParceiro", ViewBag.PartnerId as IEnumerable<SelectListItem>, "Selecione")
+                                        </label>
+                                    </section>
+                                    <section class="col col-12 col-2">
+                                        <label class="label">Número da Nota</label>
+                                        <label class="input" id="txtNumero">
+                                            @Html.MetsoTextBoxFor(model => model.TBDOC_CAB_NFE.NF_IDE_NNF, SessionsHelper.FieldType.Text, new { @type = "number" }, true, false)
+                                        </label>
+                                    </section>
+                                    <section class="col col-12 col-1">
+                                        <label class="label">Série</label>
+                                        <label class="input">
+                                            @Html.MetsoTextBoxFor(model => model.TBDOC_CAB_NFE.NF_IDE_SERIE, SessionsHelper.FieldType.Text, new { @type = "number" }, true, false)
+                                        </label>
+                                    </section>
+                                    <section class="col col-12 col-2">
+                                        <label class="label">Emissão</label>
+
+                                        <label class="input">
+                                            @Html.MetsoTextBoxFor(model => model.TBDOC_CAB_NFE.NF_IDE_DHEMI, SessionsHelper.FieldType.Text, new { @class = "mask-data datepicker", value = "11/04/2017" }, true, false)
+                                        </label>
+                                    </section>
+                                </div>
+                                <div class="row">
+                                    <section class="col col-sm-9">
+                                        <label class="label">Observação</label>
+                                        <label class="input">
+                                            @Html.TextBox("txtObservacao", (string)ViewBag.CabObservacao)
+                                        </label>
+                                    </section>
+                                    <section class="col col-12 col-2">
+                                        <label class="label">Número Doct. Original</label>
+                                        <label class="input">
+                                            @Html.TextBox("txtDocNumRef", (string)ViewBag.CabDocnumOrig)
+                                        </label>
+                                    </section>
+                                </div>
+                            </fieldset>
+
+                        }
+                    </div>
+                </div>
+            </div>
+
+            <div class="jarviswidget jarviswidget-color-blueDark" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-deletebutton="false">
+                <header>
+                    <span class="widget-icon"> <i class="fa fa-edit"></i> </span>
+                    <h2>NF Items</h2>
+                </header>
+                <div>
+                    <div class="widget-body no-padding">
+                        @using (Html.BeginForm("NotaManual", "NotaManual_J1B1N", FormMethod.Post, new { id = "frmnotaManual", @class = "smart-form", enctype = "multipart/form-data" }))
+                        {
+                            <fieldset>
+                                <div class="widget-body no-padding" style="height:320px">
+                                    <table id="jQGridDemo" style="width:1250px; "></table>
+                                </div>
+                            </fieldset>
+
+                        }
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <div class="row">
+        <article class="col-sm-12 col-md-12 col-lg-12">
+
+            <div class="widget-body">
+                <div class="smart-form">
+                    <footer class="border">
+                        <button id="btnVoltar" type="button" class="btn btn-primary" onclick="window.location.replace(document.referrer);">
+                            <i class="fa fa-send"></i> Voltar
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="GerarJ1B1N();" id="btnGerarJ1B1N">
+                            <i class="fa fa-file-pdf-o"></i> Enviar SAP
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="SalvarJ1B1N();" id="btnSalvaJ1B1N">
+                            <i class="fa fa-file-pdf-o"></i> Salvar
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="GetXml();">
+                            <i class="fa fa-file-pdf-o"></i> XML
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="GetDanfe();">
+                            <i class="fa fa-file-pdf-o"></i> Danfe
+                        </button>
+                        <button type="button" class="btn btn-danger" id="btnEstornar" title="Estornar dados de integração do VNF" value="Estornar dados de integração do VNF" onclick="Estornar();" style="float:left">
+                            <i class="fa fa-minus-circle"></i><span class="text-btn"> Estornar VNF</span>
+                        </button>
+                        <button type="button" class="btn btn-danger" id="btnRecusar" title="Recusar" onclick="Recusar();" style="float:left">
+                            <i class="fa fa-minus-circle"></i><span class="text-btn"> Recusa no verso</span>
+                        </button>
+                        <button type="button" class="btn btn-danger " id="btnDesfazer" title="Desfazer recusa" onclick="DesfazerRecusa();" style="float:left">
+                            <i class="fa fa-ban"></i><span class="text-btn"> Desfazer recusa</span>
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="RegistroManual();" id="btnRegistroManual" style="float:left">
+                            <i class="fa fa-pencil"></i> Registro Manual
+                        </button>
+                    </footer>
+                </div>
+            </div>
+        </article>
+    </div>
+
+
+    <div class="modal-body padding0" style="overflow-x:hidden">
+        <div class="row">
+            <article class="col-sm-12 col-md-12 col-lg-12">
+                <div class="tabbable">
+                    <div class="jarviswidget jarviswidget-color-blueDark" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-deletebutton="false" style="margin-bottom:0px; border-bottom:0px;">
+                        <header>
+                            <ul class="nav nav-tabs in" id="myTab1">
+                                <li class="bg-color-blueDark">
+                                    <a href="#tabAnexos" data-toggle="tab">
+                                        <span class="hidden-mobile hidden-tablet"><i class="fa fa-paperclip"></i> Anexos</span>
+                                        <span id="lblQtdAnexos" class="label bg-color-red txt-color-white"></span>
+                                    </a>
+                                </li>
+                                <li class="bg-color-blueDark">
+                                    <a href="#tabLog" data-toggle="tab"><span class="hidden-mobile hidden-tablet"><i class="fa fa-database"></i> Log</span> </a>
+                                </li>
+                            </ul>
+                        </header>
+                        <div class="tab-content" style="border: 0px;">
+                            <div class="tab-pane" id="tabAnexos">
+                                <div class="panel-group smart-accordion-default">
+                                    <div id="divAnexos">
+                                        <table id="dtAnexos" datatables_fixedheader="top" datatables_fixedheader_offsettop="60" class="table table-striped table-bordered table-hover table-click" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>Nome</th>
+                                                    <th width="4%">Download</th>
+                                                    <th width="4%">Excluir</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>Data</td>
+                                                    <td><i title="Download" onclick="DownloadAnexo();" class="fa fa-download"></i></td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="smart-form">
+                                            <section class="col col-lg-10">
+
+                                                Selecione um arquivo
+                                                <div class="input input-file">
+                                                    <span class="button" id="btnAddAnexo"><input id="FileInputfileAnexo" type="file" name="FileInputfileAnexo" onchange="this.parentNode.nextSibling.value = this.value">Add</span><input type="text" placeholder="" readonly="">
+
+                                                </div>
+                                            </section>
+                                            <section class="col col-lg-2"></section>
+                                        </div>
+                                        <button type="button" id="btnUpload" onclick="UploadAnexo();" class="btn btn-primary"><i class="fa fa-upload"></i><span class="text-btn"> Enviar</span></button>
+                                    </div>
+                                </div>
+                                <br />
+                                <div class="clear"></div>
+                            </div>
+                            <div class="tab-pane" id="tabLog">
+                                <div class="panel-group smart-accordion-default" style="max-height:300px; overflow-y:auto;">
+                                    <div id="divLog"><span>não existe informação</span></div>
+                                </div>
+                                <br />
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </div>
+
+</section>
+
+@if (ViewBag.HasError)
+{
+    @Html.Hidden("MsgError", ViewBag.MsgError as string)
+    <script type="text/javascript">
+        window.onload = function () {
+            displayMessageError();
+        };
+    </script>
+
+    
+}
+    
+
+
+
+
+@section pagespecific {
+    <link href="~/scripts/plugin/jqgridreq/ui.jqgrid.css" rel="stylesheet" />
+    <link href="~/scripts/plugin/jqgridreq/jquery-ui-1.9.2.custom.css" rel="stylesheet" />
+    <script src="~/Scripts/plugin/jqgrid/grid.locale-en.min.js"></script>
+    
+    
+    @*<script src="~/Scripts/plugin/jqgrid/jquery.jqGrid.min.js"></script>*@
+    <script src="~/Scripts/plugin/JQGrid_5.2.1/jquery.jqGrid.min.js"></script>
+
+    <script src="~/Scripts/jquery.maskMoney.js"></script>
+    <script src="~/Scripts/Metso.js"></script>
+    <script src="~/Scripts/views/NotaManualJ1B1N/NotaManualJ1B1N.js"></script>
+
+}

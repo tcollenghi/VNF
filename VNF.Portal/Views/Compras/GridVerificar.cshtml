@@ -1,0 +1,199 @@
+﻿@using MetsoFramework.Utils
+@model System.Data.DataTable
+<!-- Widget ID (each widget will need unique ID)-->
+
+<div class="jarviswidget jarviswidget-color-blueDark" data-widget-sortable="false" data-widget-editbutton="false">
+
+    <header class="navigation-wrap">
+        <div class="col-md-8 col-xs-12">
+            <div class="btn-group margin-top-5 left">
+                <a class="btn btn-default" onclick="ExportarNfe();"><i class="fa fa-file-excel-o"></i><span class="text-btn"> Exportar</span></a>
+            </div>
+        </div>
+        <div class="col-md-9 col-xs-12">
+            <div class="btn-group btn-group-justified margin-top-5 right">
+                <a id="btnEstornarMaterialRecebido" class="btn btn-primary disabled" onclick="EstornarMaterialRecebido()"><i class="fa fa-check"></i><span class="text-btn">Estorno Mat. Receb.</span></a>
+                <a id="btnMaterialRecebido" class="btn btn-primary disabled" onclick="MaterialRecebido()"><i class="fa fa-check"></i><span class="text-btn">Material Recebido</span></a>
+                <a id="btnRegistroFiscal" class="btn btn-primary disabled" onclick="RegistroFiscal()"><i class="fa fa-pencil"></i><span class="text-btn"> Registro Fiscal</span></a>
+                <a id="btnDetalhes" class="btn btn-primary disabled" onclick="Detalhes()"><i class="fa fa-search"></i><span class="text-btn"> Detalhes</span></a>
+                <a id="btnDanfeGrid" class="btn btn-primary disabled" onclick="GetDanfe()"><i class="fa fa-file-pdf-o"></i><span class="text-btn"> DANFE</span></a>
+            </div>
+        </div>
+    </header>
+    <input type="hidden" id="HdnTipoDocumento" />
+    <div class="exceedQtdMsg">@Html.Raw(ViewBag.ExceedQtdMsg)</div>
+    <div id="divData">
+        <!-- end widget edit box -->
+        <!-- widget content -->
+        <div class="widget-body no-padding">
+            <table id="dttNotaFiscal" datatables_fixedheader="top" datatables_fixedheader_offsettop="60" class="table table-striped table-bordered table-hover table-click" width="100%">
+                <thead>
+                    <tr>
+                        <th width="10%" data-class="expand">Número</th>
+                        <th width="8%">Série</th>
+                        <th width="18%">Fornecedor</th>
+                        <th width="13%">Id Fornecedor</th>
+                        <th width="13%">Tipo</th>
+                        <th width="10%">Data Emissão</th>
+                        <th width="13%">CNPJ</th>
+                        <th width="10%">Situação</th>
+                        <th width="10%">Integração SAP</th>
+                        <th width="8%">Recebido</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        string rowId = "row";
+                        string Id = "";
+                        string cnpj = "";
+                        string dataEmissao = "";
+                        string cor = "";
+                        string strMaterialRecebido = "";
+                        string strTipoDocumento = "";
+
+                        if (Model != null)
+                        {
+                            foreach (System.Data.DataRow item in Model.Rows)
+                            {
+
+                                Id = item["NFEID"].ToString();
+                                rowId = "row" + item["NFEID"].ToString();
+                                strTipoDocumento = item["VNF_TIPO_DOCUMENTO"].ToString();
+                                if (strTipoDocumento == "CTE" && !String.IsNullOrEmpty(item["TipoFrete"].ToString()))
+                                {
+                                    strTipoDocumento += " - " + item["TipoFrete"].ToString();
+                                }
+
+                                if (string.IsNullOrEmpty(item["NF_EMIT_CNPJ"].ToString()))
+                                {
+                                    cnpj = " - ";
+                                }
+                                else if (item["NF_EMIT_CNPJ"].ToString().RemoveLetters().Length == 14)
+                                {
+                                    cnpj = Convert.ToUInt64(item["NF_EMIT_CNPJ"].ToString().RemoveLetters()).ToString(@"00\.000\.000\/0000\-00");
+                                }
+
+                                if (String.IsNullOrEmpty(item["NF_IDE_DHEMI"].ToString()) || Convert.ToDateTime(item["NF_IDE_DHEMI"].ToString()) == new DateTime())
+                                {
+                                    dataEmissao = " - ";
+                                }
+                                else
+                                {
+                                    dataEmissao = Convert.ToDateTime(item["NF_IDE_DHEMI"].ToString()).ToString("dd/MM/yyyy");
+                                }
+
+                                cor = "";
+                                if (item["SITUACAO"].ToString() == "ACEITA")
+                                {
+                                    cor = "txt-color-blue";
+                                }
+                                else if (item["SITUACAO"].ToString() == "REJEITADA")
+                                {
+                                    cor = "txt-color-red";
+                                }
+                                else
+                                {
+                                    cor = "txt-color-gray";
+                                }
+
+                                if (item["VNF_MATERIAL_RECEBIDO"].ToString().ToBoolean() == true)
+                                {
+                                    strMaterialRecebido = "SIM";
+                                }
+                                else
+                                {
+                                    strMaterialRecebido = "NÃO";
+                                }
+
+                                <tr id='@rowId' onclick='selectRow(&#39;@Id&#39;, &#39;@item["VNF_TIPO_DOCUMENTO"].ToString()&#39;);fn_IntegracaoSAPbtn(&#39;@item["SITUACAO"].ToString()&#39;, &#39;@item["VNF_TIPO_DOCUMENTO"].ToString()&#39;)' class="@cor">
+                                    <td>@item["NF_IDE_NNF"]</td>
+                                    <td>@item["NF_IDE_SERIE"]</td>
+                                    <td>@item["NF_EMIT_XNOME"]</td>
+                                    <td>@item["CODFOR"]</td>
+                                    <td>@strTipoDocumento</td>
+                                    <td>@dataEmissao</td>
+                                    <td>@cnpj</td>
+                                    <td>@item["SITUACAO"]</td>
+                                    <td>@item["STATUS_INTEGRACAO"]</td>
+                                    <td>@strMaterialRecebido</td>
+                                </tr>
+                            }
+                        }
+                    }
+                </tbody>
+
+
+
+            </table>
+
+            <script type="text/javascript">
+                /* BASIC ;*/
+                var responsiveHelper_dt_basic1 = undefined;
+
+
+                var breakpointDefinition = {
+                    tablet: 1024,
+                    phone: 480
+                };
+
+
+                //Extensão para corrigir problema de ordenação em colunas de data
+                jQuery.extend(jQuery.fn.dataTableExt.oSort, {
+                    "date-uk-pre": function (a) {
+                        var ukDatea = a.split('/');
+                        return (ukDatea[2] + ukDatea[1] + ukDatea[0]) * 1;
+                    },
+
+                    "date-uk-asc": function (a, b) {
+                        return ((a < b) ? -1 : ((a > b) ? 1 : 0));
+                    },
+
+                    "date-uk-desc": function (a, b) {
+                        return ((a < b) ? 1 : ((a > b) ? -1 : 0));
+                    }
+                });
+
+                $('#dttNotaFiscal').dataTable({
+                    "aoColumns": [
+                        null,
+                        null,
+                        null,
+                        null,
+                        null,
+                        { "sType": "date-uk" },
+                        null,
+                        null,
+                        null,
+                        null
+                    ],
+                    "sDom": "<'dt-toolbar'<'col-xs-12 col-sm-6'f><'col-sm-6 col-xs-12 hidden-xs'l>r>" +
+                        "t" +
+                        "<'dt-toolbar-footer'<'col-sm-6 col-xs-12 hidden-xs'i><'col-xs-12 col-sm-6'p>>",
+                    "autoWidth": false,
+                    "preDrawCallback": function () {
+                        // Initialize the responsive datatables helper once.
+                        if (!responsiveHelper_dt_basic1) {
+                            responsiveHelper_dt_basic1 = new ResponsiveDatatablesHelper($('#dttNotaFiscal'), breakpointDefinition);
+                        }
+                    },
+                    "rowCallback": function (nRow) {
+                        responsiveHelper_dt_basic1.createExpandIcon(nRow);
+                    },
+                    "drawCallback": function (oSettings) {
+                        responsiveHelper_dt_basic1.respond();
+                    },
+                    "oLanguage": {
+                        "sLengthMenu": "Exibe _MENU_ registros por página",
+                        "sZeroRecords": "Nenhum registro encontrado",
+                        "sInfo": "Exibindo de _START_ a _END_ de _TOTAL_ registros",
+                        "sInfoEmpty": "Exibindo de 0 a 0 de 0 registros",
+                        "sInfoFiltered": "(filtrados de _MAX_ registros totais)"
+                    }
+                });
+            </script>
+        </div>
+        <!-- end widget content -->
+
+    </div>
+
+</div>

@@ -1,0 +1,145 @@
+﻿@using System.Data
+@using MetsoFramework.Utils
+@using VNF.Business;
+@model modNF
+
+@if (String.IsNullOrEmpty(Model.VNF_TIPO_DOCUMENTO))
+{
+    <span>não existe informação</span>
+}
+else
+{
+    <table class="table table-bordered tab-cust" width="100%">
+        <thead>
+            <tr>
+                <th width="10%">Item NF</th>
+                <th>Número PO</th>
+                <th>Item PO</th>
+                <th>Código Material</th>
+                <th>Descrição</th>
+                <th>Unidade</th>
+                <th>Qtde</th>
+                <th width="10%">Valor Unit.</th>
+                <th width="10%">Valor Total</th>
+                <th>CFOP</th>
+                <th>Associado</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.ITENS_NF != null)
+            {
+                if (Model.VNF_TIPO_DOCUMENTO == modNF.tipo_doc_cte && Model.VNF_CLASSIFICACAO == modNF.tipo_cte_frete_pedido)
+                {                    
+                    modNFItem itemCte = Model.ITENS_NF.FirstOrDefault();
+                    Model.ITENS_NF.Clear();
+                    Model.ITENS_NF.Add(itemCte);
+                }
+                
+                foreach (modNFItem item in Model.ITENS_NF.OrderBy(x => x.NF_PROD_ITEM))
+                {
+                    if (item == null)
+                    {
+                        continue;
+                    }
+                    
+                    string associado = "";
+                    string title = "";
+                    //decimal decQuantidade = item.NF_PROD_QCOM > 0 ? item.NF_PROD_QCOM : item.NF_PROD_QTRIB;
+                    decimal decQuantidade = item.NF_PROD_QCOM;
+                    decimal decValorTotalItem = item.NF_PROD_VUNCOM * decQuantidade;
+                    if (item.VNF_ITEM_VALIDO == "S")
+                    {
+                        associado = "fa fa-check-circle txt-color-green";
+                        title = "Associado";
+                    }
+                    else if (item.VNF_ITEM_VALIDO == "N")
+                    {
+                        associado = "fa fa-minus-circle txt-color-red";
+                        title = "Pendente";
+                    }
+                    else if (item.VNF_ITEM_VALIDO == "X")
+                    {
+                        associado = "fa fa-info-circle txt-color-yellow";
+                        title = "Irrelevante";
+                    }
+                    
+                    <tr>
+                        <td>
+                            @if (item.NF_PROD_ITEM != null)
+                            {
+                                @item.NF_PROD_ITEM.ToString();
+                            }
+                        </td>
+
+                        <td>
+                            @if (item.NF_PROD_XPED != null)
+                            {
+                                @item.NF_PROD_XPED.ToString();
+                            }
+                        </td>
+
+                        <td>                            
+                            @if (item.NF_PROD_NITEMPED != null)
+                            {
+                                @item.NF_PROD_NITEMPED.ToString()
+                            }
+                        </td>
+
+                        <td>
+                            @if (item.NF_PROD_CPROD != null)
+                            {
+                                @item.NF_PROD_CPROD.ToString();
+                            }
+                        </td>
+
+                        <td>
+                            @if (item.NF_PROD_XPROD != null)
+                            {
+                                @item.NF_PROD_XPROD.ToString();
+                            }
+                        </td>
+
+                        <td>
+                            @if (item.NF_PROD_UCOM != null)
+                            {
+                                @item.NF_PROD_UCOM.ToString();
+                            }
+                        </td>
+
+                        <td>                            
+                            @if (item.NF_PROD_QCOM != null)
+                            {
+                                @item.NF_PROD_QCOM.ToString("N3")
+                            }
+                        </td>
+
+                        <td>                           
+                            @if (item.NF_PROD_VUNCOM != null)
+                            {
+                                @item.NF_PROD_VUNCOM.ToString("C2")
+                            }
+                        </td>
+
+                        <td>                           
+                            @if (item.NF_PROD_VPROD != null)
+                            {
+                                @item.NF_PROD_VPROD.ToString("C2")
+                            }
+                        </td>
+
+                        <td title="@item.NF_PROD_CFOP_DESC">
+                            @if (item.NF_PROD_CFOP != null)
+                            {
+                                @item.NF_PROD_CFOP.ToString();
+                            }
+                        </td>
+
+                        <td class="margin0 padding0" style="text-align:center">
+                            <h5><i class='@associado' title="@title"></i></h5>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>    
+}

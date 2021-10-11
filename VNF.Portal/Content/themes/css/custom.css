@@ -1,0 +1,425 @@
+/*
+ * It is advised not to edit the smartadmin_production.css
+ * as this will override any changes you make in the 
+ * later versions of this theme. 
+ * 
+ * We advise that you use use this CSS to override 
+ * SmartAdmin styles. 
+ * 
+ * Rename the stylesheet to whatever your liking so it will stay
+ * unique to you with each update of SmartAdmin.
+ */
+
+/*
+ * INDEX
+ * 
+ * - HTML
+ * - BODY
+ * - CUSTOM STYLES
+ */
+
+
+
+
+.smart-style-1 #ribbon {
+    box-shadow: -11px 12px 23px rgba(0,0,0,.1);
+}
+
+
+.smart-style-1 .login-info {
+    border-bottom: 1px solid #525151;
+    height: 65px;
+    cursor: pointer;
+}
+
+    .smart-style-1 .login-info > span {
+        height: 64px;
+        display: block;
+        padding: 0 10px;
+        border-bottom: 1px solid #000000;
+    }
+
+    .smart-style-1 .login-info img {
+        margin-top: 10px;
+        width: 45px;
+    }
+
+    .smart-style-1 .login-info span span {
+        text-transform: capitalize;
+        font-size: 12px;
+        display: inline-block;
+        text-decoration: none;
+        max-width: 150px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        vertical-align: middle;
+    }
+
+.ajax-dropdown {
+    z-index: 906;
+    top: 95px;
+}
+
+    .ajax-dropdown:after,
+    .ajax-dropdown:before {
+        left: 20%;
+    }
+
+#logo {
+    margin-top: 10px;
+}
+
+    #logo img {
+        width: 140px;
+    }
+
+
+
+/*Data Grid*/
+
+.toolbar .input-group-addon {
+    width: 32px;
+    margin-top: 0;
+    float: left;
+    height: 32px;
+    padding-top: 8px;
+}
+
+
+.jarviswidget .navigation-wrap {
+    height: auto;
+    display: flex;
+}
+
+.right {
+    float: right;
+    text-align: right;
+}
+
+.left {
+    float: left;
+    text-align: left;
+}
+
+
+.navigation-wrap.fixed {
+    position: fixed;
+    top: 88px;
+    z-index: 500;
+    right: 0;
+    left: 220px;
+}
+
+.dt-toolbar.toolfixed {
+    position: fixed;
+    top: 131px;
+    z-index: 400;
+    right: 0;
+    left: 220px;
+    width: auto;
+}
+
+
+
+.dataTables_scrollBody {
+    height: 100% !important;
+}
+
+.dataTables_scrollHeadInner.theadfixed {
+    position: fixed;
+    top: 176px;
+    z-index: 400;
+}
+
+.mobile-view-activated .dataTables_scrollHeadInner.theadfixed {
+    top: 173px;
+}
+
+.navigation-wrap .btn-group {
+    margin: 5px -5px;
+}
+
+.mobile-view-activated .table-responsive {
+    overflow-x: auto;
+}
+
+.table-responsive {
+    overflow-x: inherit;
+}
+
+.mobile-view-activated .text-btn {
+    display: none;
+}
+
+.navigation-wrap.fixed .btn-group {
+    margin: 5px 0px;
+}
+
+.hidden-menu .navigation-wrap.fixed {
+    left: 10px;
+}
+
+.mobile-view-activated .navigation-wrap.fixed {
+    left: 0px;
+}
+
+.hidden-menu .dt-toolbar.toolfixed {
+    left: 10px;
+}
+
+.mobile-view-activated .dt-toolbar.toolfixed {
+    left: 0px;
+}
+
+.loading-grid {
+    margin: auto;
+    width: 150px;
+}
+
+    .loading-grid h4 {
+        margin-top: 6px;
+    }
+
+    .loading-grid img {
+        margin: 4px 8px 0px 5px;
+    }
+
+
+.demo {
+    width: 230px !important;
+    background: #B4C4CA !important;
+}
+
+    .demo > span {
+        background: #B4C4CA !important;
+    }
+
+    .demo.activate form .scroll-y {
+        height: 500px;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding-right: 10px;
+        margin-right: 15px;
+    }
+
+
+
+
+
+
+/*Accordion*/
+.panel-heading {
+    position: relative;
+}
+
+.tool-accor {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    padding: 15px 15px;
+    color: #ffffff;
+}
+
+    .tool-accor a {
+        color: #000000;
+    }
+
+    .tool-accor i {
+        margin: 0 2px;
+        font-size: 15px;
+    }
+
+.panel-heading h4 {
+    background-color: #ededed;
+}
+
+.panel-title {
+    font-size: 13px;
+}
+
+/*Table*/
+
+.table > thead > tr > th {
+    vertical-align: top;
+}
+
+.collapse i.pointer {
+    cursor: pointer;
+}
+
+table.table-click tr.selecionado td {
+    background-color: #7697e4 !important;
+}
+
+
+
+
+.tab-cust tr th:nth-child(10n+1),
+.tab-cust tr td:nth-child(10n+1) {
+    padding: 8px 3px;
+    width: 20px;
+}
+
+.tab-cust tr th .checkbox {
+    padding-left: 20px;
+}
+
+
+/*Tab*/
+
+.nav-tabs > li {
+    background-color: #dcdcdc;
+}
+
+
+
+/*Custom Forms*/
+
+
+.smart-form .checkbox {
+    padding-left: 0;
+}
+
+/*.smart-form footer {
+    border: 1px solid #c3c3c3;
+    border-top:0;
+}*/
+
+.smart-form footer.border {
+    border: 1px solid #c3c3c3;
+}
+
+
+/*Custom Geral*/
+
+.iconbtn i {
+    font-size: 16px;
+    margin: 3px;
+}
+
+
+/*timeline*/
+
+.timeline-body {
+    height: 320px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+}
+
+
+/*notificações*/
+
+.notification-body > li a.msg {
+    padding-left: 60px !important;
+}
+
+.notification-body li span {
+    color: #383838;
+    max-width: 325px !important;
+}
+
+    .notification-body li span span {
+        color: #383838;
+        width: 275px !important;
+    }
+
+        .notification-body li span span .pull-right {
+            text-align: right;
+        }
+
+.msg-body {
+    max-width: 270px !important;
+}
+
+.air {
+    border-radius: 0% !important;
+    margin-right: 3px;
+}
+
+/*Icons troca de Ambientes*/
+
+#shortcut ul li .jarvismetro-tile {
+    text-align: center;
+}
+
+
+/*Enter Users*/
+
+.enter-user {
+    background: #FFF;
+    box-shadow: -31px 32px 53px rgba(0,0,0,.2);
+    overflow: hidden;
+    padding: 13px;
+    position: relative;
+    margin: 10px;
+}
+
+
+/*Demo*/
+
+.demo {
+    position: fixed !important;
+    top: 53px !important;
+}
+
+    .demo > span {
+        width: 50px !important;
+        text-align: left !important;
+        padding-left: 10px !important;
+    }
+
+
+/*ToDo
+
+.todo > li{
+    background:none;
+}*/
+
+/*General*/
+.no-padding-top {
+    padding-top: 0px !important;
+}
+
+.small-chart-home {
+    top: 50%;
+    width: 100%;
+    text-align: center;
+    color: rgb(68, 68, 68);
+    font-size: 12px;
+    font-weight: 700;
+    margin-top: -10px;
+    display: block;
+    position: absolute;
+}
+
+.seleciona-automatico {
+    float: right;
+    margin-top: -2px;
+    padding: 0;
+    font-size: 19.5px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.modal.modal-wide .modal-dialog {
+    width: 90%;
+}
+
+.modal-wide .modal-body {
+    overflow-y: auto;
+}
+
+.demo #demo-setting + div {
+    display: none;
+}
+
+.demo.activate #demo-setting + div {
+    display: block;
+}
+
+.remove-tab-padding {
+    margin-right: -13px;
+    margin-left: -13px;
+    margin-bottom: -14px;
+}

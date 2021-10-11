@@ -1,0 +1,108 @@
+﻿
+
+/*CSS Fora do Padrao --- Miguel*/
+
+.alinhamento_esquerda {
+    text-align: left;
+}
+
+.alinhamento_centro {
+    text-align: center;
+}
+
+.alinhamento_direita {
+    text-align: right;
+}
+
+.selecionado td {
+    background-color: #7697e4 !important;
+    color: #FFF;
+}
+
+.marginTop50 {
+    margin-top: 50px !important;
+}
+
+.marginTop5 {
+    margin-top: 5px !important;
+}
+
+.PadRight5 {
+    padding-right: 5px !important;
+}
+
+.center {
+    margin: auto !important;
+    text-align: center !important;
+}
+
+.padding0 {
+    padding: 0px !important;
+}
+
+.padding5 {
+    padding: 5px !important;
+}
+
+.padding10 {
+    padding: 10px !important;
+}
+
+.padding15 {
+    padding: 15px !important;
+}
+
+.padding-top7 {
+    padding-top: 7px !important;
+}
+
+.margin0 {
+    margin: 0px !important;
+}
+
+.line-height0 {
+    line-height: 0% !important;
+}
+
+.border0 {
+    border: 0px !important;
+    border-style:none !important;
+}
+
+.input-editable {
+    border: 1px solid rgb(230, 230, 230);
+    background-color: rgb(240, 240, 240);
+    padding-left: 4px;
+    width: 95%;
+    height: 27px;
+    font-size: 12pt;
+    color:#c26565;
+}
+
+.cursor-pointer {
+    cursor:pointer !important;
+}
+
+.cursor-default {
+    cursor:default !important;
+}
+
+.even, .odd {
+    cursor:pointer;
+}
+
+.shadow-row {
+    background-color:#FAFAFA;
+    font-weight:300;
+    color:#505050;
+}
+
+.blocked-row {
+    color: #AAA !important;
+    text-decoration: line-through;
+}
+
+.nao-ratear {
+    color: #A3A3A3;
+    text-decoration: line-through;
+}

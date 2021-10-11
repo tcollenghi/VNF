@@ -1,0 +1,288 @@
+﻿@using MetsoFramework.Utils
+@model System.Data.DataTable
+@{
+    ViewBag.Title = "Divergências";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .padding-right3 {
+        padding-right: 3px; 
+    }
+</style>
+
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-angle-double-right fa-fw "></i>
+            Divergências
+        </h1>
+    </div>
+
+    <div class="demo">
+        <span id="demo-setting"><i class="fa fa-search txt-color-blueDark"></i></span>
+        @using (Html.BeginForm("LoadDataDIVE", "Nfe", FormMethod.Post, new { @class = "smart-form" }))
+        {
+            <legend class="no-padding margin-bottom-10">Filtros</legend>
+            <div class="custom-scroll scroll-y">
+                <section>
+                    <h6 class="margin-top-10 semi-bold margin-bottom-5">Situação</h6>
+                    @*<label class="input">
+                        @Html.MetsoDropDownList("Situacao", ViewBag.Situacao as IEnumerable<SelectListItem>, "", new { @onkeypress = "KeyEnter(event);", @disabled = "disabled" })
+                    </label>*@
+                    <label class="input">
+                        @Html.MetsoDropDownList("Situacao", ViewBag.Situacao as IEnumerable<SelectListItem>, "", new { @onkeypress = "KeyEnter(event);"})
+                    </label>
+                </section>
+                <section>
+                    <h6 class="margin-top-10 semi-bold margin-bottom-5">Motivo</h6>
+                    @*<label class="input">
+                        @Html.MetsoDropDownList("Motivo", ViewBag.Motivo as IEnumerable<SelectListItem>, "(TODAS)", new { @onkeypress = "KeyEnter(event);", @disabled = "disabled" })
+                    </label>*@
+                    <label class="input">
+                        @Html.MetsoDropDownList("Motivo", ViewBag.Motivo as IEnumerable<SelectListItem>, "(TODAS)", new { @onkeypress = "KeyEnter(event);" })
+                    </label>
+                </section>
+                <section>
+                    <h6 class="margin-top-10 semi-bold margin-bottom-5">Código Comprador</h6>
+                    <label class="input">
+                        <input id="txtCodigoComprador" onkeypress="KeyEnter(event);" name="txtCodigoComprador" class="form-control required" type="text" value="@ViewBag.Comprador" />
+                    </label>
+                </section>
+                <section>
+                    <h6 class="margin-top-10 semi-bold margin-bottom-5">Doc-e</h6>
+                    <label class="input">
+                        <input id="txtDocE" name="txtDocE" onkeypress="KeyEnter(event);" class="form-control required" type="text" value="" />
+                    </label>
+                </section>
+                <section>
+                    <h6 class="margin-top-10 semi-bold margin-bottom-5">Número PO</h6>
+                    <label class="input">
+                        <input id="txtNumeroPO" name="txtNumeroPO" onkeypress="KeyEnter(event);" class="form-control required" type="text" value="" />
+                    </label>
+                </section>
+                <section>
+                    <h6 class="margin-top-10 semi-bold margin-bottom-5">Fornecedor</h6>
+                    <label class="input">
+                        <input id="txtFornecedor" name="txtFornecedor" onkeypress="KeyEnter(event);" class="form-control required" type="text" value="" />
+                    </label>
+                </section>
+                @*<section>
+                    <h6 class="margin-top-10 semi-bold margin-bottom-5">Prioridade</h6>
+                    <label class="input">
+                        <select id="cboPrioridade" class="form-control" onkeypress="KeyEnter(event);">
+                            <option></option>
+                            <option value="NORMAL">NORMAL</option>
+                            <option value="ALTA">ALTA</option>
+                        </select>
+                    </label>
+                </section>
+                <section>
+                    <h6 class="margin-top-10 semi-bold margin-bottom-5">Origem</h6>
+                    <label class="input">
+                        <select id="cboOrigem" class="form-control" onkeypress="KeyEnter(event);">
+                            <option></option>
+                            <option value="Fiscal">FISCAL</option>
+                            <option value="MATCHING">MATCHING</option>
+                        </select>
+                    </label>
+                </section>*@
+                <section>
+                    <h6 class="margin-top-10 semi-bold margin-bottom-5">Data Emissão NF de</h6>
+                    <label class="input">
+                        <input type="text" class="form-control datepicker" data-dateformat="dd/mm/yy" placeholder="dd/mm/aaaa" name="txtDataEmissaoDe" id="txtDataEmissaoDe" onkeypress="KeyEnter(event);">
+                    </label>
+                </section>
+                <section>
+                    <h6 class="margin-top-10 semi-bold margin-bottom-5">Data Emissão NF até</h6>
+                    <label class="input">
+                        <input type="text" class="form-control datepicker" data-dateformat="dd/mm/yy" placeholder="dd/mm/aaaa" name="txtDataEmissaoAte" id="txtDataEmissaoAte" onkeypress="KeyEnter(event);">
+                    </label>
+                </section>
+                <section>
+                    <h6 class="margin-top-10 semi-bold margin-bottom-5">Data Divergência de</h6>
+                    <label class="input">
+                        <input type="text" class="form-control datepicker" data-dateformat="dd/mm/yy" placeholder="dd/mm/aaaa" name="txtDataDivergenciaDe" id="txtDataDivergenciaDe" onkeypress="KeyEnter(event);">
+                    </label>
+                </section>
+                <section>
+                    <h6 class="margin-top-10 semi-bold margin-bottom-5">Data Divergência até</h6>
+                    <label class="input">
+                        <input type="text" class="form-control datepicker" data-dateformat="dd/mm/yy" placeholder="dd/mm/aaaa" name="txtDataDivergenciaAte" id="txtDataDivergenciaAte" onkeypress="KeyEnter(event);">
+                    </label>
+                </section>
+                @*<section>
+                    <h6 class="margin-top-10 semi-bold margin-bottom-5">Tipo de Divergência</h6>
+                    <table cellspacing="1" cellpadding="0">
+                        <tbody>
+                            <tr>
+                                <td class="padding-right3">
+                                    @Html.MetsoDropDownList("ddlTipoDivergencia", ViewBag.ddlTipoDivergencia as IEnumerable<SelectListItem>, "", new { @onkeypress = "KeyEnter(event);" })
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-default" onclick="AddDvivergencia();" title="Adicionar"><span class="glyphicon glyphicon-plus"></span></button>
+                                </td>
+                                <td>
+                                    <button id="btnFilterDivergencia" type="button" class="btn btn-default" onclick="FilterDivergencia();" title="Visualizar"><span class="glyphicon glyphicon-search"></span></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>*@
+                <section>
+                    <div onclick="FilterData();" class="btn btn-xs btn-block btn-primary margin-top-10"><i class="fa fa-search margin-top-5 margin-bottom-5"></i> Buscar</div>
+                </section>
+
+            </div>
+        }
+    </div>
+
+</div>
+
+<div>
+    <!-- Widget ID (each widget will need unique ID)-->
+    <div class="jarviswidget jarviswidget-color-blueDark"  data-widget-sortable="false" data-widget-editbutton="false">
+
+        <header class="navigation-wrap">
+            <div class="col-md-6 col-xs-12">
+                <div class="btn-group margin-top-5 left">
+                    <a class="btn btn-default" onclick="ExportarDIVE();" data-toggle="modal"><i class="fa fa-file-excel-o"></i><span class="text-btn"> Exportar</span></a>
+                </div>
+            </div>
+            <div class="col-xs-11 right">
+
+                <div class="right" style="margin-right: 5px;">
+                    <button id="btnReassociar" class="btn btn-danger disabled" type="button" onclick="ReassociarEmMassa();"><i class="fa fa-retweet"></i> Reassociar</button>
+                </div>
+
+                <div class="right" style="margin-right: 5px;">
+                    <button id="btnVerificar" class="btn btn-danger disabled" type="button" onclick="Verificar();"><i class="fa fa-retweet"></i> Associar</button>
+                </div>
+
+                <div class="right" style="margin-right: 5px;">
+                    <button id="btnCancelar" class="btn btn-danger disabled hide" type="button" onclick="Cancelar();"><i class="fa fa-trash-o"></i> Cancelar Documento</button>
+                </div>
+
+                <div class="right" style="margin-right: 5px;">
+                    <button id="btnAnular" class="btn btn-primary disabled" type="button" onclick="JustificativaDetalhe();"><i class="fa fa-minus-circle"></i> Anular Divergência</button>
+                </div>
+
+                <div class="right" style="margin-right: 5px;">
+                    <button id="btnVisualizar" class="btn btn-primary disabled" type="button" onclick="Visualizar();"><i class="fa fa-pencil"></i> Modificar</button>
+                </div>
+
+                <div class="right" style="margin-right: 5px;">
+                    <button type="button" class="btn btn-primary disabled" onclick="GetOcorrencia();" id="btnCriarOcorrencia" data-toggle="modal" data-target="#divOcorrencia" title="Criar Ocorrência"><i class="fa fa-book"></i><span class="text-btn"> Ver Ocorrência</span></button>
+                </div>
+
+            </div>
+        </header>
+
+        <div id="divGrid">
+            @{
+                Html.RenderPartial("ViewDive");
+            }
+            
+
+        </div>
+       
+    </div>
+    <input type="hidden" id="hfIdNfe" /><input type="hidden" id="hfCodLog" /><input type="hidden" id="hfCodCom" /><input type="hidden" id="hfCodFor" />
+</div>
+
+@*<div class="modal fade marginTop50" id="divFilterDivergencia">
+    <div class="modal-dialog modal-sm">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+                <h4>Tipo de Divergência</h4>
+            </div>
+            <div class="modal-body">
+                <table id="dttFilterDivergencia" class="display table table-responsive table-striped table-hover" width="100%">
+                    <tbody></tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" id="btnFecharDivergencia" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>*@
+
+<div class="modal fade marginTop50" id="divJustificativaDetalhe" tabindex="-1" role="dialog" aria-labelledby="Anular divergência" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+                <h4>Anular divergência</h4>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("CancelarDIVE", "Compras", FormMethod.Post, new { id = "frmAnulaDiv", @class = "smart-form", enctype = "multipart/form-data" }))
+                {
+                    <div class="row">
+                        <section class="col col-lg-12">
+                            <label class="select">
+                                Justificativa
+                                <select id='dropDownJustificativa'>
+                                    <option>Selecione...</option>
+                                    <option>ANULAÇÃO EM MASSA</option>
+                                    <option>DEVOLUCAO DO MATERIAL</option>
+                                    <option>ERRO DE SISTEMA</option>
+                                    <option>ERRO NA REGRA DE VALIDACAO</option>
+                                    <option>ERRO NO VALIDADOR</option>
+                                    <option>VALIDACAO APOS RECEBIMENTO</option>
+                                    <option>CARTA DE CORREÇÃO</option>
+                                    <option>DESCONTO FINANCEIRO</option>
+                                    <option>NF COMPLEMENTAR</option>
+
+                                </select>
+                            </label>
+                        </section>
+                    </div>
+                    <div class="row">
+                        <section class="col col-lg-12">
+                            <label class="textarea">
+                                Detalhes
+                                @Html.MetsoTextBox("textArea", SessionsHelper.FieldType.TextAreaMedium)
+                            </label>
+                        </section>
+                    </div>
+                }
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary" onclick="Anular2();" id="btnAnular"><span class="text-btn"><i class="fa fa-check"></i> Confirmar anulação</span></a>
+                <button type="button" class="btn btn-primary" id="btnFecharJustificativa" data-dismiss="modal"><i class="fa fa-times"></i> Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section head {
+    <script src="~/Scripts/plugin/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.colVis.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.tableTools.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/plugin/datatable-responsive/datatables.responsive.min.js"></script>
+}
+
+@section pagespecific {
+
+    <!-- PAGE RELATED PLUGIN(S) -->
+    <script src="~/Scripts/plugin/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.colVis.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.tableTools.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/plugin/datatable-responsive/datatables.responsive.min.js"></script>
+    <script src="~/Scripts/jquery.maskMoney.js"></script>
+    <script src="~/Scripts/Metso.js"></script>
+
+    <!-- Page Script -->
+    <script src="~/Scripts/views/_global.js"></script>
+    <script src="~/Scripts/views/Compras/compras_dive.js"></script>
+    <script src="~/Scripts/views/PermissaoUsuario.js"></script>
+    <script>PermissaoUsuario('@(ViewBag.Acesso)')</script>
+
+
+    
+}
+

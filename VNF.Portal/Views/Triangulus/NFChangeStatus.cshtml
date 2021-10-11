@@ -1,0 +1,282 @@
+﻿@using MetsoFramework.Utils
+@using MetsoAdmin.Controllers
+@model System.Data.DataTable
+@{
+    ViewBag.Title = "Alterar Status da Nota Fiscal";
+}
+
+@*<style>
+        .margin-bottom0 {
+            margin-bottom: 0px !important;
+        }
+
+        .higth0 {
+            height: 0px !important;
+        }
+    </style>*@
+<style>
+    .exceedQtdMsg {
+        color: indianred;
+        font-style: italic;
+        font-weight: 700;
+        padding-top: 1px !important;
+        padding-bottom: 3px !important;
+        font-size: 10px !important;
+    }
+</style>
+
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-angle-double-right fa-fw "></i>
+            Alterar Status da Nota Fiscal
+        </h1>
+    </div>
+
+    <article class="col-sm-12 col-md-12 col-lg-12">
+
+        <div class="jarviswidget jarviswidget-color-blueDark margin-bottom0" data-widget-editbutton="false">
+
+            <header class="navigation-wrap">
+                <span class="widget-icon"><i class="fa fa-file-text"></i></span>
+                <h2>Alterar Status da Nota Fiscal</h2>
+            </header>
+
+            <div id="divSelecionarArquivo">
+                <div class="modal-body">
+                    <form class="smart-form">
+                        <fieldset>
+                            <div class="row col-md-12">
+                                <section class="col col-md-3">
+                                    <label class="input">
+                                        @Html.Label("Chave de Acesso")
+                                        @Html.TextBox("IdNFe", "", new { @style = "text-align:left", @id = "txtIdNFe" })
+                                    </label>
+                                </section>
+                                <section class="col col-md-1">
+                                    <label class="input">
+                                        @Html.Label("Status")
+                                        @Html.TextBox("pStatus", "", new { @style = "text-align:left", @id = "txtStatus" })
+                                        @*<input type="text" class="form-control datepicker" data-dateformat="dd/mm/yy" placeholder="dd/mm/aaaa" name="txtDataAte" id="txtDataAte" onkeypress="KeyEnter(event);">*@
+                                    </label>
+                                </section>
+                            </div>
+                        </fieldset>
+                    </form>
+                </div>
+                <div class="widget-body">
+                    <div class="smart-form">
+                        <footer class="border">
+                            <a class="btn btn-primary" onclick="AlterarStatusNF(txtIdNFe.value, txtStatus.value);" id="btnVisualizarDanfe"><span class="text-btn"><i class="fa fa-file-text"></i> Alterar </span></a>
+                        </footer>
+                    </div>
+                </div>
+            </div>
+        </div>
+  
+    </article>
+
+</div>
+
+
+<script src="~/Scripts/plugin/datatables/jquery.dataTables.min.js"></script>
+<script src="~/Scripts/plugin/datatables/dataTables.colVis.min.js"></script>
+<script src="~/Scripts/plugin/datatables/dataTables.tableTools.min.js"></script>
+<script src="~/Scripts/plugin/datatables/dataTables.bootstrap.min.js"></script>
+<script src="~/Scripts/plugin/datatable-responsive/datatables.responsive.min.js"></script>
+<script src="~/scripts/plugin/jquery-form/jquery-form.min.js"></script>
+<script src="~/Scripts/jquery.maskedinput.min.js"></script>
+<script src="~/Scripts/plugin/jq"></script>
+<script src="~/Scripts/jquery.maskMoney.js"></script>
+<script src="~/Scripts/Metso.js"></script>
+<script src="~/Scripts/views/_global.js"></script>
+<script src="~/Scripts/views/gridpadrao_index.js"></script>
+<script src="~/Scripts/views/PermissaoUsuario.js"></script>
+<script>PermissaoUsuario('@(ViewBag.Acesso)')</script>
+
+<script language="javascript">
+
+    function AlterarStatusNF(pstrNF, pstrData) {
+        $.ajax({
+            async: true,
+            type: 'POST',
+            url: '@Url.Action("validarAlterarStatus", "Triangulus")',
+            dataType: 'json',
+            data: {
+                pstrNF: pstrNF,
+                pstrStatus: pstrData
+            },
+            error: function (erro) {
+                $.smallBox({
+                    title: "Erros",
+                    content: "Não foi possível completar sua solicitação!",
+                    color: "#C46A69",
+                    icon: "fa fa-exclamation-circle",
+                    buttons: '[Fechar]',
+                    timeout: 4000
+                });
+            },
+            success: function (oReturn) {
+                if (oReturn.result === "cancelar") {
+                    $.SmartMessageBox({
+                        title: "Alteração",
+                        content: oReturn.data,
+                        buttons: '[Não][Sim]'
+                    }, function (ButtonPressed) {
+                        if (ButtonPressed === "Sim") {
+                            $.ajax({
+                                async: true,
+                                type: 'POST',
+                                url: '@Url.Action("AlterarStatus", "Triangulus")',
+                                dataType: 'json',
+                                data: {
+                                    pstrNF: pstrNF,
+                                    pstrStatus: pstrData
+                                },
+                                error: function (erro) {
+                                    $.smallBox({
+                                        title: "Erros",
+                                        content: erro.data,
+                                        color: "#C46A69",
+                                        icon: "fa fa-exclamation-circle fadeInLeft animated",
+                                        buttons: '[Fechar]',
+                                        timeout: 4000
+                                    });
+                                },
+                                success: function (oReturn) {
+                                    //location.reload();
+                                    $.smallBox({
+                                        title: "Sucesso",
+                                        content: oReturn.data,
+                                        color: "#739E73",
+                                        icon: "fa fa-exclamation-circle fadeInLeft animated",
+                                        buttons: '[Fechar]',
+                                        timeout: 4000
+                                    });
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    if (oReturn.result === "ok") {
+                        $.smallBox({
+                            title: "VNF NELES",
+                            content: oReturn.data,
+                            color: "#739E73",
+                            icon: "fa fa-check-circle",
+                            timeout: 4000
+                        });
+                    }
+                    else {
+                        $.smallBox({
+                            title: "VNF NELES",
+                            content: oReturn.data,
+                            color: "#C46A69",
+                            icon: "fa fa-check-circle",
+                            timeout: 4000
+                        });
+                    }
+                }
+
+            }
+        });
+    }
+
+
+    function Inutilizar(pstrFilial, pnumeroNFe, pstrSerie, pstrData) {
+        //alert(pstrNF);
+        //alert(pstrSerie);
+        //alert(pstrData);
+        //alert(pstrFilial);
+        $.ajax({
+            async: true,
+         //   cache: false,
+            type: 'POST',
+            url: '@Url.Action("validarInutilizacao", "Triangulus")',
+            dataType: 'json',
+            data: {
+                pstrFilial: pstrFilial,
+                pnumeroNFe: pnumeroNFe,
+                pstrSerie: pstrSerie,
+                pstrData: pstrData
+            },
+            error: function (erro) {
+                $.smallBox({
+                    title: "Erros",
+                    content: "Não foi possível completar sua solicitação!",
+                    color: "#C46A69",
+                    icon: "fa fa-exclamation-circle",
+                    buttons: '[Fechar]',
+                    timeout: 4000
+                });
+            },
+            success: function (oReturn) {
+                if (oReturn.result === "cancelar") {
+                    $.SmartMessageBox({
+                        title: "Cancelamento",
+                        content: oReturn.data,
+                        buttons: '[Não][Sim]'
+                    }, function (ButtonPressed) {
+                        if (ButtonPressed === "Sim") {
+                            $.ajax({
+                                async: true,
+                                //cache: false,
+                                type: 'POST',
+                                url: '@Url.Action("Cancelar", "Triangulus")',
+                                dataType: 'json',
+                                data: {
+                                    pstrNF: pnumeroNFe,
+                                    pstrSerie: pstrSerie,
+                                    pstrData: pstrData,
+                                    pstrFilial: pstrFilial
+                                },
+                                error: function (erro) {
+                                    $.smallBox({
+                                        title: "Erros",
+                                        content: erro.data + " Não foi possível completar sua solicitação!",
+                                        color: "#C46A69",
+                                        icon: "fa fa-exclamation-circle fadeInLeft animated",
+                                        buttons: '[Fechar]',
+                                        timeout: 4000
+                                    });
+                                },
+                                success: function (oReturn) {
+                                    //location.reload();
+                                    $.smallBox({
+                                        title: "VNF NELES",
+                                        content: oReturn.data /*+ ", Não foi possível completar sua solicitação!"*/,
+                                        color: "#739E73",
+                                        icon: "fa fa-exclamation-circle fadeInLeft animated",
+                                        buttons: '[Fechar]',
+                                        timeout: 4000
+                                    });
+                                }
+                            });
+                        }
+                    });
+                } else {
+                    if (oReturn.result === "ok") {
+                        $.smallBox({
+                            title: "VNF NELES",
+                            content: oReturn.data,
+                            color: "#739E73",
+                            icon: "fa fa-check-circle",
+                            timeout: 4000
+                        });
+                    }
+                    else {
+                        $.smallBox({
+                            title: "VNF NELES",
+                            content: oReturn.data,
+                            color: "#C46A69",
+                            icon: "fa fa-check-circle",
+                            timeout: 4000
+                        });
+                    }
+                }
+
+            }
+        });
+    }
+</script>
+

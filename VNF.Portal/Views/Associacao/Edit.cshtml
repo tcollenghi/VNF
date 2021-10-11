@@ -1,0 +1,692 @@
+﻿@using MetsoFramework.Utils
+@using VNF.Business;
+@model modNF
+@{
+    ViewBag.Title = "Documento Fiscal";
+
+    string rowId = "row";
+    string nfPedido = "";
+    string pedido = "";
+    string id = "";
+    string relevante = "";
+
+    string strDescricaoItem = "";
+    string strStatusColor = "";
+
+
+    if (Model != null)
+    {
+        if (Model.VNF_STATUS == "ACEITA")
+        {
+            strStatusColor = "state-success";
+        }
+        else if (Model.VNF_STATUS == "REJEITADA")
+        {
+            strStatusColor = "state-error";
+        }
+    }
+}
+
+<div class="row">
+    <div class="col-xs-12 col-sm-7 col-md-7 col-lg-4">
+        <h1 class="page-title txt-color-blueDark">
+            <i class="fa fa-angle-double-right fa-fw "></i>
+            Associação de Nota Fiscal
+        </h1>
+    </div>
+</div>
+@Html.Hidden("hfIdNfe", (object)ViewBag.id)
+@Html.Hidden("hdfId")
+@Html.Hidden("hfStatusIntegracao", (string)ViewBag.StatusIntegracao)
+@Html.Hidden("hfIsMandatoryNotaFiscalReferenciada", ViewBag.IsMandatoryNotaFiscalReferenciada ? "1" : "0")
+
+<section id="widget-grid" class="">
+    <div class="row">
+        <article class="col-sm-12 col-md-12 col-lg-12">
+            <div class="jarviswidget jarviswidget-color-blueDark" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-deletebutton="false">
+                <header>
+                    <span class="widget-icon"><i class="fa fa-file-text-o"></i></span>
+                    <h2>Dados</h2>
+                </header>
+
+                <div>
+                    <div class="jarviswidget-editbox">
+                        <!-- This area used as dropdown edit box -->
+                    </div>
+                    <div class="widget-body no-padding">
+                        <form class="smart-form">
+                            <fieldset>
+                                <div class="row">
+                                    <section class="col col-4">
+                                        <label class="input">
+                                            CHAVE
+                                            @Html.TextBoxFor(model => model.VNF_CHAVE_ACESSO, new { @readonly = true })
+                                        </label>
+                                    </section>
+                                    <section class="col col-2">
+                                        <label class="input">
+                                            Data Emissão
+                                            @if (Model.NF_IDE_DHEMI == new DateTime())
+                                            {
+                                                @Html.TextBoxFor(model => model.NF_IDE_DHEMI, new { @readonly = true, @Value = "" })
+
+                                            }
+                                            else
+                                            {
+                                                @Html.TextBoxFor(model => model.NF_IDE_DHEMI, new { @readonly = true, @Value = Convert.ToDateTime(Model.NF_IDE_DHEMI).ToString("dd/MM/yyyy") })
+                                            }
+
+                                        </label>
+                                    </section>
+                                    <section class="col col-2">
+                                        <label class="input">
+                                            Número
+                                            @Html.TextBoxFor(model => model.NF_IDE_NNF, new { @readonly = true })
+                                        </label>
+                                    </section>
+                                    <section class="col col-1">
+                                        <label class="input">
+                                            Série
+                                            @Html.TextBoxFor(model => model.NF_IDE_SERIE, new { @readonly = true })
+                                        </label>
+                                    </section>
+                                    <section class="col col-1">
+                                        <label class="input">
+                                            Tipo
+                                            @Html.TextBoxFor(model => model.VNF_TIPO_DOCUMENTO, new { @readonly = true })
+                                        </label>
+                                    </section>
+                                    <section class="col col-2">
+                                        <label class="input @strStatusColor">
+                                            Situação
+                                            @Html.TextBoxFor(model => model.VNF_STATUS, new { @readonly = true })
+                                        </label>
+                                    </section>
+                                </div>
+                                @if (Model.VNF_TIPO_DOCUMENTO == "CTE")
+                                {
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label class="input">
+                                                Transportadora
+                                                @Html.TextBoxFor(model => model.NF_EMIT_XNOME, new { @readonly = true })
+                                            </label>
+                                        </section>
+                                        <section class="col col-2">
+                                            <label class="input">
+                                                CNPJ
+                                                @Html.TextBox("cnpjEmitente", Model.NF_EMIT_CNPJ.ToCnpj(), new { @readonly = true, @class = "mascarar_cnpj" })
+                                            </label>
+                                        </section>
+                                        <section class="col col-2">
+                                            <label class="input">
+                                                Classificação
+                                                @Html.TextBoxFor(model => model.VNF_CLASSIFICACAO, new { @readonly = true })
+                                            </label>
+                                        </section>
+                                        <section class="col col-2">
+                                            <label class="input">
+                                                Início do Transporte
+                                                @Html.TextBoxFor(model => model.CT_IDE_XMUNINI, new { @readonly = true })
+                                            </label>
+                                        </section>
+                                        <section class="col col-2">
+                                            <label class="input">
+                                                Término do Transporte
+                                                @Html.TextBoxFor(model => model.CT_IDE_XMUNFIM, new { @readonly = true })
+                                            </label>
+                                        </section>
+                                    </div>
+                                }
+                                <div class="row">
+                                    @if (Model.VNF_TIPO_DOCUMENTO == "CTE")
+                                    {
+                                        <section class="col col-4">
+                                            <label class="input">
+                                                Remetente
+                                                @Html.TextBoxFor(model => model.NF_REM_XNOME, new { @readonly = true })
+                                            </label>
+                                        </section>
+                                        <section class="col col-2">
+                                            <label class="input">
+                                                CNPJ
+                                                @Html.TextBox("cnpjRemetente", Model.NF_REM_CNPJ.ToCnpj(), new { @readonly = true })
+                                            </label>
+                                        </section>
+                                    }
+                                    else
+                                    {
+                                        <section class="col col-4">
+                                            <label class="input">
+                                                Emissor
+                                                @Html.TextBoxFor(model => model.NF_EMIT_XNOME, new { @readonly = true })
+                                            </label>
+                                        </section>
+                                        <section class="col col-2">
+                                            <label class="input">
+                                                CNPJ
+                                                @Html.TextBox("cnpjEmissor", Model.NF_EMIT_CNPJ.ToCnpj(), new { @readonly = true })
+                                            </label>
+                                        </section>
+                                    }
+                                    <section class="col col-4">
+                                        <label class="input">
+                                            Destinatário
+                                            @Html.TextBoxFor(model => model.NF_DEST_XNOME, new { @readonly = true })
+                                        </label>
+                                    </section>
+                                    <section class="col col-2">
+                                        <label class="input">
+                                            CNPJ
+                                            @Html.TextBox("cnpjDestinatario", Model.NF_DEST_CNPJ.ToCnpj(), new { @readonly = true, @class = "mascarar_cnpj" })
+                                        </label>
+                                    </section>
+                                </div>
+                                @if (Model.VNF_TIPO_DOCUMENTO == "CTE" && (Model.CT_IDE_TOMA == "1" || Model.CT_IDE_TOMA == "2"))
+                                {
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label class="input">
+                                                Expedidor
+                                                @Html.TextBoxFor(model => model.NF_EXPED_XNOME, new { @readonly = true })
+                                            </label>
+                                        </section>
+                                        <section class="col col-2">
+                                            <label class="input">
+                                                CNPJ
+                                                @Html.TextBox("cnpjExpedidor", Model.NF_EXPED_CNPJ.ToCnpj(), new { @readonly = true })
+                                            </label>
+                                        </section>
+                                        <section class="col col-4">
+                                            <label class="input">
+                                                Recebedor
+                                                @Html.TextBoxFor(model => model.NF_RECEB_XNOME, new { @readonly = true })
+                                            </label>
+                                        </section>
+                                        <section class="col col-2">
+                                            <label class="input">
+                                                CNPJ
+                                                @Html.TextBox("cnpjRecebedor", Model.NF_RECEB_CNPJ.ToCnpj(), new { @readonly = true })
+                                            </label>
+                                        </section>
+                                    </div>
+                                }
+                                @if (Model.VNF_TIPO_DOCUMENTO == "CTE")
+                                {
+                                    <hr class="padding5" />
+                                    <div class="row">
+                                        <section class="col col-4">
+                                            <label class="input">
+                                                Tomador
+                                                @Html.TextBoxFor(model => model.CT_IDE_TOMA_DESC, new { @readonly = true })
+                                            </label>
+                                        </section>
+                                        <section class="col col-6">
+                                            <label class="input">
+                                                Razão Social
+                                                @Html.TextBoxFor(model => model.CT_TOMA_XNOME, new { @readonly = true })
+                                            </label>
+                                        </section>
+                                        <section class="col col-2">
+                                            <label class="input">
+                                                CNPJ
+                                                @Html.TextBox("CT_TOMA_CNPJ", Model.CT_TOMA_CNPJ.ToCnpj(), new { @readonly = true })
+                                            </label>
+                                        </section>
+                                    </div>
+                                }
+                                <div class="row">
+                                    <section class="col col-lg-12">
+                                        <label class="textarea">
+                                            Informações Adicionais
+                                            @Html.TextAreaFor(model => model.NF_OUTROS_INFORMACAO_ADICIONAL, new { @readonly = true, @rows = "3" })
+                                        </label>
+                                    </section>
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+    @if (ViewBag.IsMandatoryNotaFiscalReferenciada)
+    {
+        <div class="row">
+            <article class="col-sm-12 col-md-12 col-lg-12 sortable-grid ui-sortable">
+                <div class="jarviswidget jarviswidget-color-blueDark" data-widget-editbutton="false" data-widget-sortable="false" data-widget-deletebutton="false" data-widget-custombutton="false" data-widget-colorbutton="false">
+                    <header role="heading">
+                        <span class="widget-icon"><i class="fa fa-file-text-o"></i></span>
+                        <h2>Nota Fiscal Referenciada</h2>
+                        <span class="jarviswidget-loader"><i class="fa fa-refresh fa-spin"></i></span>
+                    </header>
+
+                    <div>
+                        <div class="smart-form">
+                            <div class="row">
+                                <section class="col col-2">
+                                    <label class="input">
+                                        Número
+                                        @Html.TextBoxFor(model => model.NF_NFREF_REFNNF)
+                                    </label>
+                                </section>
+                                <section class="col col-2">
+                                    <label class="input">
+                                        Série
+                                        @Html.TextBoxFor(model => model.NF_NFREF_REFSerie)
+                                    </label>
+                                </section>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    }
+    <div class="row">
+        <article class="col-sm-12 col-md-12 col-lg-12">
+            <div class="tabbable">
+                <div class="jarviswidget jarviswidget-color-blueDark" data-widget-sortable="false" data-widget-colorbutton="false" data-widget-editbutton="false" data-widget-custombutton="false" data-widget-deletebutton="false">
+                    <header>
+                        <ul class="nav nav-tabs in" id="myTab1">
+                            <li class="bg-color-blueDark active">
+                                <a href="#tabItens" data-toggle="tab"><span class="hidden-mobile hidden-tablet"><i class="fa fa-list"></i> Itens</span> </a>
+                            </li>
+                            <li class="bg-color-blueDark">
+                                <a href="#tabDivergencias" data-toggle="tab">
+                                    <span class="hidden-mobile hidden-tablet">
+                                        <i class="fa fa-exclamation-circle"></i> Divergências <span id="lblPendentes" class="label bg-color-red txt-color-white"></span>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="bg-color-blueDark">
+                                <a href="#tabComparacoes" data-toggle="tab"><span class="hidden-mobile hidden-tablet"><i class="fa fa-history"></i> Comparações</span> </a>
+                            </li>
+                        </ul>
+                    </header>
+                    <div class="tab-content">
+                        <div class="tab-pane active" id="tabItens">
+                            <div class="table-responsive smart-form">
+                                <table id="dttTabela" class="table table-bordered tab-cust" width="100%">
+                                    <thead>
+                                        <tr>
+                                            <th width="7%">Linha</th>
+                                            <th width="14%">Pedido</th>
+                                            <th width="9%">Item</th>
+                                            @if ((bool)ViewBag.IsFaturaConsignacao || (bool)ViewBag.IsSubContratacao || (bool)ViewBag.IsNotaComplementar)
+                                            {
+                                                <th width="7%" class="alinhamento_esquerda">Ref. NF</th>
+                                            }
+                                            <th width="27%">Descrição</th>
+                                            <th width="7%">Un. Med.</th>
+                                            <th width="5%" class="alinhamento_direita">Qtde</th>
+                                            <th width="9%" class="alinhamento_direita">Valor Unitário</th>
+                                            <th width="9%" class="alinhamento_direita">Valor Total</th>
+                                            <th width="5%">CFOP</th>
+                                            <th width="5%">Assoc.</th>
+                                            <th class="center" width="5%">Relevante</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @{
+                                            if (Model.ITENS_NF != null && Model.ITENS_NF.Count() > 0)
+                                            {
+                                                @Html.Hidden("hdfPedido", Model.ITENS_NF[0].NF_PROD_XPED)
+
+                                                if (Model.VNF_TIPO_DOCUMENTO == "CTE")
+                                                {
+                                                    modNFItem itemCte = Model.ITENS_NF.FirstOrDefault();
+                                                    Model.ITENS_NF.Clear();
+                                                    Model.ITENS_NF.Add(itemCte);
+                                                }
+
+                                                foreach (modNFItem item in Model.ITENS_NF)
+                                                {
+                                                    pedido = "";
+                                                    nfPedido = "";
+                                                    relevante = item.VNF_ITEM_VALIDO == "X" ? "" : "checked='checked'";
+                                                    rowId = "row_" + item.NF_PROD_ITEM.ToString();
+                                                    id = item.NF_PROD_ITEM.ToString();
+                                                    strDescricaoItem = item.NF_PROD_XPROD == null ? "" : item.NF_PROD_XPROD.Length <= 50 ? item.NF_PROD_XPROD : item.NF_PROD_XPROD.Substring(0, 50) + "...";
+
+                                                    if (item.NF_PROD_XPED != null)
+                                                    {
+                                                        nfPedido = item.NF_PROD_XPED.ToString();
+                                                    }
+
+                                                    <tr role="row" id='@rowId' onclick="selectRowPedido(@id, '@nfPedido');" class="cursor-pointer" title="selecionar linha">
+                                                        <td>@item.NF_PROD_ITEM.ToString().PadLeft(3, '0')</td>
+
+                                                        @if (Model.VNF_TIPO_DOCUMENTO != modNF.tipo_doc_talonario)
+                                                        {
+
+                                                            if (ViewBag.Modificar)
+                                                            {
+                                                                <td class="padding5">
+                                                                    <input type="text" id="txtPedido_@id" class="input-editable" value="@nfPedido" onkeypress="return onlyInt(event)" onchange="CopiarNumeroPedido(this, @id)" maxlength="10">
+                                                                </td>
+                                                                <td class="padding5">
+                                                                    <input type="text" id="txtItemPedido_@id" class="input-editable" value="@item.NF_PROD_NITEMPED.ToString()" onkeypress="return onlyInt(event)" onchange="VerificarStatusIntegracao(this)" maxlength="6">
+                                                                </td>
+
+                                                            }
+                                                            else
+                                                            {
+                                                                @Html.Hidden("hfmodificar", (bool)ViewBag.Modificar)
+                                                                <td class="padding5">@nfPedido</td>
+                                                                <td class="padding5">@item.NF_PROD_NITEMPED.ToString()</td>
+
+                                                            }
+
+                                                        }
+                                                        else
+                                                        {
+                                                            @Html.Hidden("hfmodificar", (bool)ViewBag.Modificar)
+                                                            <td class="padding5">@nfPedido</td>
+                                                            <td class="padding5">@item.NF_PROD_NITEMPED.ToString()</td>
+                                                        }
+
+                                                        @if ((bool)ViewBag.IsFaturaConsignacao || (bool)ViewBag.IsSubContratacao || (bool)ViewBag.IsNotaComplementar)
+                                                        {
+                                                            if ((bool)ViewBag.IsFaturaConsignacao)
+                                                            {
+                                                                <td class="center">
+                                                                    <a onclick="LoadRowsRefNF(@id)" class="btn btn-xs btn-default" data-toggle="modal" data-target="#modal_refnf"><i class="fa fa-file-text-o"></i></a>
+                                                                </td>
+                                                            }
+                                                            else if ((bool)ViewBag.IsNotaComplementar)
+                                                            {
+                                                                <td class="center">
+                                                                    <a onclick="LoadRowsRefNFNotaComplementar(@id)" class="btn btn-xs btn-default" data-toggle="modal" data-target="#modal_refnf_nf_complementar"><i class="fa fa-file-text-o"></i></a>
+                                                                </td>
+                                                            }
+                                                            else
+                                                            {
+                                                                <td class="center">
+                                                                    <a onclick="LoadRowsRefNFSubContratacao(@id)" class="btn btn-xs btn-default" data-toggle="modal" data-target="#modal_refnf_subcontratacao"><i class="fa fa-file-text-o"></i></a>
+                                                                </td>
+                                                            }
+
+                                                        }
+                                                        <td>@strDescricaoItem</td>
+                                                        <td>@(item.NF_PROD_UTRIB == null ? item.NF_PROD_UCOM : item.NF_PROD_UTRIB)</td>
+                                                        @*Marcio Spinosa - 05/07/2018 - SR00205170 - CR00008351*@
+                                                        @*<td class="alinhamento_direita">@item.NF_PROD_QCOM.ToString("N2")</td>*@
+                                                        <td class="alinhamento_direita">@item.NF_PROD_QCOM.ToString("N3")</td>
+                                                        @*Marcio Spinosa - 05/07/2018 - SR00205170 - CR00008351 - Fim*@
+                                                        <td class="alinhamento_direita">@item.NF_PROD_VUNCOM.ToString("C2")</td>
+                                                        <td class="alinhamento_direita">@item.NF_PROD_VPROD.ToString("C2")</td>
+                                                        <td><span rel="tooltip" data-placement="top" data-original-title="Tooltip Top">@item.NF_PROD_CFOP</span></td>
+                                                        @if (item.VNF_ITEM_VALIDO == "S")
+                                                        {
+                                                            <td style="text-align:center" id="tdAssociacao_@id"><h5 title="Associado"><i class="fa fa-check-circle txt-color-green"></i></h5></td>
+                                                        }
+                                                        else if (item.VNF_ITEM_VALIDO == "X")
+                                                        {
+                                                            <td style="text-align:center" id="tdAssociacao_@id"><h5 title="Irrelevante"><i class="fa fa-info-circle txt-color-yellow"></i></h5></td>
+                                                        }
+                                                        else
+                                                        {
+                                                            <td style="text-align:center" id="tdAssociacao_@id"><h5 title="Pendente"><i class="fa fa-minus-circle txt-color-red"></i></h5></td>
+                                                        }
+                                                        <td style="background-color:#FFF; padding-right:18px;">
+                                                            <input type="hidden" id="hfRelDefaultValue_@id" value="@item.VNF_ITEM_VALIDO" />
+                                                            <input type="hidden" id="hfRelevante_@id" value="@item.VNF_ITEM_VALIDO" />
+                                                            <label id="lblItemRelevante_@id" class="toggle">
+                                                                <input type="checkbox" id="chkItemRelevante_@id" name="checkbox-toggle" onclick="AlterarRelevancia(@id)" @relevante>
+                                                                <i data-swchon-text="SIM" data-swchoff-text="NÃO"></i>
+                                                            </label>
+                                                        </td>
+                                                    </tr>
+                                                }
+                                            }
+                                        }
+                                    </tbody>
+                                </table>
+                                <input type="hidden" id="hdfItemNF">
+                                <br />
+                                <div class="clear"></div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tabDivergencias">
+                            <div class="panel-group smart-accordion-default">
+                                <div id="divDivergencia"></div>
+                            </div>
+                        </div>
+                        <div class="tab-pane" id="tabComparacoes">
+                            <div class="row">
+                                <div class="col-md-3 col-xs-1">
+                                    <div class="widget-body">
+                                        <div class="table-responsive smart-form">
+                                            <table id="dttDatasComparacoes" datatables_fixedheader="top" datatables_fixedheader_offsettop="60" class="table table-striped table-bordered table-hover table-click" width="100%">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Data</th>
+                                                        <th>Usuário</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-9 col-xs-3">
+                                    <div class="widget-body">
+                                        <div class="panel-group smart-accordion-default" id="tabDocumentosRelacionados">
+                                            <div class="panel panel-default">
+                                                <div id="divComparacoes" class="table-responsive smart-form"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </article>
+    </div>
+
+    <div class="row">
+        <article class="col-sm-12 col-md-12 col-lg-12">
+            <div class="widget-body">
+                <div class="smart-form">
+                    <footer class="border">
+                        @*@if (Model.VNF_TIPO_DOCUMENTO == modNF.tipo_doc_nfe || (Model.VNF_TIPO_DOCUMENTO == modNF.tipo_doc_cte && Model.VNF_CLASSIFICACAO != modNF.tipo_cte_debito_posterior))*@
+                        <button type="button" id="btnAssociar" class="btn btn-danger" onclick="Associar()">
+                            <i class="fa fa-retweet"></i> Associar
+                        </button>
+                        <button type="button" id="btnConsultarInbound" onclick="ConsultarInbound(false)" class="btn btn-primary">
+                            <i class="fa fa-calendar"></i> Inbounds
+                        </button>
+                        <button type="button" id="btnConsultarPedido" onclick="ConsultarPedido()" class="btn btn-primary">
+                            <i class="fa fa-file-text-o"></i> Pedido
+                        </button>
+                        @if (Model.VNF_TIPO_DOCUMENTO != modNF.tipo_doc_talonario)
+                        {
+                            <button type="button" class="btn btn-primary" onclick="GetXml()">
+                                <i class="fa fa-file-code-o"></i> XML
+                            </button>
+                        }
+                        <button type="button" class="btn btn-primary" onclick="GetDanfe()">
+                            <i class="fa fa-file-pdf-o"></i> DANFE
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="window.location='@Url.Action("Edit", "Compras", new { id = @Model.VNF_CHAVE_ACESSO })'">
+                            <i class="fa fa-search"></i> Detalhes
+                        </button>
+                        <button type="button" class="btn btn-primary" onclick="window.location.replace(document.referrer)">
+                            <i class="fa fa-arrow-circle-left"></i> Voltar
+                        </button>
+                    </footer>
+                </div>
+            </div>
+        </article>
+    </div>
+</section>
+
+<div class="modal fade modal-wide bs-example-modal-lg" id="divConsultarPedido" style="margin-top:50px">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+                <h4>Consulta SAP</h4>
+            </div>
+            <div class="scroll-y" style="max-height:300px;overflow:auto">
+                <div class="modal-body" id="definicaoTabela">
+                    @{
+                        Html.RenderPartial("GridConsultaPedido");
+                    }
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnFecharConsultaPedido" data-dismiss="modal"><i class="fa fa-times"></i> Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="modal fade bs-example-modal-lg" id="divConsultarInbound" style="margin-top:50px">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Fechar</span></button>
+                <h4>Consulta Inbounds</h4>
+            </div>
+            <div class="scroll-y" style="max-height:500px;overflow:auto">
+                <div id="divInboundDeliveryBody" class="modal-body">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnFecharConsultaInbound" data-dismiss="modal"><i class="fa fa-times"></i> Fechar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_refnf" tabindex="-1" role="dialog" aria-hidden="true" style="margin-top:50px">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h6 class="modal-title" id="myModalLabel">Notas de referência</h6>
+            </div>
+            <div class="modal-body">
+                <section id="widget-grid" class="">
+                    <div class="row">
+                        <table id="gridNotasRef">
+                            <tr>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </section>
+            </div>
+            <div class="modal-footer">
+                <a id="btAddNotaRef" class="btn btn-primary" style="float: left"><i class="fa fa-check"></i><span class="text-btn"> Adicionar</span></a>
+                <a id="btSalvarRefNF" class="btn btn-primary"><i class="fa fa-check"></i><span class="text-btn"> Salvar</span></a>
+                <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i><span class="text-btn"> Fechar</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_refnf_subcontratacao" tabindex="-1" role="dialog" aria-hidden="true" style="margin-top:50px">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h6 class="modal-title" id="myModalLabel">Notas de referência</h6>
+            </div>
+            <div class="modal-body">
+                <section id="widget-grid" class="">
+                    <div class="row">
+                        <table id="gridNotasRefSubContratacao">
+                            <thead>
+                                <tr>
+                                    <th>Nota Ref.</th>
+                                    <th>Setie Ref.</th>
+                                    <th>Item Ref.</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+                </section>
+            </div>
+            <div class="modal-footer">
+                <a id="btAddNotaRefSubContratacao" class="btn btn-primary" style="float: left"><i class="fa fa-check"></i><span class="text-btn"> Adicionar</span></a>
+                <a id="btSalvarRefNFSubContratacao" class="btn btn-primary"><i class="fa fa-check"></i><span class="text-btn"> Salvar</span></a>
+                <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i><span class="text-btn"> Fechar</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_refnf_nf_complementar" tabindex="-1" role="dialog" aria-hidden="true" style="margin-top:50px">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h6 class="modal-title" id="myModalLabel">Notas de referência</h6>
+            </div>
+            <div class="modal-body">
+                <section id="widget-grid" class="">
+                    <div class="row">
+                        <table id="gridNotasRefNFComplementar">
+                            <tr>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </div>
+                </section>
+            </div>
+            <div class="modal-footer">
+                <a id="btAddNotaRefNFComplementar" class="btn btn-primary" style="float: left"><i class="fa fa-check"></i><span class="text-btn"> Adicionar</span></a>
+                <a id="btSalvarRefNFComplementar" class="btn btn-primary"><i class="fa fa-check"></i><span class="text-btn"> Salvar</span></a>
+                <button type="button" class="btn btn-primary" data-dismiss="modal"><i class="fa fa-times"></i><span class="text-btn"> Fechar</span></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section pagespecific {
+
+    <!-- PAGE RELATED PLUGIN(S) -->
+    <script src="~/Scripts/plugin/datatables/jquery.dataTables.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.colVis.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.tableTools.min.js"></script>
+    <script src="~/Scripts/plugin/datatables/dataTables.bootstrap.min.js"></script>
+    <script src="~/Scripts/plugin/datatable-responsive/datatables.responsive.min.js"></script>
+    <script src="~/Scripts/jquery.maskMoney.js"></script>
+    <script src="~/Scripts/Metso.js"></script>
+
+    <!-- Page Script -->
+    <script src="~/Scripts/views/_global.js"></script>
+    <script src="~/Scripts/views/associacao/associacao_edit.js"></script>
+
+    <script type="text/javascript">
+        /* BASIC ;*/
+        var responsiveHelper_dt_basic = undefined;
+        var responsiveHelper_datatable_fixed_column = undefined;
+        var responsiveHelper_datatable_col_reorder = undefined;
+        var responsiveHelper_datatable_tabletools = undefined;
+
+        var breakpointDefinition = {
+            tablet: 1024,
+            phone: 480
+        };
+
+    </script>
+    <style>
+        .serierefnf {
+            width: 50px;
+        }
+
+        .numerorefnf {
+            width: 120px;
+        }
+    </style>
+}
